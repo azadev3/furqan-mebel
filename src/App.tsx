@@ -17,7 +17,7 @@ import PaymentSuccessPage from "./routes/PaymentSuccessPage";
 import FavouritesPage from "./routes/FavouritesPage";
 import StorePage from "./routes/StorePage";
 import CreditConditionsPage from "./routes/CreditConditionsPage";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   ActiveLoginPageState,
   ActiveRegisterPageState,
