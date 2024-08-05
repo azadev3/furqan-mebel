@@ -1,0 +1,243 @@
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+@import "../global.scss";
+@import "./aboutpage.scss";
+@import "./blogpage.scss";
+@import "./contact_vacation_productsPage.scss";
+@import "./errormsg_dashboardtogglemenu.scss";
+@import "./paymentpages.scss";
+@import "./creditstorefavoritpages.scss";
+@import './profilepagestyles.scss';
+
+@mixin PublicSans {
+  font-family: "Public Sans", sans-serif;
+}
+
+@mixin TableStyle {
+  table {
+    width: 100%;
+    height: auto;
+
+    thead {
+      background: #f2f4f5;
+      height: 40px;
+    }
+    thead tr th {
+      text-transform: uppercase;
+      padding: 10px 24px 10px 24px;
+      text-align: start;
+      color: #475156;
+      font-weight: 500;
+      font-size: 12px;
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+        text-decoration: none;
+        span {
+          color: #43b749;
+          font-weight: 600;
+          transition: 200ms ease-in-out;
+          font-size: 14px;
+          @include PublicSans();
+        }
+        img {
+          transition: 200ms ease-in-out;
+          width: 16px;
+          height: 16px;
+        }
+        &:hover {
+          img {
+            transform: translateX(16px);
+            opacity: 0;
+          }
+          span {
+            transform: translateX(16px);
+            color: #202123;
+          }
+        }
+        &:active {
+          transform: scale(0.99);
+        }
+      }
+    }
+
+    tbody {
+      width: 100%;
+      height: auto;
+      tr {
+        width: 100%;
+        height: 45px;
+        td {
+          padding: 18px 24px 18px 24px;
+          a {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 16px;
+            text-decoration: none;
+            span {
+              color: #43b749;
+              font-weight: 600;
+              transition: 200ms ease-in-out;
+              font-size: 14px;
+              @include PublicSans();
+            }
+            img {
+              transition: 200ms ease-in-out;
+              width: 16px;
+              height: 16px;
+            }
+            &:hover {
+              img {
+                transform: translateX(16px);
+                opacity: 0;
+              }
+              span {
+                transform: translateX(16px);
+                color: #202123;
+              }
+            }
+            &:active {
+              transform: scale(0.99);
+            }
+          }
+          &:nth-child(1) {
+            color: #191c1f;
+          }
+          &:nth-child(2) {
+            text-transform: uppercase;
+            font-weight: 600;
+            font-size: 14px;
+            @include PublicSans();
+          }
+          &:nth-child(3) {
+            font-weight: 400;
+            font-size: 14px;
+            color: #5f6c72;
+          }
+          &:nth-child(4) {
+            color: #475156;
+            font-weight: 400;
+            font-size: 14px;
+          }
+          &.packaging {
+            color: #fa8232 !important;
+          }
+          &.finished {
+            color: #2db224 !important;
+          }
+          &.rejected {
+            color: #ee5858 !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin OrderAndDetailTableStyle {
+  .orders-and-details-table {
+    width: 100%;
+    height: auto;
+    padding: 0px 0px 12px 0px;
+    border-radius: 18px;
+    border: 1px solid #e4e7e9;
+    background-color: #ffffff;
+    .head {
+      border-radius: 4px 4px 0px 0px;
+      width: 100%;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 16px 24px;
+      text-align: center;
+      span {
+        color: #191c1f;
+        font-weight: 500;
+        font-size: 14px;
+        text-align: center;
+      }
+    }
+
+    @include TableStyle();
+  }
+}
+
+@mixin CardRepitionStyles {
+  .card-repition {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 28px;
+    .process {
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 23.5px;
+      .item-process {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+        gap: 10px;
+        span {
+          color: #212121;
+          font-weight: 400;
+          font-size: 14px;
+        }
+        .steptrail1,
+        .steptrail2 {
+          position: absolute;
+          top: 0;
+          left: 70%;
+        }
+
+        .icon {
+          width: 32px;
+          height: 32px;
+          border-radius: 100px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          border: 2px solid #212121;
+          background-color: #ffffff;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: scale-down;
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin WrapperStyle {
+  @include AnimatePage();
+  width: 100%;
+  height: auto;
+  padding-left: 108px;
+  padding-right: 108px;
+  background-color: transparent;
+}
+
+@include ErrorMessageAndDashboardToggleMenuStyles();
+
+@include AboutPageStyle();
+
+@include BlogPageStyles();
+
+@include ContactVacationProductsPageStyles();
+
+@include PaymentPageStyles();
+
+@include CreditStoreAndFavouritePageStyles();
+
+@include ProfilePageStyles();
