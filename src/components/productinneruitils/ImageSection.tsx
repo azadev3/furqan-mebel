@@ -1,7 +1,7 @@
 import React from "react";
 import { FaHeart } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
-import { atom, useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
 import { useQuery } from "@tanstack/react-query";
 import { Baseurl } from "../../api/Baseurl";
@@ -10,7 +10,6 @@ import { ImagesPopularProducts, OptionsPopularProducts, ProductsInterface } from
 import { useAddBasket } from "../../useAddBasket";
 import { showImgState, userAddBasket } from "../../recoil/Atoms";
 import Loader from "../../uitils/Loader";
-import { FiSearch } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
 
 const ImageSection: React.FC = () => {

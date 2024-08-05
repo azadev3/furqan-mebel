@@ -1,7 +1,5 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import Typography from '@mui/material/Typography';
 import { styled } from '@mui/system';
 import { atom, useRecoilState } from 'recoil';
 
@@ -13,7 +11,7 @@ const marks = [
   { value: 24, label: '24' },
 ];
 
-const StyledSlider = styled(Slider)(({ theme }) => ({
+const StyledSlider = styled(Slider)(({ }) => ({
   maxWidth: '180px',
   minWidth: '180px',
   '& .MuiSlider-thumb': {
@@ -51,7 +49,7 @@ export const SliderValue = atom<number>({
 export default function SliderSizes() {
   const [value, setValue] = useRecoilState(SliderValue);
 
-  const handleChange = (event: any, newValue: any) => {
+  const handleChange = (newValue: any) => {
     setValue(newValue);
   };
 

@@ -2,7 +2,7 @@ import React from "react";
 import NavigationShower from "../uitils/NavigationShower";
 import EmptyFavorites from "../components/favoritespageuitils/EmptyFavorites";
 import { useRecoilValue } from "recoil";
-import { favouriteItemsState, userAddedFavourite } from "../recoil/Atoms";
+import { userAddedFavourite } from "../recoil/Atoms";
 import Favorites from "../components/favoritespageuitils/Favorites";
 // import Favorites from "../components/favoritespageuitils/Favorites";
 
