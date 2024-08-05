@@ -1,14 +1,16 @@
 import React from "react";
 import "../../styles/footer.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
 import { useQuery } from "@tanstack/react-query";
 import { ContactItemsType } from "../contactpageuitils/RightContact";
 import Loader from "../../uitils/Loader";
+import { CategoriesInterface } from "../homepageuitils/PopularProducts";
+import { selectedCategoryStateProductPage } from "../../recoil/Atoms";
 
 interface Socials {
   id: number;
@@ -17,12 +19,6 @@ interface Socials {
   icon: string;
 }
 
-type CategoryTypeTop = {
-  id: number;
-  title: string;
-  to: string;
-};
-
 type FooterNavType = {
   id: number;
   title: string;
@@ -30,38 +26,6 @@ type FooterNavType = {
 };
 
 const Footer: React.FC = () => {
-  const CategoryTopItem: CategoryTypeTop[] = [
-    {
-      id: 1,
-      title: "Yataq",
-      to: "/products",
-    },
-    {
-      id: 2,
-      title: "Qonaq",
-      to: "/products",
-    },
-    {
-      id: 3,
-      title: "Yumşaq",
-      to: "/products",
-    },
-    {
-      id: 4,
-      title: "Uşaq & Gənc",
-      to: "/products",
-    },
-    {
-      id: 5,
-      title: "Dəhliz",
-      to: "/products",
-    },
-    {
-      id: 6,
-      title: "Mətbəx",
-      to: "/products",
-    },
-  ];
 
   const FooterNavItem: FooterNavType[] = [
     {
@@ -168,6 +132,28 @@ const Footer: React.FC = () => {
     staleTime: 1000000,
   });
 
+  // FETCH CATEGORIES
+  const { data: CategoryProductsData } = useQuery({
+    queryKey: ["categoryProductsKey", activelanguage],
+    queryFn: async () => {
+      const response = await axios.get(`${Baseurl}/categories`, {
+        headers: {
+          "Accept-Language": activelanguage,
+        },
+      });
+      return response.data?.categories;
+    },
+    staleTime: 1000000,
+  });
+
+  // redirect subitem according to selected category
+  const navigate = useNavigate();
+  const [__, setCategoryTitle] = useRecoilState(selectedCategoryStateProductPage);
+  const handleSelectedCategory = (categoryId: number | null) => {
+    navigate("/products");
+    setCategoryTitle(categoryId);
+  };
+
   return (
     <footer className="footer-wrapper">
       <footer className="footer">
@@ -180,7 +166,10 @@ const Footer: React.FC = () => {
             <div className="links-foot">
               {contactItemsDataFooter && contactItemsDataFooter.length > 0 ? (
                 contactItemsDataFooter.map((item: ContactItemsType, i: number) => (
-                  <Link to={i === 0 ? `mailto:${item.title}` : i === 1 ? `tel:${item.title}` : ""} className="link-item" key={item.id}>
+                  <Link
+                    to={i === 0 ? `mailto:${item.title}` : i === 1 ? `tel:${item.title}` : ""}
+                    className="link-item"
+                    key={item.id}>
                     <img src={item?.icon} alt={`${item.id}-icon`} />
                     <span>{item?.value}</span>
                   </Link>
@@ -206,17 +195,29 @@ const Footer: React.FC = () => {
           <div className="right-footer">
             <nav className="categories-top">
               <div className="left-links">
-                {CategoryTopItem.map((item: CategoryTypeTop) => (
-                  <Link key={item.id} to={item.to ? item.to : ""} className="link">
-                    {item.title}
-                  </Link>
-                ))}
+                {CategoryProductsData && CategoryProductsData.length > 0
+                  ? CategoryProductsData.slice(0, 4).map((item: CategoriesInterface) => (
+                      <span
+                        onClick={() => handleSelectedCategory(item?.id)}
+                        key={item.id}
+                        className="link"
+                        style={{ textDecoration: "none", cursor: "pointer" }}>
+                        {item?.title}
+                      </span>
+                    ))
+                  : []}
               </div>
 
-              <Link to="/products" className="show-all-products">
+              <div
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setCategoryTitle(null);
+                  navigate("/products");
+                }}
+                className="show-all-products">
                 <span>Bütün məhsullara bax</span>
                 <img src="../rightarrow.svg" alt="rightarrow" />
-              </Link>
+              </div>
             </nav>
             <nav className="links-navigation-footer">
               {FooterNavItem.map((item: FooterNavType) => (

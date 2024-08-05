@@ -1,13 +1,14 @@
 import React, { SetStateAction, useEffect, useRef } from "react";
-import { Link, useLocation, useMatch } from "react-router-dom";
+import { Link, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
-import { Logo, NavbarItemType, NavbarSubitemType } from "./Header";
+import { Logo, NavbarItemType } from "./Header";
 import { FaAngleDown, FaRegUser } from "react-icons/fa6";
 import {
   basketItemState,
   LoginMenuState,
   profileDropdownState,
   scrollHeaderState,
+  selectedCategoryStateProductPage,
   userAddBasket,
   userAddedFavourite,
   UserIsAuthState,
@@ -20,6 +21,7 @@ import { Baseurl } from "../../api/Baseurl";
 import ProfileDropdown from "./ProfileDropdown";
 import getCookie from "../../getCookie";
 import { CartType } from "../basketpageuitils/Basket";
+import { CategoriesInterface } from "../homepageuitils/PopularProducts";
 
 type Props = {
   setSearchModal: React.Dispatch<SetStateAction<boolean>>;
@@ -97,6 +99,22 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
     };
   }, [dropdown]);
 
+  
+  // FETCH CATEGORIES
+  const { data: CategoryProductsData } = useQuery({
+    queryKey: ["categoryProductsKey", activeLanguage],
+    queryFn: async () => {
+      const response = await axios.get(`${Baseurl}/categories`, {
+        headers: {
+          "Accept-Language": activeLanguage,
+        },
+      });
+      return response.data?.categories;
+    },
+    staleTime: 1000000,
+  });
+
+
   // Define navbar items
   const NavbarItems: NavbarItemType[] = [
     { id: 1, title: "Ana səhifə", to: "/" },
@@ -110,14 +128,15 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
           style={{ transform: dropdown === 3 ? "rotate(180deg)" : "", transition: "150ms ease-in-out" }}
         />
       ),
-      subitem: [
-        { id: 1, title: "Subitem 1", to: "/products" },
-        { id: 6, title: "Subitem 6", to: "/products" },
-        { id: 7, title: "Subitem 7", to: "/products" },
-        { id: 8, title: "Subitem 8", to: "/products" },
-        { id: 9, title: "Subitem 9", to: "/products" },
-        { id: 10, title: "Subitem 10", to: "/products" },
-      ],
+      subitem:
+      CategoryProductsData && CategoryProductsData.length > 0
+          ? CategoryProductsData.map((item: CategoriesInterface) => {
+              return {
+                id: item?.id,
+                title: item?.title,
+              };
+            })
+          : [],
       to: "",
     },
     { id: 4, title: "Bloq", to: "/blog" },
@@ -188,6 +207,15 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
     getAllBasketProduct();
   }, [basketItems]);
   
+    // redirect subitem according to selected category 
+    const navigate = useNavigate();
+    const [__, setCategoryTitle] = useRecoilState(selectedCategoryStateProductPage);
+    const handleSelectedCategory = (categoryId: number | null) => {
+      navigate("/products");
+      setCategoryTitle(categoryId);
+    }
+  
+
   return (
     <header className="responsive-header">
       {/* profile dropdown */}
@@ -228,15 +256,15 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
               <div
                 ref={(ref) => submenuRefs.current.set(item.id, ref)}
                 className={`submenu ${dropdown === item.id ? "active" : ""}`}>
-                {item.subitem?.map((subitem: NavbarSubitemType) => (
-                  <Link
+                {item.subitem?.map((subitem: CategoriesInterface) => (
+                  <span className="sublink"
                     key={subitem.id}
-                    to={subitem.to}
                     onClick={() => {
-                      setDropdown(null), setToggleMenu(false);
+                      setDropdown(null), setToggleMenu(false),
+                      handleSelectedCategory(subitem?.id)
                     }}>
                     {subitem.title}
-                  </Link>
+                  </span>
                 ))}
               </div>
             </React.Fragment>
@@ -288,7 +316,7 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
         <Link to="/favourites" className={`hearth ${isAddedFav ? "hearth-anim" : ""}`}>
           <img
             src={
-              isFavouritePage || isAddedFav ? "../hearthfill.svg" : isHomePage ? "../hearthwhite.png" : "../hearth.svg"
+              isFavouritePage || isAddedFav ? "../hearthfill.svg" : isHomePage && !scrolled ? "../qlb.svg" : "../hearth.svg"
             }
             alt="hearth"
             title="Favorilər"

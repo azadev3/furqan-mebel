@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { basketItemState } from "../../recoil/Atoms";
 import { useAddBasket } from "../../useAddBasket";
 import axios from "axios";
@@ -43,6 +43,7 @@ export interface CartType {
 }
 
 const Basket: React.FC = () => {
+  const setBasketItems = useSetRecoilState(basketItemState);
   const basketItems = useRecoilValue(basketItemState);
   const basketItemsData = Object.values(basketItems);
 
@@ -55,17 +56,22 @@ const Basket: React.FC = () => {
     setLoading(true);
     try {
       const token = getCookie("accessToken");
-      const response = await axios.get(`${Baseurl}/cart`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Accept-Language": selectedLanguage,
-        },
-      });
+      if (token) {
+        const response = await axios.get(`${Baseurl}/cart`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Accept-Language": selectedLanguage,
+          },
+        });
 
-      if (response.data) {
-        setIsBasketProducts(response.data.cart);
+        if (response.data) {
+          setIsBasketProducts(response.data.cart);
+        } else {
+          console.log(response.status);
+        }
       } else {
-        console.log(response.status);
+        const localBasketItems = JSON.parse(localStorage.getItem("baskets") || "{}");
+        setBasketItems(localBasketItems);
       }
     } catch (error) {
       console.log(error);
@@ -122,6 +128,8 @@ const Basket: React.FC = () => {
     });
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="basket">
       {loading ? (
@@ -133,7 +141,7 @@ const Basket: React.FC = () => {
               <div className="isbasketted-products-container">
                 {isBasketProducts.cart_items.map((item: CartItemType) => (
                   <div className="item-basket" key={item.id}>
-                    <div className="leftbasketproduct">
+                    <div style={{cursor: "pointer"}} className="leftbasketproduct" onClick={() => navigate(`/products/${item?.product?.slug?.toLowerCase()}`)}>
                       <div className="image-product">
                         <img
                           src={item.product.img}
@@ -163,16 +171,6 @@ const Basket: React.FC = () => {
                   </div>
                 ))}
               </div>
-              {/* <div className="total-price-counter">
-               {isBasketProducts && isBasketProducts.cart_items.length > 0 ? (
-                <>
-                {isBasketProducts.cart_items.map((item: CartItemType) => (
-                   <span>Total Price: {item.quantity} AZN</span>
-                ))}
-                </>
-               ) :""}
-              </div> */}
-
               <div className="continue-btn">
                 <Link to="/delivery" className="btn">
                   <span>Davam et</span>
@@ -180,6 +178,47 @@ const Basket: React.FC = () => {
                 </Link>
               </div>
             </React.Fragment>
+          ) : basketItemsData && basketItemsData.length > 0 ? (
+            <div className="local-basket-products-container">
+              {basketItemsData.map((item: ProductsInterface) => (
+                <div className="item-basket" key={item.id}>
+                <div className="leftbasketproduct" style={{cursor: "pointer"}} onClick={() => navigate(`/products/${item?.slug?.toLowerCase()}`)}>
+                  <div className="image-product">
+                    <img
+                      src={item?.img}
+                      alt={`${item?.id}-product`}
+                      title={item?.title || "product"}
+                    />
+                  </div>
+                  <div className="titles">
+                    <span>{item?.title}</span>
+                    <p>{item?.content}</p>
+                  </div>
+                </div>
+                <div className="rightbasketproduct">
+                  <div className="price">
+                    <span>{item?.price} AZN</span>
+                  </div>
+                  <div className="counter">
+                    <span className="decrement" onClick={() => decrementProduct(item?.id)}>
+                      -
+                    </span>
+                    <span>{count[item?.id] || item.quantity}</span>
+                    <span className="increment" onClick={() => incrementProduct(item?.id)}>
+                      +
+                    </span>
+                  </div>
+                </div>
+              </div>
+                
+              ))}
+              <div className="continue-btn">
+                <Link to="/delivery" className="btn">
+                  <span>Davam et</span>
+                  <img src="../rightwhitee.svg" alt="" />
+                </Link>
+              </div>
+            </div>
           ) : (
             <p
               style={{

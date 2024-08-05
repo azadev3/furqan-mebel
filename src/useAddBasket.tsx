@@ -18,16 +18,29 @@ export const useAddBasket = () => {
     setLoading(true);
     e?.preventDefault();
     const token = getCookie("accessToken");
-
+  
     try {
-      const response = await axios.post(`${Baseurl}/cart/add/${id}`, basketItems, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.data) {
-        console.log(response.data, "elave edldi");
+      if (token) {
+        const response = await axios.post(`${Baseurl}/cart/add/${id}`, basketItems, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (response.data) {
+          console.log(response.data, "elave edldi");
+          setBasketItems((prevItems: any) => {
+            const updatedItems = { ...prevItems, [id]: basketItems };
+            localStorage.setItem("baskets", JSON.stringify(updatedItems));
+            toast.success(`${basketItems?.title}, Səbətə Əlavə Olundu!`, {
+              position: "top-center",
+            });
+            return updatedItems;
+          });
+        } else {
+          console.log(response.status);
+        }
+      } else {
         setBasketItems((prevItems: any) => {
           const updatedItems = { ...prevItems, [id]: basketItems };
           localStorage.setItem("baskets", JSON.stringify(updatedItems));
@@ -36,8 +49,6 @@ export const useAddBasket = () => {
           });
           return updatedItems;
         });
-      } else {
-        console.log(response.status);
       }
     } catch (error) {
       console.log(error);
@@ -45,24 +56,29 @@ export const useAddBasket = () => {
       setLoading(false);
     }
   };
+  
 
-  const removeBasket = async (basketItems: ProductsInterface, id?: any) => {
-    setLoading(true);
-    const token = getCookie("accessToken");
-    try {
-      const response = await axios.post(`${Baseurl}/cart/remove/${id}`, basketItems, {
+
+const removeBasket = async (basketItem: ProductsInterface, id: number) => {
+  
+  setLoading(true);
+  const token = getCookie("accessToken");
+  
+  try {
+    if (token) {
+      const response = await axios.post(`${Baseurl}/cart/remove/${id}`, basketItem, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.data) {
-        console.log(response.data, "cixarildi");
+        console.log(response.data, "çıkarıldı");
         setBasketItems((prevItems: any) => {
           const updatedItems = { ...prevItems };
           delete updatedItems[id];
           localStorage.setItem("baskets", JSON.stringify(updatedItems));
-          toast.warning(`${basketItems?.title}, Səbətdən Çıxarıldı!`, {
+          toast.warning(`${basketItem?.title}, Səbətdən Çıxarıldı!`, {
             position: "top-center",
           });
           return updatedItems;
@@ -70,12 +86,26 @@ export const useAddBasket = () => {
       } else {
         console.log(response.status);
       }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+    } else {
+      setBasketItems((prevItems: any) => {
+        const updatedItems = { ...prevItems };
+        delete updatedItems[id];
+        localStorage.setItem("baskets", JSON.stringify(updatedItems));
+        toast.warning(`${basketItem?.title}, Səbətdən Çıxarıldı!`, {
+          position: "top-center",
+        });
+        return updatedItems;
+      });
     }
-  };
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  
+  
 
   const addBasketForCounter = (product: ProductsInterface, quantity: number) => {
     setBasketItems((prevItems: any) => {

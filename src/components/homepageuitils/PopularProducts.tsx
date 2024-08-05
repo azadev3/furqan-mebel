@@ -27,8 +27,8 @@ export type filterType = {
 export interface CategoriesInterface {
   id: number;
   title: string;
-  img: string | null;
-  children: ChildrenCategory[];
+  img?: string | null;
+  children?: ChildrenCategory[];
 }
 
 export type OptionsPopularProducts = {

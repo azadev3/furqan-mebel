@@ -36,9 +36,12 @@ const ProductSection: React.FC = () => {
     staleTime: 1000000,
   });
 
-  const productInner = allProductsData && allProductsData.length > 0 ? allProductsData.find((item: ProductsInterface) => {
-    return item?.slug.toLowerCase() === slugproduct?.toLowerCase();
-  }) : "";
+  const productInner =
+    allProductsData && allProductsData.length > 0
+      ? allProductsData.find((item: ProductsInterface) => {
+          return item?.slug.toLowerCase() === slugproduct?.toLowerCase();
+        })
+      : "";
 
   // const SetModuleItems: SetModuleTypes[] = [
   //   {
@@ -93,15 +96,14 @@ const ProductSection: React.FC = () => {
     }
   };
 
-  const sliderValue = useRecoilValue(SliderValue)
-
+  const sliderValue = useRecoilValue(SliderValue);
   return (
     <section className="product-section">
       <div className="details-section">
         <p>Masa və stullar</p>
         <div className="title-and-description">
           <h2>{productInner?.title}</h2>
-            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productInner?.content) }} />
+          <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productInner?.content) }} />
         </div>
       </div>
 
@@ -133,7 +135,7 @@ const ProductSection: React.FC = () => {
             </div>
             <div className="monthly-payment">
               <span>Aylıq ödəniş</span>
-              <p style={{fontSize:"16px"}}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
+              <p style={{ fontSize: "16px" }}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
             </div>
           </div>
           <article className="title-bottom">
@@ -147,11 +149,14 @@ const ProductSection: React.FC = () => {
       <article className="set-modules">
         <h3>Dəstə daxil olan modullar</h3>
         <div className="grid-modules">
-          {allProductsData && allProductsData.length > 0 ? allProductsData.map((item: ProductsInterface) => (
-            item.modules && item.modules.map((modules: ModulesProducts, i: number) => (
-            <div className="item-module" key={i}>
-              <p>{modules?.title}</p>
-              {/* <div className="counter-area">
+          {allProductsData && allProductsData.length > 0 ? (
+            allProductsData.map(
+              (item: ProductsInterface) =>
+                item.modules &&
+                item.modules.map((modules: ModulesProducts, i: number) => (
+                  <div className="item-module" key={i}>
+                    <p>{modules?.title}</p>
+                    {/* <div className="counter-area">
                 <button className="decrement" onClick={() => modulesCounterDecrementFunction(item?.id.toString())}>
                   -
                 </button>
@@ -161,13 +166,16 @@ const ProductSection: React.FC = () => {
                 </button>
               </div> */}
 
-              <div className="prices">
-                <strong>{item?.price} AZN</strong>
-                {/* <span>discountprice</span> */}
-              </div>
-            </div>
-            ))
-          )) : <Loader />}
+                    <div className="prices">
+                      <strong>{item?.price} AZN</strong>
+                      {/* <span>discountprice</span> */}
+                    </div>
+                  </div>
+                ))
+            )
+          ) : (
+            <Loader />
+          )}
         </div>
       </article>
     </section>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "../../styles/header.scss";
-import { Link, NavLink, useLocation, useMatch } from "react-router-dom";
+import { Link, NavLink, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { FaAngleDown } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
 import ResponsiveHeader from "./ResponsiveHeader";
@@ -12,6 +12,7 @@ import {
   LoginMenuState,
   profileDropdownState,
   scrollHeaderState,
+  selectedCategoryStateProductPage,
   userAddBasket,
   userAddedFavourite,
   UserIsAuthState,
@@ -24,7 +25,7 @@ import { Baseurl } from "../../api/Baseurl";
 import axios from "axios";
 import { CartType } from "../basketpageuitils/Basket";
 import getCookie from "../../getCookie";
-import { ProductsInterface } from "../homepageuitils/PopularProducts";
+import { CategoriesInterface } from "../homepageuitils/PopularProducts";
 
 export interface Logo {
   id: number;
@@ -36,7 +37,7 @@ export type NavbarSubitemType = {
   id: number;
   title: string;
   icon?: string | JSX.Element;
-  to: string;
+  to?: string;
 };
 
 export interface NavbarItemType {
@@ -64,16 +65,16 @@ const Header: React.FC = () => {
     staleTime: 1000000,
   });
 
-  // FETCH PRODUCTS
-  const { data: productsDataForSubmenu } = useQuery({
-    queryKey: ["productsDataForSubmenuKey", activeLanguage],
+  // FETCH CATEGORIES
+  const { data: CategoryProductsData } = useQuery({
+    queryKey: ["categoryProductsKey", activeLanguage],
     queryFn: async () => {
-      const response = await axios.get(`${Baseurl}/all_products`, {
+      const response = await axios.get(`${Baseurl}/categories`, {
         headers: {
           "Accept-Language": activeLanguage,
         },
       });
-      return response.data?.products;
+      return response.data?.categories;
     },
     staleTime: 1000000,
   });
@@ -126,12 +127,11 @@ const Header: React.FC = () => {
         />
       ),
       subitem:
-        productsDataForSubmenu && productsDataForSubmenu.length > 0
-          ? productsDataForSubmenu.map((item: ProductsInterface) => {
+      CategoryProductsData && CategoryProductsData.length > 0
+          ? CategoryProductsData.map((item: CategoriesInterface) => {
               return {
                 id: item?.id,
                 title: item?.title,
-                to: `/products/${item?.slug.toLowerCase()}`,
               };
             })
           : [],
@@ -256,6 +256,15 @@ const Header: React.FC = () => {
     getAllBasketProduct();
   }, [basketItems]);
 
+  // redirect subitem according to selected category 
+  const navigate = useNavigate();
+  const [__, setCategoryTitle] = useRecoilState(selectedCategoryStateProductPage);
+  const handleSelectedCategory = (categoryId: number | null) => {
+    navigate("/products");
+    setCategoryTitle(categoryId);
+  }
+
+
   return (
     <header
       className={`header-wrapper ${
@@ -318,10 +327,14 @@ const Header: React.FC = () => {
                     <div
                       ref={(ref) => submenuRefs.current.set(item.id, ref)}
                       className={`submenu ${dropdown === item.id ? "active" : ""}`}>
-                      {item.subitem?.map((subitem: NavbarSubitemType) => (
-                        <Link key={subitem.id} to={subitem.to} onClick={() => setDropdown(null)}>
-                          {subitem.title}
-                        </Link>
+                      {item.subitem?.map((subitem: CategoriesInterface, i: number) => (
+                        <span className="sublink" key={i} 
+                        onClick={() => {
+                          setDropdown(null);
+                          handleSelectedCategory(subitem?.id)
+                        }}>
+                          {subitem?.title}
+                        </span>
                       ))}
                     </div>
                   </React.Fragment>
@@ -364,8 +377,8 @@ const Header: React.FC = () => {
                   src={
                     isFavouritePage || isAddedFav
                       ? "../hearthfill.svg"
-                      : isHomePage
-                      ? "../hearthwhite.png"
+                      : isHomePage && !scrolled
+                      ? "../qlb.svg"
                       : "../hearth.svg"
                   }
                   alt="hearth"

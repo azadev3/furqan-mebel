@@ -3,13 +3,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
 import { useQuery } from "@tanstack/react-query";
 import { Baseurl } from "../../api/Baseurl";
 import axios from "axios";
 import { CategoriesInterface } from "./PopularProducts";
 import { useNavigate } from "react-router-dom";
+import { selectedCategoryStateProductPage } from "../../recoil/Atoms";
 
 
 const CategoriesSection: React.FC = () => {
@@ -30,6 +31,14 @@ const CategoriesSection: React.FC = () => {
   });
 
   const navigate = useNavigate();
+
+  
+  // redirect subitem according to selected category 
+  const [__, setCategoryTitle] = useRecoilState(selectedCategoryStateProductPage);
+  const handleSelectedCategory = (categoryId: number | null) => {
+    navigate("/products");
+    setCategoryTitle(categoryId);
+  }
 
   return (
     <section className="categories-wrapper">
@@ -55,7 +64,9 @@ const CategoriesSection: React.FC = () => {
             modules={[Navigation]}
             className="mySwiper">
             {CategoryProductsData && CategoryProductsData?.length > 0 ? CategoryProductsData.map((category: CategoriesInterface) => (
-              <SwiperSlide style={{cursor: "pointer"}} onClick={() => navigate('/products')} className="grid-item" key={category.id}>
+              <SwiperSlide style={{cursor: "pointer"}}
+              onClick={() => handleSelectedCategory(category?.id)}
+              className="grid-item" key={category.id}>
                 <img src={category.img ? category.img : "../imageforoffers.jpeg"} alt={category.title} />
                 <h2>{category.title}</h2>
               </SwiperSlide>

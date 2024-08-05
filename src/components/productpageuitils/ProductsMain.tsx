@@ -754,31 +754,33 @@ export const ProductsPageProducts: ProductsPageProductsType[] = [
 ];
 
 const ProductsMain: React.FC = () => {
+
+
   const activeLanguage = useRecoilValue(SelectedLanguageState);
 
   const [selectedCategory, setSelectedCategory] = useRecoilState(selectedCategoryStateProductPage);
 
-  // FETCH CATEGORIES
-  const { data: CategoryProductsData } = useQuery({
-    queryKey: ["categoryProductsKey", activeLanguage],
-    queryFn: async () => {
-      const response = await axios.get(`${Baseurl}/categories`, {
-        headers: {
-          "Accept-Language": activeLanguage,
-        },
-      });
-      return response.data?.categories;
-    },
-    staleTime: 1000000,
-  });
+  // // FETCH CATEGORIES
+  // const { data: CategoryProductsData } = useQuery({
+  //   queryKey: ["categoryProductsKey", activeLanguage],
+  //   queryFn: async () => {
+  //     const response = await axios.get(`${Baseurl}/categories`, {
+  //       headers: {
+  //         "Accept-Language": activeLanguage,
+  //       },
+  //     });
+  //     return response.data?.categories;
+  //   },
+  //   staleTime: 1000000,
+  // });
 
-  //set first category mounted component
-  React.useEffect(() => {
-    if (CategoryProductsData && CategoryProductsData.length > 0) {
-      const firstCategory = CategoryProductsData[0]?.id;
-      setSelectedCategory(firstCategory);
-    }
-  }, [CategoryProductsData]);
+  // //set first category mounted component
+  // React.useEffect(() => {
+  //   if (CategoryProductsData && CategoryProductsData.length > 0) {
+  //     const firstCategory = CategoryProductsData[0]?.id;
+  //     setSelectedCategory(firstCategory);
+  //   }
+  // }, [CategoryProductsData]);
 
   //FETCH ALL PRODUCTS
   const { data: allProductsData } = useQuery({

@@ -19,6 +19,7 @@ type Props = {
 const Categories: React.FC<Props> = ({ handleSelect, selectedCategory }) => {
   const activeLanguage = useRecoilValue(SelectedLanguageState);
 
+
   // FETCH CATEGORIES
   const { data: CategoryProductsData, error, isLoading } = useQuery({
     queryKey: ["categoryProductsKey", activeLanguage],

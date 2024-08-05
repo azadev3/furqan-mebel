@@ -49,8 +49,8 @@ export const SliderValue = atom<number>({
 export default function SliderSizes() {
   const [value, setValue] = useRecoilState(SliderValue);
 
-  const handleChange = (newValue: any) => {
-    setValue(newValue);
+  const handleChange = (_: Event, newValue: number | number[]) => {
+    setValue(newValue as number);
   };
 
   return (

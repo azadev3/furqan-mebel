@@ -45,7 +45,7 @@ const PaginationProductsPage = ({ data, itemsPerPage }: { data: any; itemsPerPag
   return (
     <div className="products-page-products-pag">
       <div className="products-page-content">
-        {currentData.map((item: ProductsInterface) => (
+        {currentData && currentData.length > 0 ? currentData.map((item: ProductsInterface) => (
           <Link to={`/products/${item?.slug.toLowerCase()}`} className="items" key={item.id}>
             <img className="shop-bag" src="../shopbag.svg" alt="show" title="Səbət" />
             <div
@@ -96,10 +96,11 @@ const PaginationProductsPage = ({ data, itemsPerPage }: { data: any; itemsPerPag
               </div>
             </div>
           </Link>
-        ))}
+        )) : <p className="no-product-title">Hələ ki bu kateqoriyada məhsul yoxdur.</p>}
       </div>
 
-      <div className="pagination">
+      {currentData && currentData.length > 0 ? (
+        <div className="pagination">
         <div className="pagination-content">
           <BsArrowLeftCircle className="prev" onClick={() => handleClick(Math.max(1, currentPage - 1))} />
           <div className="paginations">
@@ -115,6 +116,7 @@ const PaginationProductsPage = ({ data, itemsPerPage }: { data: any; itemsPerPag
           <BsArrowRightCircle className="next" onClick={() => handleClick(Math.min(totalPages, currentPage + 1))} />
         </div>
       </div>
+      ) : ""}
     </div>
   );
 };
