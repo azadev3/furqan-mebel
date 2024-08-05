@@ -1,10 +1,13 @@
 import React from "react";
 import { DashboardLinkItems, DashboardLinksType } from "../../routes/Dashboard";
-import { Link, useMatch } from "react-router-dom";
-import { dashboarLinksActiveState, profileDropdownState } from "../../recoil/Atoms";
+import { Link, useMatch, useNavigate } from "react-router-dom";
+import { dashboarLinksActiveState, profileDropdownState, UserIsAuthState } from "../../recoil/Atoms";
 import { useRecoilState } from "recoil";
 import getCookie from "../../getCookie";
 import { UserInfo } from "../profileuitils/DashboardContent";
+import axios from "axios";
+import { Baseurl } from "../../api/Baseurl";
+import { toast } from "react-toastify";
 
 type prop = {
   userRef: any;
@@ -47,7 +50,6 @@ const ProfileDropdown: React.FC<prop> = (prop) => {
     };
   }, []);
 
-
   const getUserInfo = getCookie("userInfo");
   const [userInfo, setUserInfo] = React.useState<UserInfo>();
   React.useEffect(() => {
@@ -56,6 +58,55 @@ const ProfileDropdown: React.FC<prop> = (prop) => {
       setUserInfo(parsedInfo);
     }
   }, []);
+
+  const [__, setProfileDropdown] = useRecoilState(profileDropdownState);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [_, setAuth] = useRecoilState(UserIsAuthState);
+  const navigate = useNavigate();
+  const LogOutUser = async () => {
+    setLoading(true);
+    try {
+      const token = getCookie("accessToken");
+      const response = await axios.get(`${Baseurl}/logout`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data) {
+        toast.success("Hesabdan çıxılır...", {
+          position: "bottom-right",
+        });
+        document.cookie = "userInfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None";
+        document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None";
+        localStorage.clear();
+        const timeout = setTimeout(() => {
+          navigate("/");
+          setAuth(false);
+          setProfileDropdown(false);
+        }, 700);
+        return () => clearTimeout(timeout);
+      } else {
+        response.status;
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          toast.error("Bir xəta baş verdi", {
+            position: "bottom-right",
+          });
+        } else {
+          toast.error("Bir xəta baş verdi", {
+            position: "bottom-right",
+          });
+        }
+      }
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
 
   return (
     <div aria-modal="true" aria-hidden={!profileDropdownMenu} className="profileDropdownMenu">
@@ -74,9 +125,9 @@ const ProfileDropdown: React.FC<prop> = (prop) => {
             const logOutLink = item?.id === 5;
             if (logOutLink) {
               return (
-                <li key={item?.id} className="link-item-profilemenu">
+                <li onClick={LogOutUser} key={item?.id} className="link-item-profilemenu">
                   <img src={item?.deactiveIcon} alt={`${item?.id}-icon`} title={item?.title} />
-                  <span>{item?.title}</span>
+                  <span>{loading ? "Hesabdan çıxılır..." : item?.title}</span>
                 </li>
               );
             } else {

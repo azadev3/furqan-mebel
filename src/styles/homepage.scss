@@ -307,7 +307,8 @@
               align-items: center;
               color: #212121;
               font-weight: 400;
-              font-size: 16px;
+              overflow: hidden;
+              font-size: 12.5px;
             }
             .active {
               border: 1px solid #43b749;

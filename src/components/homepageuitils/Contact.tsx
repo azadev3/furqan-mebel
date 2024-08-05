@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export type InformationItemType = {
   id: number;
@@ -26,6 +26,8 @@ const Contact: React.FC = () => {
     },
   ];
 
+  const navigate = useNavigate();
+
   return (
     <div className="contact-wrapper">
       <div className="contact">
@@ -46,15 +48,15 @@ const Contact: React.FC = () => {
                 <textarea placeholder="A little about the company and the team that you’ll be working with."></textarea>
               </div>
 
-              <button type="submit">Göndər</button>
+              <button type="submit" onClick={() => navigate('/contact')}>Göndər</button>
             </form>
           </div>
 
           <div className="information">
             <h1>Əlaqə məlumatları</h1>
             <div className="information-items">
-              {InformationItems.map((item: InformationItemType) => (
-                <Link to="" key={item.id}>
+              {InformationItems.map((item: InformationItemType, i:number) => (
+                <Link to={i === 1 ? `mailto:${item.title}` : i === 2 ? `tel:${item.title}` : ""} key={item.id}>
                   <img src={item.icon ? item.icon : ""} alt={`${item.id}-icon`} title={item.title} />
                   <span>{item.title}</span>
                 </Link>
