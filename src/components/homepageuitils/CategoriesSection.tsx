@@ -1,5 +1,4 @@
 import React from "react";
-import { v4 as uuidv4 } from "uuid";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -12,78 +11,8 @@ import axios from "axios";
 import { CategoriesInterface } from "./PopularProducts";
 import { useNavigate } from "react-router-dom";
 
-type CategorySectionType = {
-  id: string;
-  title: string;
-  image: string;
-};
 
 const CategoriesSection: React.FC = () => {
-  const CategoriesSectionItems: CategorySectionType[] = React.useMemo(
-    () => [
-      {
-        id: uuidv4(),
-        title: "Ev",
-        image: "../img1.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Qapılar",
-        image: "../3.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Wood",
-        image: "../ofis.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Ofis",
-        image: "../4.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Otel",
-        image: "../44.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Restoran & kafe",
-        image: "../55.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Ev",
-        image: "../4.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Ofis",
-        image: "../44.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Otel",
-        image: "../3.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Ev",
-        image: "../img1.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Restoran",
-        image: "../44.jpeg",
-      },
-      {
-        id: uuidv4(),
-        title: "Kafe",
-        image: "../55.jpeg",
-      },
-    ],
-    []
-  );
 
   // FETCH CATEGORIES
   const activeLanguage = useRecoilValue(SelectedLanguageState);
