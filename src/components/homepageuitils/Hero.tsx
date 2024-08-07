@@ -9,6 +9,10 @@ import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import Loader from "../../uitils/Loader";
 import Error from "../../uitils/Error";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
 type HeroDataType = {
   id: string;
@@ -24,7 +28,7 @@ const Hero: React.FC = () => {
     data: HeroData,
     isLoading: LoadingHeroData,
     isError: ErrorHeroData,
-  } = useQuery({
+  } = useQuery<HeroDataType[]>({
     queryKey: ["heroDataKey", activeLanguage],
     queryFn: async () => {
       const response = await axios.get(`${Baseurl}/hero`, {
@@ -47,27 +51,35 @@ const Hero: React.FC = () => {
 
   return (
     <div className="hero-wrapper">
-      {HeroData &&
-        HeroData.length > 0 &&
-        HeroData.map((item: HeroDataType, i: number) => (
-          <div className="hero" key={i}>
-            <div className="filter"></div>
-            <video loop muted autoPlay controls={false} src={item?.video}></video>
+      {HeroData && HeroData.length > 0 && (
+        <Swiper
+          pagination={{ dynamicBullets: true }}
+          modules={[Pagination]}
+          className="mySwiper"
+        >
+          {HeroData.map((item: HeroDataType) => (
+            <SwiperSlide key={item.id}>
+              <div className="hero">
+                <div className="filter"></div>
+                <video loop muted autoPlay controls={false} src={item?.video}></video>
 
-            <div className="content-texts">
-              <h1 className="text-main">{item?.title}</h1>
-              <p>{item?.content}</p>
-              <Link to="/products" className="button-explain">
-                <span>Məhsulları kəşf et</span>
-                <FaArrowRightLong className="righticon" />
-              </Link>
-            </div>
-            <HiOutlineArrowDownCircle
-              className="arrow-down-circle"
-              onClick={() => window.scroll({ top: window.scrollY + 800, behavior: "smooth" })}
-            />
-          </div>
-        ))}
+                <div className="content-texts">
+                  <h1 className="text-main">{item?.title}</h1>
+                  <p>{item?.content}</p>
+                  <Link to="/products" className="button-explain">
+                    <span>Məhsulları kəşf et</span>
+                    <FaArrowRightLong className="righticon" />
+                  </Link>
+                </div>
+                <HiOutlineArrowDownCircle
+                  className="arrow-down-circle"
+                  onClick={() => window.scroll({ top: window.scrollY + 800, behavior: "smooth" })}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
     </div>
   );
 };

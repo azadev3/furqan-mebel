@@ -17,13 +17,13 @@ const PaginationLikedProducts = ({ data, itemsPerPage }: { data: FavouriteItemTy
     setCurrentPage(pageNumber);
   };
 
-  const currentData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const currentData = data && data?.length > 0 ? data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : '';
 
   return (
     <div className="favorites">
       <div className="favorites-content">
         {Object.values(currentData).map((item: FavouriteItemType) => (
-          <Link to={`/products/${item?.slug.toLowerCase()}`}
+          <Link to={`/products/${item?.slug?.toLowerCase()}`}
             style={{ cursor: "pointer", textDecoration: "none" }}
             className="liked-items"
             key={item.id}>

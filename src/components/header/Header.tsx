@@ -26,6 +26,7 @@ import axios from "axios";
 import { CartType } from "../basketpageuitils/Basket";
 import getCookie from "../../getCookie";
 import { CategoriesInterface } from "../homepageuitils/PopularProducts";
+import Catalogs from "./Catalogs";
 
 export interface Logo {
   id: number;
@@ -301,6 +302,8 @@ const Header: React.FC = () => {
               <input type="text" placeholder="Axtar" readOnly />
               <CiSearch className="searchicon" />
             </div>
+            <Catalogs />
+          
           </div>
           <div className="right-header">
             <nav className="navbar">

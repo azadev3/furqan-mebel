@@ -42,7 +42,7 @@ const FormAndTotalPrice: React.FC = () => {
             }}>
             {({ handleSubmit, errors }) => (
               <Form onSubmit={handleSubmit}>
-                <div className="country">
+                {/* <div className="country">
                   <label>Ölkə</label>
                   <Field
                     style={{ border: errors && errors?.country ? "2px solid red" : "" }}
@@ -58,7 +58,7 @@ const FormAndTotalPrice: React.FC = () => {
                     <option value="Turkey">Turkey</option>
                   </Field>
                   <ErrorMessage className="error-msg" name="country" component="span" />
-                </div>
+                </div> */}
                 <div className="name-surname">
                   <div className="leftname">
                     <label>Ad</label>
@@ -82,7 +82,7 @@ const FormAndTotalPrice: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="apartment-adress">
+                {/* <div className="apartment-adress">
                   <div className="leftname">
                     <label>Adress</label>
                     <Field
@@ -103,7 +103,7 @@ const FormAndTotalPrice: React.FC = () => {
                     />
                     <ErrorMessage className="error-msg" name="apartment" component="span" />
                   </div>
-                </div>
+                </div> */}
 
                 <div className="zipcode-city">
                   <div className="leftname">
@@ -122,7 +122,7 @@ const FormAndTotalPrice: React.FC = () => {
                   </div>
                 </div>
                 <div className="bottom-form">
-                  <h2>Əlaqə məlumatları</h2>
+                  {/* <h2>Əlaqə məlumatları</h2> */}
                   <div className="tel-and-email">
                     <div className="tel">
                       <label>Əlaqə nömrəsi</label>
@@ -134,7 +134,7 @@ const FormAndTotalPrice: React.FC = () => {
                       />
                       <ErrorMessage className="error-msg" name="telephone" component="span" />
                     </div>
-                    <div className="email">
+                    {/* <div className="email">
                       <label>Email</label>
                       <Field
                         style={{ border: errors && errors?.country ? "2px solid red" : "" }}
@@ -143,7 +143,7 @@ const FormAndTotalPrice: React.FC = () => {
                         placeholder="johndoe@gmail.com"
                       />
                       <ErrorMessage className="error-msg" name="email" component="span" />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="button">

@@ -87,7 +87,7 @@ const Basket: React.FC = () => {
   const initialCount =
     basketItemsData && basketItemsData.length > 0
       ? basketItemsData.reduce((acc: { [key: number]: number }, item: ProductsInterface) => {
-          acc[item.id] = 1;
+          acc[item.id] = item.quantity || 1;
           return acc;
         }, {})
       : {};
@@ -95,8 +95,8 @@ const Basket: React.FC = () => {
   const [count, setCount] = React.useState<{ [key: number]: number }>(initialCount);
 
   const incrementProduct = (id: number) => {
-    setCount((prevcount) => {
-      const newCount = (prevcount[id] || 1) + 1;
+    setCount((prevCount) => {
+      const newCount = (prevCount[id] || 1) + 1;
       const product = basketItemsData.find((item: ProductsInterface) => item.id === id);
 
       if (product) {
@@ -104,15 +104,15 @@ const Basket: React.FC = () => {
       }
 
       return {
-        ...prevcount,
+        ...prevCount,
         [id]: newCount,
       };
     });
   };
 
   const decrementProduct = (id: number) => {
-    setCount((prevcount) => {
-      const currentCount = prevcount[id] || 1;
+    setCount((prevCount) => {
+      const currentCount = prevCount[id] || 1;
       const newCount = currentCount - 1;
 
       const product = basketItemsData.find((item: ProductsInterface) => item.id === id);
@@ -122,10 +122,15 @@ const Basket: React.FC = () => {
       }
 
       return {
-        ...prevcount,
+        ...prevCount,
         [id]: newCount < 1 ? 1 : newCount,
       };
     });
+  };
+
+  const calculateTotalPrice = (price: string, count: number) => {
+    const priceFloat = parseFloat(price) || 0;
+    return (priceFloat * count).toFixed(2);
   };
 
   const navigate = useNavigate();
@@ -141,7 +146,11 @@ const Basket: React.FC = () => {
               <div className="isbasketted-products-container">
                 {isBasketProducts.cart_items.map((item: CartItemType) => (
                   <div className="item-basket" key={item.id}>
-                    <div style={{cursor: "pointer"}} className="leftbasketproduct" onClick={() => navigate(`/products/${item?.product?.slug?.toLowerCase()}`)}>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      className="leftbasketproduct"
+                      onClick={() => navigate(`/products/${item?.product?.slug?.toLowerCase()}`)}
+                    >
                       <div className="image-product">
                         <img
                           src={item.product.img}
@@ -156,7 +165,7 @@ const Basket: React.FC = () => {
                     </div>
                     <div className="rightbasketproduct">
                       <div className="price">
-                        <span>{item.product.price} AZN</span>
+                        <span>{calculateTotalPrice(item.product.price, count[item.product.id] || item.quantity)} AZN</span>
                       </div>
                       <div className="counter">
                         <span className="decrement" onClick={() => decrementProduct(item.product.id)}>
@@ -182,35 +191,34 @@ const Basket: React.FC = () => {
             <div className="local-basket-products-container">
               {basketItemsData.map((item: ProductsInterface) => (
                 <div className="item-basket" key={item.id}>
-                <div className="leftbasketproduct" style={{cursor: "pointer"}} onClick={() => navigate(`/products/${item?.slug?.toLowerCase()}`)}>
-                  <div className="image-product">
-                    <img
-                      src={item?.img}
-                      alt={`${item?.id}-product`}
-                      title={item?.title || "product"}
-                    />
+                  <div
+                    className="leftbasketproduct"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigate(`/products/${item?.slug?.toLowerCase()}`)}
+                  >
+                    <div className="image-product">
+                      <img src={item?.img} alt={`${item?.id}-product`} title={item?.title || "product"} />
+                    </div>
+                    <div className="titles">
+                      <span>{item?.title}</span>
+                      <p>{item?.content}</p>
+                    </div>
                   </div>
-                  <div className="titles">
-                    <span>{item?.title}</span>
-                    <p>{item?.content}</p>
+                  <div className="rightbasketproduct">
+                    <div className="price">
+                      <span>{calculateTotalPrice(item?.price || "0", count[item?.id] || 1)} AZN</span>
+                    </div>
+                    <div className="counter">
+                      <span className="decrement" onClick={() => decrementProduct(item?.id)}>
+                        -
+                      </span>
+                      <span>{count[item?.id] || 1}</span>
+                      <span className="increment" onClick={() => incrementProduct(item?.id)}>
+                        +
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div className="rightbasketproduct">
-                  <div className="price">
-                    <span>{item?.price} AZN</span>
-                  </div>
-                  <div className="counter">
-                    <span className="decrement" onClick={() => decrementProduct(item?.id)}>
-                      -
-                    </span>
-                    <span>{count[item?.id] || item.quantity}</span>
-                    <span className="increment" onClick={() => incrementProduct(item?.id)}>
-                      +
-                    </span>
-                  </div>
-                </div>
-              </div>
-                
               ))}
               <div className="continue-btn">
                 <Link to="/delivery" className="btn">
@@ -227,7 +235,8 @@ const Basket: React.FC = () => {
                 width: "100%",
                 textAlign: "center",
                 color: "#303030",
-              }}>
+              }}
+            >
               Hələ ki heç bir məhsul səbətə əlavə olunmayıb.
             </p>
           )}

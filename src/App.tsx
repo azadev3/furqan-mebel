@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Homepage from "./routes/Homepage";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
-import Topheader from "./components/header/Topheader";
+import Topheader, { CallYourModalState } from "./components/header/Topheader";
 import AboutPage from "./routes/AboutPage";
 import "./styles/pages/pages.scss";
 import BlogPage from "./routes/BlogPage";
@@ -17,7 +17,7 @@ import PaymentSuccessPage from "./routes/PaymentSuccessPage";
 import FavouritesPage from "./routes/FavouritesPage";
 import StorePage from "./routes/StorePage";
 import CreditConditionsPage from "./routes/CreditConditionsPage";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   ActiveLoginPageState,
   ActiveRegisterPageState,
@@ -40,10 +40,9 @@ import { useAddFavourite } from "./useAddFavourite";
 import { FavouriteItemType } from "./components/productpageuitils/filteruitils/productmainuitils/PaginationProducts";
 import axios from "axios";
 import { Baseurl } from "./api/Baseurl";
+import Thanks from "./Thanks";
 
 const App: React.FC = () => {
-
-
   const [isAuth, setAuth] = useRecoilState(UserIsAuthState);
 
   React.useEffect(() => {
@@ -144,24 +143,58 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     const outsideClickImgModal = (e: MouseEvent) => {
-      if(imgModalDivRef && imgModalDivRef.current && imgModalDivRef.current.contains(e.target as Node)) {
+      if (imgModalDivRef && imgModalDivRef.current && imgModalDivRef.current.contains(e.target as Node)) {
         setShowedImg("");
       }
-    }
+    };
 
     document.addEventListener("mousedown", outsideClickImgModal);
     return () => document.removeEventListener("mousedown", outsideClickImgModal);
-  }, []); 
+  }, []);
+
+  //call your modal
+  const [callYourModal, setCallYourModal] = useRecoilState(CallYourModalState);
+
+  const callYourModalRef = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    const outsideClickedCallYourModal = (e: MouseEvent) => {
+      if (callYourModalRef.current && !callYourModalRef.current.contains(e.target as Node)) {
+        setCallYourModal(false);
+      }
+    };
+
+    document.addEventListener("mousedown", outsideClickedCallYourModal);
+    return () => document.removeEventListener("mousedown", outsideClickedCallYourModal);
+  }, []);
 
   return (
     <div className="app">
+      {/* call your modal */}
+      <div className={`call-your-modal-overlay ${callYourModal ? "active" : ""}`}>
+        <div className="call-your-modal" ref={callYourModalRef}>
+          <img src="../closebtn.svg" alt="close-btn" className="closebtn" onClick={() => setCallYourModal(false)} />
+          <h1>Zəng sifariş et</h1>
+          <form action="" className="form">
+            <div className="field-input">
+              <label htmlFor="name">Ad</label>
+              <input type="text" name="name" id="name" placeholder="Jhon" />
+            </div>
+            <div className="field-input">
+              <label htmlFor="tel">Əlaqə nömrəsi</label>
+              <input type="text" name="tel" id="tel" placeholder="+994 70 000 00 00" />
+            </div>
+          </form>
+          <button type="submit">Göndər</button>
+        </div>
+      </div>
+
       {/* show img modal */}
       <div className={`image-modal-overlay ${showedImg ? "active" : ""}`} ref={imgModalDivRef}>
-          <div className="image-modal">
-            <img src={showedImg} alt="" />
-          </div>
-         </div>
-     
+        <div className="image-modal">
+          <img src={showedImg} alt="" />
+        </div>
+      </div>
 
       <div className={`overlay ${loginMenu ? "active" : ""}`}>
         <div className={`login-menu-wrapper ${loginMenu ? "active" : ""}`} ref={loginMenuRef}>
@@ -249,6 +282,7 @@ const App: React.FC = () => {
         <Route path="/stores" element={<StorePage />} />
         <Route path="/credit" element={<CreditConditionsPage />} />
         <Route path="/profile/*" element={<Dashboard />} />
+        <Route path="/thanks" element={<Thanks />} />
       </Routes>
       <Footer />
     </div>

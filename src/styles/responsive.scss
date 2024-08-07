@@ -525,7 +525,6 @@
   }
 }
 @media only screen and (max-width: 1030px) {
-  
   .header-wrapper .header .right-header {
     gap: 5px;
   }
@@ -539,7 +538,13 @@
   .header-wrapper .header .right-header .navbar {
     gap: 2px;
   }
-  .homepage-wrapper .homepage .popular-products-wrapper .popular-products .container-with-popular-products .categories-swiper .swiper-slide {
+  .homepage-wrapper
+    .homepage
+    .popular-products-wrapper
+    .popular-products
+    .container-with-popular-products
+    .categories-swiper
+    .swiper-slide {
     overflow: hidden;
     font-size: 8.5px;
   }
@@ -566,8 +571,6 @@
     width: 130px;
     height: 30px;
   }
-
-
 }
 @media only screen and (max-width: 968px) {
   .image-modal-overlay .image-modal {
@@ -2027,7 +2030,41 @@
 }
 
 @media only screen and (max-width: 568px) {
-  .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .image-section .show-other-image-navigator {
+  .thanks-page {
+    margin-top: 60px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .thanks-page .texts h1 {
+    font-size: 16px;
+  }
+  .thanks-page .texts p {
+    font-size: 12px;
+    max-width: 300px;
+  }
+  .thanks-page .home-btn span {
+    font-size: 13px;
+  }
+  .call-your-modal-overlay .call-your-modal {
+    padding: 36px 24px;
+  }
+  .call-your-modal-overlay .call-your-modal h1 {
+    font-size: 18px;
+  }
+  .call-your-modal-overlay .call-your-modal .closebtn {
+    width: 28px;
+    height: 28px;
+  }
+  .call-your-modal-overlay .call-your-modal .form .field-input label {
+    font-size: 14px;
+  }
+
+  .product-inner-page-wrapper
+    .productinnerpage
+    .product-showing-area
+    .product-showing
+    .image-section
+    .show-other-image-navigator {
     min-height: unset !important;
     max-height: unset !important;
     height: auto;
@@ -2862,5 +2899,3 @@
     padding: 16px 10px;
   }
 }
-
-
