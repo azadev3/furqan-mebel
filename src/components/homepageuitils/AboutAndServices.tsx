@@ -6,6 +6,7 @@ import { Baseurl } from "../../api/Baseurl";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
 import { useRecoilValue } from "recoil";
 import Loader from "../../uitils/Loader";
+import { useTranslations } from "../../TranslateContext";
 
 interface Abouts {
   id: number;
@@ -50,10 +51,12 @@ const AboutAndServices: React.FC = () => {
     },
   });
 
+  const { translations } = useTranslations(); 
+
   return (
     <div className="about-and-services-wrapper">
       <div className="about-and-services">
-        <h1>Xidmətlərimiz & Haqqımızda</h1>
+        <h1>{translations['xidmetler_ve_haqqimizda']}</h1>
 
         <div className="grid-aboutservices">
           <div className="about-services">

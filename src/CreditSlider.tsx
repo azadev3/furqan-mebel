@@ -1,5 +1,6 @@
 import React from "react";
 import { Range, getTrackBackground } from "react-range";
+import { useTranslations } from "./TranslateContext";
 
 const STEP = 1;
 const MIN = 3;
@@ -8,10 +9,12 @@ const MAX = 24;
 const CreditSlider = () => {
   const [values, setValues] = React.useState([12]);
 
+  const { translations } = useTranslations();
+
   return (
     <div style={{ padding: "20px" }}>
       <div>
-        <h3>Kredit şərtləri</h3>
+        <h3>{translations['kredit_sertleri']}</h3>
       </div>
       <Range
         values={values}

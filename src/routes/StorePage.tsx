@@ -7,6 +7,7 @@ import axios from "axios";
 import { Baseurl } from "../api/Baseurl";
 import Loader from "../uitils/Loader";
 import DOMPurify from "dompurify";
+import { useTranslations } from "../TranslateContext";
 interface Locations {
   id: number;
   branch_name: string;
@@ -36,10 +37,12 @@ const StorePage: React.FC = () => {
     setSelectedLocation(branch_address);
   };
 
+  const { translations } = useTranslations();
+
   return (
     <div className="store-page-wrapper">
       <div className="store-page">
-        <NavigationShower prevpage="Mağazalar" />
+        <NavigationShower prevpage={translations['magazalar']} />
         <div className="map-and-locations">
           {contactItemsData &&
             contactItemsData.length > 0 &&

@@ -4,6 +4,7 @@ import React from "react";
 import * as yup from "yup";
 import { Baseurl } from "../../api/Baseurl";
 import { toast } from "react-toastify";
+import { useTranslations } from "../../TranslateContext";
 
 const LeftContact: React.FC = () => {
   const ContactSchema = yup.object().shape({
@@ -13,10 +14,12 @@ const LeftContact: React.FC = () => {
     message: yup.string().required("Lütfən, mesajınızı yazın"),
   });
 
+  const { translations } = useTranslations(); 
+
   return (
     <div className="left-contact">
       <div className="toptitle-contact">
-        <h1>Bizimlə əlaqə</h1>
+        <h1>{translations['bizimle_elaqe']}</h1>
         <p>
           Lorem ipsum dolor sit amet consectetur. Sed amet pulvinar cursus volutpat dolor. Lorem ipsum dolor sit amet
           consectetur. Sed amet pulvinar cursus volutpat dolor
@@ -94,7 +97,7 @@ const LeftContact: React.FC = () => {
                 )}
               </div>
 
-              <button type="submit">Göndər</button>
+              <button type="submit">{translations['gonder']}</button>
             </Form>
           )}
         </Formik>

@@ -1,6 +1,7 @@
 import React from "react";
 import { useRecoilState } from "recoil";
 import { checkboxCheckedState } from "../../../recoil/Atoms";
+import { useTranslations } from "../../../TranslateContext";
 
 type SortItemType = {
   id: number;
@@ -8,22 +9,25 @@ type SortItemType = {
 };
 
 const Sort: React.FC = () => {
+
+  const { translations } = useTranslations();
+
   const SortItems: SortItemType[] = [
     {
       id: 1,
-      title: "Ucuzdan - Bahaya",
+      title: translations['ucuzdan_bahaya_filter'],
     },
     {
       id: 2,
-      title: "Bahadan - Ucuza",
+      title: translations['bahadan_ucuza_filter'],
     },
     {
       id: 3,
-      title: "Yeni Məhsullar",
+      title: translations['yeni_mehsullar_filter'],
     },
     {
       id: 4,
-      title: "Endirimli Məhsullar",
+      title: translations['endirimli_mehsullar_filter'],
     },
   ];
 
@@ -44,7 +48,7 @@ const Sort: React.FC = () => {
   return (
     <div className="sort">
       <div className="sort-categ" onClick={openSortCategory}>
-        <span>Sort</span>
+        <span>{translations['sort']}</span>
         <img src="../down.svg" alt="" style={{ transform: category ? "rotate(180deg)" : "" }} />
       </div>
       <div className={`sort-category-submenu ${category ? "showed" : ""}`}>

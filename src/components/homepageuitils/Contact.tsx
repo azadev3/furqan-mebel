@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslations } from "../../TranslateContext";
 
 export type InformationItemType = {
   id: number;
@@ -28,6 +29,8 @@ const Contact: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const { translations } = useTranslations();
+
   return (
     <div className="contact-wrapper">
       <div className="contact">
@@ -37,23 +40,23 @@ const Contact: React.FC = () => {
 
         <div className="right-contact">
           <div className="contact-withus">
-            <h1>Bizimlə əlaqə</h1>
+            <h1>{translations['bizimle_elaqe']}</h1>
             <form className="form">
               <div className="email">
-                <span>Email</span>
+                <span>{translations['email']}</span>
                 <input type="email" placeholder="jhondoe@gmail.com" />
               </div>
               <div className="message">
-                <span>Mesaj</span>
-                <textarea placeholder="A little about the company and the team that you’ll be working with."></textarea>
+                <span>{translations['mesaj']}</span>
+                <textarea placeholder={translations['message_textarea']}></textarea>
               </div>
 
-              <button type="submit" onClick={() => navigate('/contact')}>Göndər</button>
+              <button type="submit" onClick={() => navigate('/contact')}>{translations['gonder']}</button>
             </form>
           </div>
 
           <div className="information">
-            <h1>Əlaqə məlumatları</h1>
+            <h1>{translations['elaqe_melumatlari']}</h1>
             <div className="information-items">
               {InformationItems.map((item: InformationItemType, i:number) => (
                 <Link to={i === 1 ? `mailto:${item.title}` : i === 2 ? `tel:${item.title}` : ""} key={item.id}>

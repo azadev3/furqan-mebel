@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 import { basketItemState } from "../../recoil/Atoms";
 import { useAddBasket } from "../../useAddBasket";
 import axios from "axios";
@@ -9,6 +9,12 @@ import getCookie from "../../getCookie";
 import { ProductsInterface } from "../homepageuitils/PopularProducts";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
 import Loader from "../../uitils/Loader";
+import { useTranslations } from "../../TranslateContext";
+
+export const PriceCountState = atom<string>({
+  key: "priceCountKey",
+  default: "",
+});
 
 export type ProductType = {
   id: number;
@@ -135,6 +141,8 @@ const Basket: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const { translations } = useTranslations();
+
   return (
     <div className="basket">
       {loading ? (
@@ -182,7 +190,7 @@ const Basket: React.FC = () => {
               </div>
               <div className="continue-btn">
                 <Link to="/delivery" className="btn">
-                  <span>Davam et</span>
+                  <span>{translations['davam_et']}</span>
                   <img src="../rightwhitee.svg" alt="" />
                 </Link>
               </div>
@@ -222,7 +230,7 @@ const Basket: React.FC = () => {
               ))}
               <div className="continue-btn">
                 <Link to="/delivery" className="btn">
-                  <span>Davam et</span>
+                  <span>{translations['davam_et']}</span>
                   <img src="../rightwhitee.svg" alt="" />
                 </Link>
               </div>

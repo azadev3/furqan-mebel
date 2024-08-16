@@ -3,6 +3,7 @@ import NavigationShower from "../uitils/NavigationShower";
 import CardRepition from "../components/deliverypageuitils/CardRepition";
 import { FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
+import { useTranslations } from "../TranslateContext";
 
 type CardSelectType = {
   id: number;
@@ -99,6 +100,8 @@ const PaymentDetails: React.FC = () => {
     console.log(activeMonth, "f");
   }, [activeMonth, radioRefs]);
 
+  const { translations } = useTranslations();
+
   return (
     <div className="payment-detail-page-wrapper">
       <div className="payment-detail-page">
@@ -155,7 +158,7 @@ const PaymentDetails: React.FC = () => {
                 ))}
               </div>
               <div className="monthly-pay">
-                <p className="title-pay">Aylıq ödəniş</p>
+                <p className="title-pay">{translations['ayliq_odenis']}</p>
                 <span className="count-price">15.83000 AZN</span>
               </div>
             </div>
@@ -163,7 +166,7 @@ const PaymentDetails: React.FC = () => {
             
           <div className="finish-payment">
             <button className="btn" type="button" onClick={handleSubmit}>
-            Sifarişi təsdiqlə
+            {translations['sifarisi_tesdiqle']}
             </button>
           </div>
           </div>

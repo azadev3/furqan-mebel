@@ -13,6 +13,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import { useTranslations } from "../../TranslateContext";
 
 type HeroDataType = {
   id: string;
@@ -26,8 +27,8 @@ const Hero: React.FC = () => {
 
   const {
     data: HeroData,
-    isLoading: LoadingHeroData,
-    isError: ErrorHeroData,
+    isLoading,
+    isError,
   } = useQuery<HeroDataType[]>({
     queryKey: ["heroDataKey", activeLanguage],
     queryFn: async () => {
@@ -41,44 +42,44 @@ const Hero: React.FC = () => {
     staleTime: 1000000,
   });
 
-  if (LoadingHeroData) {
-    return <Loader />;
-  }
-
-  if (ErrorHeroData) {
-    return <Error />;
-  }
+  const { translations } = useTranslations();
 
   return (
     <div className="hero-wrapper">
-      {HeroData && HeroData.length > 0 && (
-        <Swiper
-          pagination={{ dynamicBullets: true }}
-          modules={[Pagination]}
-          className="mySwiper"
-        >
-          {HeroData.map((item: HeroDataType) => (
-            <SwiperSlide key={item.id}>
-              <div className="hero">
-                <div className="filter"></div>
-                <video loop muted autoPlay controls={false} src={item?.video}></video>
+      {isLoading ? (
+        <Loader />
+      ) : isError ? (
+        <Error />
+      ) : (
+        <React.Fragment>
+          {HeroData && HeroData.length > 0 ? (
+            <Swiper pagination={{ dynamicBullets: true, clickable: true }} modules={[Pagination]} className="mySwiper">
+              {HeroData.map((item: HeroDataType) => (
+                <SwiperSlide key={item.id}>
+                  <div className="hero">
+                    <div className="filter"></div>
+                    <video loop muted autoPlay controls={false} src={item?.video}></video>
 
-                <div className="content-texts">
-                  <h1 className="text-main">{item?.title}</h1>
-                  <p>{item?.content}</p>
-                  <Link to="/products" className="button-explain">
-                    <span>Məhsulları kəşf et</span>
-                    <FaArrowRightLong className="righticon" />
-                  </Link>
-                </div>
-                <HiOutlineArrowDownCircle
-                  className="arrow-down-circle"
-                  onClick={() => window.scroll({ top: window.scrollY + 800, behavior: "smooth" })}
-                />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+                    <div className="content-texts">
+                      <h1 className="text-main">{item?.title}</h1>
+                      <p>{item?.content}</p>
+                      <Link to="/products" className="button-explain">
+                        <span>{translations["mehsullari_kesf_et"]}</span>
+                        <FaArrowRightLong className="righticon" />
+                      </Link>
+                    </div>
+                    <HiOutlineArrowDownCircle
+                      className="arrow-down-circle"
+                      onClick={() => window.scroll({ top: window.scrollY + 800, behavior: "smooth" })}
+                    />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            ""
+          )}
+        </React.Fragment>
       )}
     </div>
   );

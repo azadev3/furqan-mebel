@@ -2,7 +2,7 @@ import React, { SetStateAction, useEffect, useRef } from "react";
 import { Link, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
 import { Logo, NavbarItemType } from "./Header";
-import { FaAngleDown, FaRegUser } from "react-icons/fa6";
+import { FaRegUser } from "react-icons/fa6";
 import {
   basketItemState,
   LoginMenuState,
@@ -22,12 +22,16 @@ import ProfileDropdown from "./ProfileDropdown";
 import getCookie from "../../getCookie";
 import { CartType } from "../basketpageuitils/Basket";
 import { CategoriesInterface } from "../homepageuitils/PopularProducts";
+import { useTranslations } from "../../TranslateContext";
 
 type Props = {
   setSearchModal: React.Dispatch<SetStateAction<boolean>>;
 };
 
 const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
+
+  const { translations } = useTranslations(); 
+
   //FETCH LOGO
   const activeLanguage = useRecoilValue(SelectedLanguageState);
 
@@ -99,49 +103,33 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
     };
   }, [dropdown]);
 
-  
-  // FETCH CATEGORIES
-  const { data: CategoryProductsData } = useQuery({
-    queryKey: ["categoryProductsKey", activeLanguage],
-    queryFn: async () => {
-      const response = await axios.get(`${Baseurl}/categories`, {
-        headers: {
-          "Accept-Language": activeLanguage,
-        },
-      });
-      return response.data?.categories;
-    },
-    staleTime: 1000000,
-  });
-
-
   // Define navbar items
   const NavbarItems: NavbarItemType[] = [
-    { id: 1, title: "Ana səhifə", to: "/" },
-    { id: 2, title: "Haqqımızda", to: "/about" },
-    {
-      id: 3,
-      title: "Məhsullar",
-      icon: (
-        <FaAngleDown
-          className="down-icon"
-          style={{ transform: dropdown === 3 ? "rotate(180deg)" : "", transition: "150ms ease-in-out" }}
-        />
-      ),
-      subitem:
-      CategoryProductsData && CategoryProductsData.length > 0
-          ? CategoryProductsData.map((item: CategoriesInterface) => {
-              return {
-                id: item?.id,
-                title: item?.title,
-              };
-            })
-          : [],
-      to: "",
-    },
-    { id: 4, title: "Bloq", to: "/blog" },
-    { id: 5, title: "Kredit", to: "/credit" },
-    { id: 6, title: "Əlaqə", to: "/contact" },
+    { id: 1, title: `${translations['nav_anasehife']}`, to: "/" },
+    { id: 2, title: `${translations['nav_haqqimizda']}`, to: "/about" },
+    // {
+    //   id: 3,
+    //   title: `${translations['nav_mehsullar']}`,
+    //   icon: (
+    //     <FaAngleDown
+    //       className="down-icon"
+    //       style={{ transform: dropdown === 3 ? "rotate(180deg)" : "", transition: "150ms ease-in-out" }}
+    //     />
+    //   ),
+    //   subitem:
+    //   CategoryProductsData && CategoryProductsData.length > 0
+    //       ? CategoryProductsData.map((item: CategoriesInterface) => {
+    //           return {
+    //             id: item?.id,
+    //             title: item?.title,
+    //           };
+    //         })
+    //       : [],
+    //   to: "",
+    // },
+    { id: 4, title: `${translations['nav_blog']}`, to: "/blog" },
+    { id: 5, title: `${translations['nav_kredit']}`, to: "/credit" },
+    { id: 6, title: `${translations['nav_contact']}`, to: "/contact" },
   ];
 
   //search modal

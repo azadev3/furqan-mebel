@@ -11,6 +11,7 @@ import { ProductsInterface } from "../homepageuitils/PopularProducts";
 import { IoMdHeart } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";
 import { useAddFavourite } from "../../useAddFavourite";
+import { useTranslations } from "../../TranslateContext";
 
 const SimiliarProducts: React.FC = () => {
 
@@ -38,9 +39,11 @@ const SimiliarProducts: React.FC = () => {
     staleTime: 1000000,
   });
 
+  const { translations } = useTranslations();
+
   return (
     <div className="similiar-products">
-      <h1>Bənzər məhsullar</h1>
+      <h1>{translations['benzer_mehsullar']}</h1>
 
       <div className="carouselsimiliar-products">
         <Swiper

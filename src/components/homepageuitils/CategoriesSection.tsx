@@ -11,6 +11,7 @@ import axios from "axios";
 import { CategoriesInterface } from "./PopularProducts";
 import { useNavigate } from "react-router-dom";
 import { selectedCategoryStateProductPage } from "../../recoil/Atoms";
+import { useTranslations } from "../../TranslateContext";
 
 
 const CategoriesSection: React.FC = () => {
@@ -40,10 +41,12 @@ const CategoriesSection: React.FC = () => {
     setCategoryTitle(categoryId);
   }
 
+  const { translations } = useTranslations();
+
   return (
     <section className="categories-wrapper">
       <div className="categories">
-        <h1>Kateqoriyalar</h1>
+        <h1>{translations['kategoriyalar']}</h1>
 
         <div className="grid-categories-section">
           <Swiper

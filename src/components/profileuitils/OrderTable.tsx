@@ -1,5 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { SelectedLanguageState } from "../header/SelectedLanguage";
+import { useRecoilValue } from "recoil";
+import { useQuery } from "@tanstack/react-query";
+import { Baseurl } from "../../api/Baseurl";
+import axios from "axios";
+import getCookie from "../../getCookie";
+import { Orders } from "../paymentsuccesspageuitils/PaymentReceipt";
 
 export type OrderType = {
   id: number;
@@ -8,72 +15,41 @@ export type OrderType = {
   date: string;
   all: string;
 };
-//order data
-export const Orders: OrderType[] = [
-  {
-    id: 1,
-    orderID: "#964593761",
-    status: "hazırlanır",
-    date: "Dec 30, 2019 05:18",
-    all: "29.0000 AZN (5 Products)",
-  },
-  {
-    id: 2,
-    orderID: "#9634459761",
-    status: "tamamlandı",
-    date: "Dec 30, 2019 05:18",
-    all: "29.0000 AZN (5 Products)",
-  },
-  {
-    id: 3,
-    orderID: "#964111159761",
-    status: "hazırlanır",
-    date: "Dec 30, 2019 05:18",
-    all: "29.0000 AZN (5 Products)",
-  },
-  {
-    id: 4,
-    orderID: "#222296459761",
-    status: "hazırlanır",
-    date: "Dec 30, 2019 05:18",
-    all: "29.0000 AZN (5 Products)",
-  },
-  {
-    id: 5,
-    orderID: "#9123213126459761",
-    status: "hazırlanır",
-    date: "Dec 30, 2019 05:18",
-    all: "29.0000 AZN (5 Products)",
-  },
-  {
-    id: 6,
-    orderID: "#9666765878459761",
-    status: "ləğv edildi",
-    date: "Dec 30, 2019 05:18",
-    all: "29.0000 AZN (5 Products)",
-  },
-  {
-    id: 7,
-    orderID: "#96459776861",
-    status: "hazırlanır",
-    date: "Dec 30, 2019 05:18",
-    all: "29.0000 AZN (5 Products)",
-  },
-];
 
 const OrderTable: React.FC = () => {
+
+   //fetch orders
+   const selectedLang = useRecoilValue(SelectedLanguageState);
+   const { data: ordersData } = useQuery<Orders[]>({
+     queryKey: ["ordersDataKey", selectedLang],
+     queryFn: async () => {
+       const token = getCookie("accessToken");
+       const response = await axios.get(`${Baseurl}/orders`, {
+         headers: {
+           "Accept-Language": selectedLang,
+           Authorization: `Bearer ${token}`,
+         },
+       });
+       return response.data?.orders;
+     },
+   });
+
   //control for statuses colors
-  const ControlStatus = (item: string) => {
-    switch (item) {
-      case "hazırlanır":
-        return "packaging";
-      case "tamamlandı":
-        return "finished";
-      case "ləğv edildi":
+  const ControlStatus = (item: Orders) => {
+    switch (item.status) {
+      case "1":
+        return "newpackage";
+      case "2":
+        return "readying";
+      case "3":
+        return "sended";
+      case "4": 
+        return "delivered";
+      case "5":
         return "rejected";
       default:
-        break;
-    }
+        return "unknown-status";
+      }
   };
   return (
     <div className="orders-and-details-table">
@@ -86,7 +62,6 @@ const OrderTable: React.FC = () => {
             <th>sifariş id</th>
             <th>status</th>
             <th>tarix</th>
-            <th>ümumi</th>
             <th>
               <Link to="">
                 <span>Hamısı</span>
@@ -96,20 +71,19 @@ const OrderTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {Orders.map((item: OrderType) => (
-            <tr key={item?.id}>
-              <td>{item?.orderID}</td>
-              <td className={ControlStatus(item?.status)}>{item?.status}</td>
-              <td>{item?.date}</td>
-              <td>{item?.all}</td>
+          {ordersData && ordersData?.length > 0 ? ordersData.map((item: Orders, i: number) => (
+            <tr key={i}>
+              <td>{item?.id}</td>
+              <td className={ControlStatus(item)}>{item.status === "1" ? "Yeni Sifariş" : item.status === "2" ? "Hazırlanır" : item.status === "3" ? "Göndərildi" : item.status === "4" ? "delivered" : item.status === "5" ? "rejected" : ""}</td>
+              <td>{item?.order_date}</td>
               <td>
-                <Link to={`/profile/orderhistory/${item?.orderID.split("#").join("")}`}>
+                <Link to={`/profile/orderhistory/${item?.id.toString().split("#").join("")}`}>
                   <span>Detallar</span>
                   <img src="../rig.svg" alt="" />
                 </Link>
               </td>
             </tr>
-          ))}
+          )) : ""}
         </tbody>
       </table>
     </div>

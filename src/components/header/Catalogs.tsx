@@ -1,17 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { PiList } from "react-icons/pi";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "./SelectedLanguage";
 import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
-import { PiCaretRightBold } from "react-icons/pi";
+import { FaAngleDown } from "react-icons/fa6";
+import { Link, useNavigate } from "react-router-dom";
+import { selectedCategoryStateProductPage } from "../../recoil/Atoms";
+import { useTranslations } from "../../TranslateContext";
 
 type Children = {
   id: number;
   title: string;
   img: string | null;
-  children?: Children[];
 };
 
 interface Catalog {
@@ -37,6 +39,7 @@ const Catalogs: React.FC = () => {
         return response.data?.categories;
       }
     },
+    staleTime: 600000,
   });
 
   const [catalogMenu, setCatalogMenu] = React.useState<boolean>(false);
@@ -65,68 +68,97 @@ const Catalogs: React.FC = () => {
     return () => document.removeEventListener("mousedown", outsideClicked);
   }, []);
 
+  //hover if open submenus
+  const [sub, setSub] = React.useState<number | null>(null);
+
+  const handleOpenSubMenu = (id: number | null) => {
+    setSub(id);
+  };
+
+  const navigate = useNavigate();
+  const [_, setSelectedCategory] = useRecoilState(selectedCategoryStateProductPage);
+
+  const { translations } = useTranslations();
+
   return (
     <div className="catalog-menu">
       <button className="button-catalog-menu" ref={buttonRef} onClick={handleCatalogMenu}>
-        <span>Kataloq</span>
+        <span>{translations['nav_catalog']}</span>
         <PiList className={`list-icon-catalog ${catalogMenu ? "active" : ""}`} />
       </button>
 
       {/* catalog menu dropdown */}
       <div className={`catalog-toggle-menu ${catalogMenu ? "active" : ""}`} ref={catalogMenuDivRef}>
-        {CategoriesForCatalog &&
-          CategoriesForCatalog.length > 0 &&
-          CategoriesForCatalog.map((item: Catalog) => <CatalogItem key={item.id} item={item} />)}
+        {CategoriesForCatalog && CategoriesForCatalog?.length > 0
+          ? CategoriesForCatalog?.map((item: Catalog) => (
+              <div className="link-container" key={item?.id}>
+                {/* main items */}
+                <div
+                  onClick={() => {
+                    if (item && item?.children?.length <= 0) {
+                      navigate("/products");
+                      setCatalogMenu(false);
+                      setSub(null);
+                      setSelectedCategory(item?.id);
+                    }
+                  }}
+                  style={{ cursor: item && item?.children?.length <= 0 ? "pointer" : "" }}
+                  className="catalog-link"
+                  onMouseEnter={() => handleOpenSubMenu(item?.id)}
+                  onMouseLeave={() => setSub(null)}>
+                  <span>{item?.title}</span>
+                  {item && item?.children && item?.children?.length > 0 ? (
+                    <FaAngleDown className={`down ${sub === item?.id ? "active" : ""}`} />
+                  ) : (
+                    ""
+                  )}
+                  {/* sub items */}
+                  <div className={`sub-catalog ${sub === item?.id && item?.children?.length > 0 ? "active" : ""}`}>
+                    <div className="left">
+                      {item && item.children && item.children?.length > 0 && sub && sub === item?.id
+                        ? item.children?.map((item: Children) => (
+                            <Link
+                              to="/products"
+                              onClick={() => {
+                                setCatalogMenu(false);
+                                setSub(null);
+                                //if category title includes on the mini category title
+                                //select main category title on the category page
+                                const ifIncludesItemTitleOnTheMainCategory =
+                                  CategoriesForCatalog && CategoriesForCatalog.length > 0
+                                    ? CategoriesForCatalog.find(
+                                        (cat: Catalog) =>
+                                          cat.children &&
+                                          cat.children.length > 0 &&
+                                          cat.children.some((child) => child.title === item.title)
+                                      )
+                                    : null;
+
+                                if (ifIncludesItemTitleOnTheMainCategory) {
+                                  setSelectedCategory(ifIncludesItemTitleOnTheMainCategory?.id);
+                                }
+                              }}
+                              key={item?.id}
+                              className="catalog-link-inner">
+                              {item?.title}
+                            </Link>
+                          ))
+                        : ""}
+                    </div>
+
+                    <div className="right">
+                      {item && item.img ? (
+                        <img src={item && item.img ? item.img : ""} alt={`${item?.id}-image`} title={item?.title} />
+                      ) : (
+                        <p>Hələ ki, heç bir məhsul şəkili əlavə edilməyib.</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          : ""}
       </div>
-    </div>
-  );
-};
-
-interface CatalogItemProps {
-  item: Catalog | Children;
-}
-
-const CatalogItem: React.FC<CatalogItemProps> = ({ item }) => {
-  const [subCategoryVisible, setSubCategoryVisible] = React.useState<boolean>(false);
-
-  const hasChildren = item.children && item.children.length > 0;
-  const hasImages =
-    hasChildren && item && item.children && item.children?.length > 0 && item.children.some((child) => child.img);
-
-  return (
-    <div
-      className="catalog-item"
-      onMouseEnter={() => setSubCategoryVisible(true)}
-      onMouseLeave={() => setSubCategoryVisible(false)}>
-      <div className="sub-category-link">
-        <span>{item.title}</span>
-        {hasChildren && <PiCaretRightBold className="caret" />}
-      </div>
-      {hasChildren && subCategoryVisible && (
-        <div className="sub-category-menu">
-          <div className="links">
-            {item &&
-              item.children &&
-              item.children?.length > 0 &&
-              item.children.map((child) => <CatalogItem key={child.id} item={child} />)}
-          </div>
-          <div className="sub-category-img">
-            {/* <span>Məhsullar</span> */}
-            <div className="img-wrap">
-              {hasImages ? (
-                item &&
-                item.children &&
-                item.children?.length > 0 &&
-                item.children.map(
-                  (child, i: number) => child.img && i === 0 && <img key={child.id} src={child.img} alt={child.title} />
-                )
-              ) : (
-                <p style={{ textAlign: "center" }}>Hələ ki, əlavə edilmiş şəkil yoxdur.</p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

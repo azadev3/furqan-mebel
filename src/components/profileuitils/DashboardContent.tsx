@@ -35,6 +35,7 @@ export interface updateDataUser {
 }
 
 const DashboardContent: React.FC = () => {
+
   //statistics data
   const Statistics: StatisticsType[] = [
     {

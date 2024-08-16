@@ -41,6 +41,7 @@ import { FavouriteItemType } from "./components/productpageuitils/filteruitils/p
 import axios from "axios";
 import { Baseurl } from "./api/Baseurl";
 import Thanks from "./Thanks";
+import { useTranslations } from "./TranslateContext";
 
 const App: React.FC = () => {
   const [isAuth, setAuth] = useRecoilState(UserIsAuthState);
@@ -168,13 +169,15 @@ const App: React.FC = () => {
     return () => document.removeEventListener("mousedown", outsideClickedCallYourModal);
   }, []);
 
+  const { translations } = useTranslations();
+
   return (
     <div className="app">
       {/* call your modal */}
       <div className={`call-your-modal-overlay ${callYourModal ? "active" : ""}`}>
         <div className="call-your-modal" ref={callYourModalRef}>
           <img src="../closebtn.svg" alt="close-btn" className="closebtn" onClick={() => setCallYourModal(false)} />
-          <h1>Zəng sifariş et</h1>
+          <h1>{translations['zeng_sifaris_et']}</h1>
           <form action="" className="form">
             <div className="field-input">
               <label htmlFor="name">Ad</label>
@@ -185,7 +188,7 @@ const App: React.FC = () => {
               <input type="text" name="tel" id="tel" placeholder="+994 70 000 00 00" />
             </div>
           </form>
-          <button type="submit">Göndər</button>
+          <button type="submit">{translations['gonder']}</button>
         </div>
       </div>
 

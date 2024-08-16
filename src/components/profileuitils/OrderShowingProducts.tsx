@@ -1,52 +1,41 @@
 import React from "react";
-
-type Product = {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-};
-
-interface ActiveProductsType {
-  id: number;
-  price: string;
-  garant: string;
-  deliveryPrice: string;
-  product: Product;
-}
+import { useRecoilValue } from "recoil";
+import { SelectedLanguageState } from "../header/SelectedLanguage";
+import { OrderItems, Orders } from "../paymentsuccesspageuitils/PaymentReceipt";
+import { useQuery } from "@tanstack/react-query";
+import getCookie from "../../getCookie";
+import axios from "axios";
+import { Baseurl } from "../../api/Baseurl";
+import { useParams } from "react-router-dom";
 
 const OrderShowingProducts: React.FC = () => {
-  const ActiveProduct: ActiveProductsType[] = [
-    {
-      id: 1,
-      deliveryPrice: "10 AZN",
-      garant: "1x",
-      price: "12.000 AZN",
-      product: {
-        id: 1,
-        title: "Margaret Qonaq Otağı Dəsti",
-        description: "Bakı, Lorem ipsum dolor sit amet consectetur. Viverra diam nisi morbi ullamcorper mattis",
-        image: "../margaret.svg",
-      },
+  const { id } = useParams();
+
+  //fetch orders
+  const selectedLang = useRecoilValue(SelectedLanguageState);
+  const { data: ordersData } = useQuery<Orders[]>({
+    queryKey: ["ordersDataKey", selectedLang],
+    queryFn: async () => {
+      const token = getCookie("accessToken");
+      const response = await axios.get(`${Baseurl}/orders`, {
+        headers: {
+          "Accept-Language": selectedLang,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data?.orders;
     },
-    {
-      id: 2,
-      deliveryPrice: "10 AZN",
-      garant: "1x",
-      price: "12.000 AZN",
-      product: {
-        id: 1,
-        title: "Margaret Qonaq Otağı Dəsti",
-        description: "Bakı, Lorem ipsum dolor sit amet consectetur. Viverra diam nisi morbi ullamcorper mattis",
-        image: "../margaret.svg",
-      },
-    },
-  ];
+  });
+
+  const innerProduct =
+  ordersData && ordersData.length > 0 ? ordersData?.find((item: Orders) => {
+    return item.id.toString() === id?.toString().split("#").join("");
+  })?.order_items : [];
 
   return (
     <div className="list-products-order">
       <div className="head-information-area">
-        <span className="product-count">Məhsul (02)</span>
+        <span className="product-count">Məhsul ({innerProduct?.length})</span>
       </div>
       <div className="product-table-area">
         <table>
@@ -54,29 +43,25 @@ const OrderShowingProducts: React.FC = () => {
             <tr>
               <th>Məhsul</th>
               <th>Qiymət</th>
-              <th>Qarantiya</th>
-              <th>Çatdırılma</th>
             </tr>
           </thead>
           <tbody>
-            {ActiveProduct.map((item: ActiveProductsType) => (
-              <tr key={item?.id}>
+            {innerProduct && innerProduct?.length > 0 ? innerProduct?.map((item: OrderItems) => (
+              <tr key={item.product?.id}>
                 <td>
                   <div className="product">
                     <div className="imageproduct">
-                      <img src={item?.product?.image} alt="" />
+                      <img src={item.product?.img} alt={item.product?.title} />
                     </div>
                     <div className="texts">
                       <span>{item?.product?.title}</span>
-                      <p>{item?.product?.description}</p>
+                      <p>{item?.product?.content}</p>
                     </div>
                   </div>
                 </td>
-                <td>{item?.price}</td>
-                <td>{item?.garant}</td>
-                <td>{item?.deliveryPrice}</td>
+                <td>{item?.product?.price} AZN</td>
               </tr>
-            ))}
+            )) : "sa"} 
           </tbody>
         </table>
       </div>

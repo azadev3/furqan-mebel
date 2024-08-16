@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import SelectedLanguage from "./SelectedLanguage";
 import { atom, useRecoilState } from "recoil";
+import { useTranslations } from "../../TranslateContext";
 
 export const CallYourModalState = atom<boolean>({
   key: "callYourModalStateKey",
@@ -16,13 +17,15 @@ const Topheader: React.FC = () => {
     setCallYourModal(true);
   }
 
+  const { translations } = useTranslations();
+
   return (
     <header className="top-header-wrapper">
       <header className="topheader">
         <div className="left-links">
           <div className="links">
-            <Link to="/stores">Mağazalar</Link>
-            <Link to="/vacations">Vakansiyalar</Link>
+            <Link to="/stores">{translations['magazalar']}</Link>
+            <Link to="/vacations">{translations['vakansiyalar']}</Link>
           </div>
 
           <span className="time">

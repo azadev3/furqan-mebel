@@ -6,6 +6,7 @@ import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import { useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
+import { useTranslations } from "../../TranslateContext";
 
 const TopTwoCards: React.FC = () => {
   const activeLanguage = useRecoilValue(SelectedLanguageState);
@@ -24,6 +25,8 @@ const TopTwoCards: React.FC = () => {
     staleTime: 1000000,
   });
 
+  const { translations } = useTranslations();
+
   return (
     <div className="top-two-cards">
       <div className="left-card">
@@ -38,7 +41,7 @@ const TopTwoCards: React.FC = () => {
                   </div>
                   <div className="descriptions">
                     <div className="top">
-                      <span>Blog və Yeniliklər</span>
+                      <span>{translations['blog_ve_yenilikler_title']}</span>
                       <span>{item?.created_at}</span>
                     </div>
                     <h1>{item?.title}</h1>
@@ -62,7 +65,7 @@ const TopTwoCards: React.FC = () => {
                   </div>
                   <div className="descriptions">
                     <div className="top">
-                      <span>Blog və Yeniliklər</span>
+                      <span>{translations['blog_ve_yenilikler_title']}</span>
                       <span>{item?.created_at}</span>
                     </div>
                     <h1>{item?.title}</h1>

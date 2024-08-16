@@ -8,6 +8,7 @@ import { Baseurl } from "../api/Baseurl";
 import axios from "axios";
 import Loader from "../uitils/Loader";
 import Error from "../uitils/Error";
+import { useTranslations } from "../TranslateContext";
 
 interface CreditConditions {
   id: number;
@@ -16,7 +17,6 @@ interface CreditConditions {
 }
 
 const CreditConditionsPage: React.FC = () => {
-
   //fetch credits
   const activeLanguage = useRecoilValue(SelectedLanguageState);
 
@@ -36,28 +36,29 @@ const CreditConditionsPage: React.FC = () => {
     },
     staleTime: 1000000,
   });
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (isError) {
-    return <Error />;
-  }
+  const { translations } = useTranslations();
 
   return (
     <div className="credit-conditions-page-wrapper">
       <div className="credit-conditions-page">
-        <NavigationShower prevpage="Kredit şərtləri" />
+        <NavigationShower prevpage={translations["kredit_sertleri"]} />
 
         <div className="credit-condition-container">
-          {CreditConditionsData &&
-            CreditConditionsData.map((conditions: CreditConditions) => (
-              <div key={uuidv4()} className="condition-item">
-                <span>{conditions?.title}</span>
-                <span>{conditions?.content}</span>
-              </div>
-            ))}
+          {isLoading ? (
+            <Loader />
+          ) : isError ? (
+            <Error />
+          ) : (
+            <React.Fragment>
+              {CreditConditionsData &&
+                CreditConditionsData.map((conditions: CreditConditions) => (
+                  <div key={uuidv4()} className="condition-item">
+                    <span>{conditions?.title}</span>
+                    <span>{conditions?.content}</span>
+                  </div>
+                ))}
+            </React.Fragment>
+          )}
         </div>
       </div>
     </div>

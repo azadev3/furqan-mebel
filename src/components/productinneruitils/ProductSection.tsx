@@ -9,6 +9,7 @@ import { ModulesProducts, ProductsInterface } from "../homepageuitils/PopularPro
 import DOMPurify from "dompurify";
 import Loader from "../../uitils/Loader";
 import SliderSizes, { SliderValue } from "../../SliderSizes";
+import { useTranslations } from "../../TranslateContext";
 
 // type SetModuleTypes = {
 //   id: number;
@@ -97,6 +98,9 @@ const ProductSection: React.FC = () => {
   };
 
   const sliderValue = useRecoilValue(SliderValue);
+
+  const { translations } = useTranslations();
+
   return (
     <section className="product-section">
       <div className="details-section">
@@ -110,8 +114,8 @@ const ProductSection: React.FC = () => {
       <div className="quantity-and-dimensions">
         <div className="sale">
           <strong className="price">{productInner?.price} AZN</strong>
-          {productInner.discounted_price ? <span className="discountprice">{productInner?.discounted_price}</span> : ""}
-          {productInner.discounted_price ? (
+          {productInner && productInner?.discounted_price ? <span className="discountprice">{productInner?.discounted_price}</span> : ""}
+          {productInner && productInner?.discounted_price ? (
             <span className="sale-count">
               {countSaleCount(`${productInner?.price}`, `${productInner?.discounted_price}`)} sale!
             </span>
@@ -122,7 +126,7 @@ const ProductSection: React.FC = () => {
       </div>
 
       <div className="credit-terms">
-        <h4>Kredit şərtləri</h4>
+        <h4>{translations['kredit_sertleri']}</h4>
 
         <div className="terms-wrapper">
           <div className="top-container">
@@ -130,11 +134,11 @@ const ProductSection: React.FC = () => {
               <SliderSizes />
             </div>
             <div className="comission">
-              <span>Komissiya haqqı</span>
+              <span>{translations['komissiya_haqqi']}</span>
               <p>azn</p>
             </div>
             <div className="monthly-payment">
-              <span>Aylıq ödəniş</span>
+              <span>{translations['ayliq_odenis']}</span>
               <p style={{ fontSize: "16px" }}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
             </div>
           </div>
@@ -147,7 +151,7 @@ const ProductSection: React.FC = () => {
       </div>
 
       <article className="set-modules">
-        <h3>Dəstə daxil olan modullar</h3>
+        <h3>{translations['deste_daxil_modullar']}</h3>
         <div className="grid-modules">
           {allProductsData && allProductsData.length > 0 ? (
             allProductsData.map(

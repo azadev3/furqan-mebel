@@ -121,10 +121,16 @@
             font-weight: 400;
             font-size: 14px;
           }
-          &.packaging {
+          &.newpackage {
             color: #fa8232 !important;
           }
-          &.finished {
+          &.readying {
+            color: gold;
+          }
+          &.sended {
+            color: mediumslateblue;
+          }
+          &.delivered {
             color: #2db224 !important;
           }
           &.rejected {

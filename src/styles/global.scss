@@ -5,6 +5,41 @@
 //include mulish
 @import url("https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap");
 
+
+.payment-success-page-wrapper .payment-success-page .card-repition .process {
+  display: none !important;
+}
+.delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .name-surname .leftname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .name-surname .rightsurname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .name-surname .rightname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .apartment-adress .leftname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .apartment-adress .rightsurname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .apartment-adress .rightname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .zipcode-city .leftname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .zipcode-city .rightsurname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .zipcode-city .rightname select {
+  background-position: 97% !important;
+}
+.blog-inner-page-wrapper .inner-page-blog .top-description-blog .author-and-views .view {
+  display: none !important;
+}
+.blog-inner-page-wrapper .inner-page-blog .top-description-blog .author-and-views .dot {
+  display: none !important;
+}
+.blog-page-wrapper .blog-page .blogs .grid-blogs .item-blog {
+  width: 100% !important;
+}
+.footer-wrapper .footer .footer-contents .right-footer .subscribe-button p {
+  display: none !important;
+}
+.product-page-wrapper .products-page .container-products .filter .filter-relations .price-placement .filter-for-colors {
+  display: none !important;
+}
+.product-page-wrapper .products-page .container-products .filter .filter-relations .price-placement .range {
+  display: none !important;
+}
+.product-inner-page-wrapper .productinnerpage .similiar-products .carouselsimiliar-products .swiper-slide .item-details .category-name {
+  display: none !important;
+}
+.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active {
+  background-color: rgb(96, 255, 125) !important;
+}
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+}
 @mixin AnimatePage {
   animation: animatePage 200ms ease-in-out forwards normal;
   @keyframes animatePage {

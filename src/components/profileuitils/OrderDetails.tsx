@@ -1,13 +1,38 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import { Orders, OrderType } from "./OrderTable";
-import OrderDetailEtapComponent from "./OrderDetailEtapComponent";
 import OrderShowingProducts from "./OrderShowingProducts";
+import { useRecoilValue } from "recoil";
+import { SelectedLanguageState } from "../header/SelectedLanguage";
+import { Orders } from "../paymentsuccesspageuitils/PaymentReceipt";
+import getCookie from "../../getCookie";
+import axios from "axios";
+import { Baseurl } from "../../api/Baseurl";
+import { useQuery } from "@tanstack/react-query";
 
 const OrderDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const showDetails = Orders.find((item: OrderType) => item.orderID.split("#").join("") === id);
+
+  //fetch orders
+  const selectedLang = useRecoilValue(SelectedLanguageState);
+  const { data: ordersData } = useQuery<Orders[]>({
+    queryKey: ["ordersDataKey", selectedLang],
+    queryFn: async () => {
+      const token = getCookie("accessToken");
+      const response = await axios.get(`${Baseurl}/orders`, {
+        headers: {
+          "Accept-Language": selectedLang,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data?.orders;
+    },
+  });
+
+  const showDetails =
+    ordersData &&
+    ordersData?.length > 0 &&
+    ordersData.find((item: Orders) => item?.id.toString().split("#").join("") === id);
 
   return (
     <div className="order-details">
@@ -20,21 +45,19 @@ const OrderDetails: React.FC = () => {
       <div className="order-detail-top">
         <div className="card-one">
           <div className="order-id-and-detail">
-            <span>{showDetails?.orderID}</span>
             <article>
-              <span>2 Məhsul</span>
               <span className="dot"></span>
-              <span>Sifariş verildi 17 Yanvar, 2025 7:32 PM</span>
+              <span>Sifariş verildi {showDetails ? showDetails?.order_date : ""} PM</span>
             </article>
           </div>
-          <strong>$1199.00</strong>
+          <strong>{showDetails ? `${showDetails?.total_price} AZN` : ""}</strong>
         </div>
-
+        {/* 
         <div className="delivering-time">
           <span>Təxmini çatdırılma tarixi</span>
           <strong>23 Yanvar, 2025</strong>
-        </div>
-        <OrderDetailEtapComponent />
+        </div> */}
+        {/* <OrderDetailEtapComponent /> */}
       </div>
       {/* <OrderActivity /> */}
       <OrderShowingProducts />

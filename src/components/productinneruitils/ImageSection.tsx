@@ -146,6 +146,8 @@ const ImageSection: React.FC = () => {
                 images: productInner?.images,
                 modules: productInner?.modules,
                 options: productInner?.options,
+                quantity: productInner?.quantity,
+                is_new: productInner?.is_new,
               },
               productInner && productInner.id
             )
@@ -158,6 +160,8 @@ const ImageSection: React.FC = () => {
           onClick={() =>
             addBasket(
               {
+                quantity: productInner?.quantity,
+                is_new: productInner?.is_new,
                 id: productInner?.id,
                 category_name: productInner?.category_name,
                 content: productInner?.content,

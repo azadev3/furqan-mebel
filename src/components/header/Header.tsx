@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "../../styles/header.scss";
 import { Link, NavLink, useLocation, useMatch, useNavigate } from "react-router-dom";
-import { FaAngleDown } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
 import ResponsiveHeader from "./ResponsiveHeader";
 import SearchModal from "./SearchModal";
@@ -27,6 +26,7 @@ import { CartType } from "../basketpageuitils/Basket";
 import getCookie from "../../getCookie";
 import { CategoriesInterface } from "../homepageuitils/PopularProducts";
 import Catalogs from "./Catalogs";
+import { useTranslations } from "../../TranslateContext";
 
 export interface Logo {
   id: number;
@@ -50,6 +50,9 @@ export interface NavbarItemType {
 }
 
 const Header: React.FC = () => {
+
+  const { translations } = useTranslations(); 
+
   //FETCH LOGO
   const activeLanguage = useRecoilValue(SelectedLanguageState);
 
@@ -62,20 +65,6 @@ const Header: React.FC = () => {
         },
       });
       return response.data?.logo;
-    },
-    staleTime: 1000000,
-  });
-
-  // FETCH CATEGORIES
-  const { data: CategoryProductsData } = useQuery({
-    queryKey: ["categoryProductsKey", activeLanguage],
-    queryFn: async () => {
-      const response = await axios.get(`${Baseurl}/categories`, {
-        headers: {
-          "Accept-Language": activeLanguage,
-        },
-      });
-      return response.data?.categories;
     },
     staleTime: 1000000,
   });
@@ -116,31 +105,31 @@ const Header: React.FC = () => {
 
   // Define navbar items
   const NavbarItems: NavbarItemType[] = [
-    { id: 1, title: "Ana səhifə", to: "/" },
-    { id: 2, title: "Haqqımızda", to: "/about" },
-    {
-      id: 3,
-      title: "Məhsullar",
-      icon: (
-        <FaAngleDown
-          className="down-icon"
-          style={{ transform: dropdown === 3 ? "rotate(180deg)" : "", transition: "150ms ease-in-out" }}
-        />
-      ),
-      subitem:
-      CategoryProductsData && CategoryProductsData.length > 0
-          ? CategoryProductsData.map((item: CategoriesInterface) => {
-              return {
-                id: item?.id,
-                title: item?.title,
-              };
-            })
-          : [],
-      to: "",
-    },
-    { id: 4, title: "Blog", to: "/blog" },
-    { id: 5, title: "Kredit", to: "/credit" },
-    { id: 6, title: "Əlaqə", to: "/contact" },
+    { id: 1, title: `${translations['nav_anasehife']}`, to: "/" },
+    { id: 2, title: `${translations['nav_haqqimizda']}`, to: "/about" },
+    // {
+    //   id: 3,
+    //   title: `${translations['nav_mehsullar']}`,
+    //   icon: (
+    //     <FaAngleDown
+    //       className="down-icon"
+    //       style={{ transform: dropdown === 3 ? "rotate(180deg)" : "", transition: "150ms ease-in-out" }}
+    //     />
+    //   ),
+    //   subitem:
+    //   CategoryProductsData && CategoryProductsData.length > 0
+    //       ? CategoryProductsData.map((item: CategoriesInterface) => {
+    //           return {
+    //             id: item?.id,
+    //             title: item?.title,
+    //           };
+    //         })
+    //       : [],
+    //   to: "",
+    // },
+    { id: 4, title: `${translations['nav_blog']}`, to: "/blog" },
+    { id: 5, title: `${translations['nav_kredit']}`, to: "/credit" },
+    { id: 6, title: `${translations['nav_contact']}`, to: "/contact" },
   ];
 
   //responsive header
@@ -218,6 +207,7 @@ const Header: React.FC = () => {
       setIsAddedFav(false);
     }
   }, [favouritesItems]);
+  
   //basket items
   React.useEffect(() => {
     const basketData = localStorage.getItem("baskets");

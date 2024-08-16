@@ -11,6 +11,7 @@ import { ContactItemsType } from "../contactpageuitils/RightContact";
 import Loader from "../../uitils/Loader";
 import { CategoriesInterface } from "../homepageuitils/PopularProducts";
 import { selectedCategoryStateProductPage } from "../../recoil/Atoms";
+import { useTranslations } from "../../TranslateContext";
 
 interface Socials {
   id: number;
@@ -27,49 +28,50 @@ type FooterNavType = {
 
 const Footer: React.FC = () => {
 
+  const { translations } = useTranslations();
+
   const FooterNavItem: FooterNavType[] = [
     {
       id: 1,
-      title: "Ana Səhifə",
+      title: `${translations['nav_anasehife'] || 'Ana Səhifə'}`,
       to: "/",
     },
     {
       id: 2,
-      title: "Haqqımızda",
+      title: `${translations['nav_haqqimizda'] || 'Haqqımızda'}`,
       to: "/about",
     },
     {
       id: 3,
-      title: "Məhsullar",
+      title: `${translations['nav_mehsullar'] || 'Məhsullar'}`,
       to: "/products",
     },
     {
       id: 4,
-      title: "Blog",
+      title: `${translations['nav_blog'] || 'Blog'}`,
       to: "/blog",
     },
     {
       id: 5,
-      title: "Kredit",
+      title: `${translations['nav_kredit'] || 'Kredit'}`,
       to: "/credit",
     },
     {
       id: 6,
-      title: "Mağazalar",
+      title: `${translations['magazalar'] || 'Mağazalar'}`,
       to: "/stores",
     },
     {
       id: 7,
-      title: "Vakansiyalar",
+      title: `${translations['vakansiyalar'] || 'Vakansiyalar'}`,
       to: "/vacations",
     },
     {
       id: 8,
-      title: "Əlaqə",
+      title: `${translations['bizimle_elaqe'] || 'Əlaqə'}`,
       to: "/contact",
     },
   ];
-
   // subscribtion email send
   const [email, setEmail] = React.useState<string>("");
 
@@ -236,7 +238,7 @@ const Footer: React.FC = () => {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 />
                 <button type="submit" onClick={handleSubmitSubscribe}>
-                  Abonə ol
+                  {translations['abone_ol']}
                 </button>
               </div>
               <p>Kampaniyalar haqqında məlumat əldə etmək üçün.</p>

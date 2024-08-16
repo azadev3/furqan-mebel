@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { useTranslations } from "../../TranslateContext";
 
 type LeftOfferType = {
   id: string;
@@ -37,10 +38,12 @@ const SpecialOffers: React.FC = () => {
     },
   ];
 
+  const { translations } = useTranslations(); 
+
   return (
     <div className="special-offers-wrapper">
       <div className="special-offers">
-        <h1>Xüsusi Təkliflər</h1>
+        <h1>{translations['xususi_teklifler']}</h1>
 
         <div className="gridoffer">
           <div className="left">

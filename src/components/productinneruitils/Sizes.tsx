@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslations } from "../../TranslateContext";
 
 type ProductSizeType = {
   id: number;
@@ -29,9 +30,11 @@ const Sizes: React.FC = () => {
     },
   ];
 
+  const { translations } = useTranslations();
+
   return (
     <section className="sizes-content">
-      <h3>Ölçülər</h3>
+      <h3>{translations['olculer']}</h3>
 
       <div className="grid-item-sizes">
         {Productsizes.map((item: ProductSizeType) => (

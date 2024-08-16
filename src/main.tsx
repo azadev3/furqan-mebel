@@ -6,6 +6,7 @@ import "./styles/global.scss";
 import "./styles/responsive.scss";
 import ScrollToTop from "./ScrollToTop.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TranslateContextProvider } from "./TranslateContext.tsx";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <HashRouter>
       <ScrollToTop>
         <QueryClientProvider client={queryClient}>
-          <App />
+          <TranslateContextProvider>
+            <App />
+          </TranslateContextProvider>
         </QueryClientProvider>
       </ScrollToTop>
     </HashRouter>

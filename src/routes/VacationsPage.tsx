@@ -9,6 +9,7 @@ import { Baseurl } from "../api/Baseurl";
 import axios from "axios";
 import Loader from "../uitils/Loader";
 import Error from "../uitils/Error";
+import { useTranslations } from "../TranslateContext";
 
 export const selectedVacationState = atom<string>({
   key: "selectedVacationState",
@@ -144,10 +145,12 @@ const VacationsPage: React.FC = () => {
     return <Error />;
   }
 
+  const { translations } = useTranslations();
+
   return (
     <div className="vacations-page-wrapper">
       <div className="vacations-page">
-        <NavigationShower prevpage="Vakansiyalar" />
+        <NavigationShower prevpage={translations['vakansiyalar']} />
         <div className="container-vacations">
           <div className="left-vacations">
             <Vacations data={VacationsData}/>

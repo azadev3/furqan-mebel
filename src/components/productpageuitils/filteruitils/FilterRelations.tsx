@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { useRecoilState } from "recoil";
 import { rangeMinMaxInputState } from "../../../recoil/Atoms";
+import { useTranslations } from "../../../TranslateContext";
 
 type ColorsType = {
   id: number;
@@ -145,15 +146,17 @@ const FilterRelations: React.FC = () => {
     }));
   };
 
+  const { translations } = useTranslations();
+
   return (
     <div className="filter-relations">
       <div className="title-top">
         <img src="../filtericon.svg" alt="" />
-        <span>Filter</span>
+        <span>{translations['filter']}</span>
       </div>
 
       <div className="price-placement">
-        <span>Qiymət aralığı</span>
+        <span>{translations['qiymet_araligi_filter']}</span>
 
         <div className="min-max">
           {RangeInputs.map((inputs: RangeInputType) => (
@@ -188,7 +191,7 @@ const FilterRelations: React.FC = () => {
         </div>
 
         <div className="material">
-          <span>Material</span>
+          <span>{translations['material_filter']}</span>
 
           <div className="materials">
             {Materials.map((item: MaterialType) => (
@@ -203,7 +206,7 @@ const FilterRelations: React.FC = () => {
         </div>
 
         <div className="for-styles-filtering">
-          <span>Tərz</span>
+          <span>{translations['terz_filter']}</span>
           <div className="styles-content">
             {Styles.map((item: StylesType) => (
               <span

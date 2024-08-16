@@ -5,7 +5,6 @@ import DashboardContent from "../components/profileuitils/DashboardContent";
 import OrderHistory from "../components/profileuitils/OrderHistory";
 import OrderDetails from "../components/profileuitils/OrderDetails";
 import FavouritesComponent from "../components/profileuitils/FavouritesComponent";
-import Settings from "../components/profileuitils/Settings";
 import { IoClose } from "react-icons/io5";
 import { useRecoilState } from "recoil";
 import { dashboarLinksActiveState, UserIsAuthState } from "../recoil/Atoms";
@@ -45,13 +44,13 @@ export const DashboardLinkItems: DashboardLinksType[] = [
     deactiveIcon: "../Heart.svg",
     to: "/profile/favourites",
   },
-  {
-    id: 4,
-    title: "Tənzimləmələr",
-    activeIcon: "../Gearw.svg",
-    deactiveIcon: "../Gear.svg",
-    to: "/profile/settings",
-  },
+  // {
+  //   id: 4,
+  //   title: "Tənzimləmələr",
+  //   activeIcon: "../Gearw.svg",
+  //   deactiveIcon: "../Gear.svg",
+  //   to: "/profile/settings",
+  // },
   {
     id: 5,
     title: "Çıxış",
@@ -222,7 +221,7 @@ const Dashboard: React.FC = () => {
               <Route path="orderhistory" element={<OrderHistory />} />
               <Route path="orderhistory/:id" element={<OrderDetails />} />
               <Route path="favourites" element={<FavouritesComponent />} />
-              <Route path="settings" element={<Settings />} />
+              {/* <Route path="settings" element={<Settings />} /> */}
             </Routes>
           </div>
         </div>

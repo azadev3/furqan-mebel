@@ -7,6 +7,7 @@ import { useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
 import { Baseurl } from "../../api/Baseurl";
 import axios from "axios";
+import { useTranslations } from "../../TranslateContext";
 
 interface Testimonials {
   id: number;
@@ -50,11 +51,13 @@ const CustomersComment: React.FC = () => {
     }
   };
 
+  const { translations } = useTranslations(); 
+
   return (
     <div className="customer-comment-wrapper">
       <div className="customer-comment-wrapper">
         <div className="toptitle">
-          <h1>Müştəri rəyləri</h1>
+          <h1>{translations['musteri_reyleri']}</h1>
           <div className="buttons">
             <button className="swiper-button-wprev" onClick={handlePrevClick}>
               <FaArrowLeft className="left" />

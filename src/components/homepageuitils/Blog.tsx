@@ -9,6 +9,7 @@ import { SelectedLanguageState } from "../header/SelectedLanguage";
 import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import Error from "../../uitils/Error";
+import { useTranslations } from "../../TranslateContext";
 
 export type BlogItemType = {
   id: number | string;
@@ -63,11 +64,13 @@ const Blog: React.FC = () => {
     }
   };
 
+  const { translations } = useTranslations();
+
   return (
     <div className="blog-section-wrapper">
       <div className="blog-section">
         <div className="toptitle-blogsection">
-          <h1>Blog</h1>
+          <h1>{translations['nav_blog']}</h1>
 
           <div className="buttons">
             <button className="swiper-button-wprev" onClick={handlePrevClick}>
@@ -106,7 +109,7 @@ const Blog: React.FC = () => {
                     <img src={item?.img} alt={`${item?.id}-image`} title={item?.title} />
                   </div>
                   <div className="title-top">
-                    <strong>Blog və Yeniliklər</strong>
+                    <strong>{translations['blog_ve_yenilikler_title']}</strong>
                     <span>{item?.created_at}</span>
                   </div>
                   <div className="bottom-title">

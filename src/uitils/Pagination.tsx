@@ -3,6 +3,7 @@ import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 import { BlogsType } from "../components/homepageuitils/Blog";
 import { Link } from "react-router-dom";
 import Loader from "./Loader";
+import { useTranslations } from "../TranslateContext";
 
 const Pagination = ({ data, itemsPerPage }: { data: BlogsType[]; itemsPerPage: number }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -14,28 +15,34 @@ const Pagination = ({ data, itemsPerPage }: { data: BlogsType[]; itemsPerPage: n
 
   const currentData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  const { translations } = useTranslations();
+
   return (
     <div className="blogs">
       <div className="grid-blogs">
-        {data && currentData && data?.length > 0 ? currentData.map((item: BlogsType) => (
-          <div key={item.id} className="item-blog">
-            <div className="blogimage">
-              <img src={item?.img} alt={`${item.id}-image`} title={item?.title} />
+        {data && currentData && data?.length > 0 ? (
+          currentData.map((item: BlogsType) => (
+            <div key={item.id} className="item-blog">
+              <div className="blogimage">
+                <img src={item?.img} alt={`${item.id}-image`} title={item?.title} />
+              </div>
+              <div className="title-top">
+                <strong>{translations["blog_ve_yenilikler_title"]}</strong>
+                <span>{item?.created_at}</span>
+              </div>
+              <div className="bottom-title">
+                <h1>{item?.title}</h1>
+                <div dangerouslySetInnerHTML={{ __html: item?.content.slice(0, 300) }} />
+                <Link to={`/blog/${item?.slug}`} className="formore-button">
+                  <span>Daha çox</span>
+                  <img src="../linearrowgreen.svg" alt="arrowright" title="Go to blogs" />
+                </Link>
+              </div>
             </div>
-            <div className="title-top">
-              <strong>Blog və Yeniliklər</strong>
-              <span>{item?.created_at}</span>
-            </div>
-            <div className="bottom-title">
-              <h1>{item?.title}</h1>
-              <div dangerouslySetInnerHTML={{ __html: item?.content.slice(0, 300) }} />
-              <Link to={`/blog/${item?.slug}`} className="formore-button">
-                <span>Daha çox</span>
-                <img src="../linearrowgreen.svg" alt="arrowright" title="Go to blogs" />
-              </Link>
-            </div>
-          </div>
-        )) : <Loader />}
+          ))
+        ) : (
+          <Loader />
+        )}
       </div>
 
       <div className="pagination">

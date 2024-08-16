@@ -1,109 +1,91 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { SelectedLanguageState } from "../header/SelectedLanguage";
+import axios from "axios";
+import { Baseurl } from "../../api/Baseurl";
+import getCookie from "../../getCookie";
+import Loader from "../../uitils/Loader";
 
-type ReceiptDetailsType = {
+export type Product = {
   id: number;
-  orderid: string;
-  transactiondate: string;
-  paymentmethod: string;
-  subtotal: string;
-  tax: string;
-  shipping: string;
-  total: string;
+  title: string;
+  content: string;
+  category_name: string;
+  parent_category_id: number;
+  img: string;
+  price: string;
 };
 
-type ItemReceipt = {
+export type OrderItems = {
   id: number;
-  productimg: string;
-  productname: string;
-  productdescription: string;
-  productprice: string;
-  details?: ReceiptDetailsType;
+  quantity: number;
+  product: Product;
 };
+
+export interface Orders {
+  id: number;
+  status: string;
+  items_count: number;
+  total_price: string;
+  order_date: string;
+  order_items: OrderItems[];
+}
 
 const PaymentReceipt: React.FC = () => {
-  const ItemReceipts: ItemReceipt[] = [
-    {
-      id: 1,
-      productdescription: "Lorem ipsum dolor sit amet consectetur.",
-      productimg: "../promg.svg",
-      productname: "Margaret Qonaq Dəsti",
-      productprice: "129.0000",
-      details: {
-        id: 1,
-        orderid: "#1234567",
-        paymentmethod: "Mastercard ending with 123",
-        shipping: "129.0000",
-        tax: "129.0000",
-        subtotal: "129.0000",
-        total: "129.0000",
-        transactiondate: "Tuesday, 13 June 2024",
-      },
+  //fetch orders
+  const selectedLang = useRecoilValue(SelectedLanguageState);
+  const { data: ordersData, isLoading } = useQuery<Orders[]>({
+    queryKey: ["ordersDataKey", selectedLang],
+    queryFn: async () => {
+      const token = getCookie("accessToken");
+      const response = await axios.get(`${Baseurl}/orders`, {
+        headers: {
+          "Accept-Language": selectedLang,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data?.orders;
     },
-  ];
+  });
 
   return (
     <div className="receipt">
-      {ItemReceipts.map((item: ItemReceipt) => (
-        <div className="receipt-item" key={item.id}>
-          <div className="top-product-item">
-            <div className="leftpro">
-              <div className="productimg">
-                <img
-                  src={item.productimg ? item.productimg : ""}
-                  alt={`${item.id}-product`}
-                  title={item?.productname}
-                />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <React.Fragment>
+          {ordersData && ordersData.length > 0 ? (
+            ordersData.map((order: Orders) => (
+              <div className="receipt-item" key={order.id}>
+                {order.order_items &&
+                  order.order_items.map((orderItem: OrderItems) => (
+                    <div className="top-product-item" key={orderItem.id}>
+                      <div className="leftpro">
+                        <div className="productimg">
+                          <img
+                            src={orderItem.product.img ? orderItem.product.img : ""}
+                            alt={`${orderItem.product.id}-product`}
+                            title={orderItem.product.category_name}
+                          />
+                        </div>
+                        <div className="titlespro">
+                          <span>{orderItem.product.category_name}</span>
+                          <p>{orderItem.product.content}</p>
+                        </div>
+                      </div>
+                      <div className="rightpro">
+                        <span>{orderItem.product.price}</span>
+                      </div>
+                    </div>
+                  ))}
               </div>
-              <div className="titlespro">
-                <span>{item?.productname}</span>
-                <p>{item?.productdescription}</p>
-              </div>
-            </div>
-            <div className="rightpro">
-              <span>{item?.productprice}</span>
-            </div>
-          </div>
-
-          {item.details && (
-            <div className="receipt-item-details">
-              <article className="item-detail-top">
-                <article className="detail">
-                  <span>Sifariş ID</span>
-                  <span>{item?.details?.orderid}</span>
-                </article>
-                <article className="detail">
-                  <span>Transaction Date</span>
-                  <span>{item?.details?.transactiondate}</span>
-                </article>
-                <article className="detail">
-                  <span>Payment Method</span>
-                  <span>{item?.details?.paymentmethod}</span>
-                </article>
-              </article>
-
-              <article className="item-detail-top">
-                <article className="detail">
-                  <span>Subtotal</span>
-                  <span>{item?.details?.subtotal}</span>
-                </article>
-                <article className="detail">
-                  <span>Tax</span>
-                  <span>{item?.details?.tax}</span>
-                </article>
-                <article className="detail">
-                  <span>Shipping</span>
-                  <span>{item?.details?.shipping}</span>
-                </article>
-              </article>
-
-              <article className="total-count">
-                <span>Total</span>
-                <span>{item?.details?.total}</span>
-              </article>
-            </div>
+            ))
+          ) : (
+            <p>No orders found.</p>
           )}
-        </div>
-      ))}
+        </React.Fragment>
+      )}
     </div>
   );
 };
