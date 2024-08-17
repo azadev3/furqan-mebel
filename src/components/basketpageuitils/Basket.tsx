@@ -236,13 +236,7 @@ const Basket: React.FC = () => {
                 <div
                   className="btn"
                   style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    if (isAuth) {
-                      navigate("/delivery");
-                    } else {
-                      setLoginMenu(true);
-                    }
-                  }}>
+                  onClick={() => navigate("/delivery")}>
                   <span>{translations["davam_et"]}</span>
                   <img src="../rightwhitee.svg" alt="" />
                 </div>
