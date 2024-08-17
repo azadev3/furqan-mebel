@@ -2,12 +2,17 @@ import React from "react";
 import { DashboardLinkItems, DashboardLinksType } from "../../routes/Dashboard";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { dashboarLinksActiveState, profileDropdownState, UserIsAuthState } from "../../recoil/Atoms";
-import { useRecoilState } from "recoil";
+import { atom, useRecoilState } from "recoil";
 import getCookie from "../../getCookie";
 import { UserInfo } from "../profileuitils/DashboardContent";
 import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import { toast } from "react-toastify";
+
+export const userInfoState = atom<UserInfo | null>({
+  key: 'userinfostate',
+  default: null,
+});
 
 type prop = {
   userRef: any;

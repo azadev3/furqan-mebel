@@ -34,6 +34,7 @@ const Login: React.FC = () => {
           try {
             const response = await axios.post(`${Baseurl}/login`, values);
             if (response.data || response.status === 200) {
+              localStorage.removeItem("baskets");
               toast.success("Uğurludur, yönləndirilirsiniz.", {
                 position: "top-center",
               });

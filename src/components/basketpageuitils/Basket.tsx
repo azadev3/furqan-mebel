@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { atom, useRecoilValue, useSetRecoilState } from "recoil";
-import { basketItemState } from "../../recoil/Atoms";
+import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { basketItemState, LoginMenuState, UserIsAuthState } from "../../recoil/Atoms";
 import { useAddBasket } from "../../useAddBasket";
 import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
@@ -143,6 +143,10 @@ const Basket: React.FC = () => {
 
   const { translations } = useTranslations();
 
+  const isAuth = useRecoilValue(UserIsAuthState);
+
+  const [_, setLoginMenu] = useRecoilState(LoginMenuState);
+
   return (
     <div className="basket">
       {loading ? (
@@ -157,8 +161,7 @@ const Basket: React.FC = () => {
                     <div
                       style={{ cursor: "pointer" }}
                       className="leftbasketproduct"
-                      onClick={() => navigate(`/products/${item?.product?.slug?.toLowerCase()}`)}
-                    >
+                      onClick={() => navigate(`/products/${item?.product?.slug?.toLowerCase()}`)}>
                       <div className="image-product">
                         <img
                           src={item.product.img}
@@ -173,7 +176,9 @@ const Basket: React.FC = () => {
                     </div>
                     <div className="rightbasketproduct">
                       <div className="price">
-                        <span>{calculateTotalPrice(item.product.price, count[item.product.id] || item.quantity)} AZN</span>
+                        <span>
+                          {calculateTotalPrice(item.product.price, count[item.product.id] || item.quantity)} AZN
+                        </span>
                       </div>
                       <div className="counter">
                         <span className="decrement" onClick={() => decrementProduct(item.product.id)}>
@@ -190,7 +195,7 @@ const Basket: React.FC = () => {
               </div>
               <div className="continue-btn">
                 <Link to="/delivery" className="btn">
-                  <span>{translations['davam_et']}</span>
+                  <span>{translations["davam_et"]}</span>
                   <img src="../rightwhitee.svg" alt="" />
                 </Link>
               </div>
@@ -202,8 +207,7 @@ const Basket: React.FC = () => {
                   <div
                     className="leftbasketproduct"
                     style={{ cursor: "pointer" }}
-                    onClick={() => navigate(`/products/${item?.slug?.toLowerCase()}`)}
-                  >
+                    onClick={() => navigate(`/products/${item?.slug?.toLowerCase()}`)}>
                     <div className="image-product">
                       <img src={item?.img} alt={`${item?.id}-product`} title={item?.title || "product"} />
                     </div>
@@ -229,10 +233,19 @@ const Basket: React.FC = () => {
                 </div>
               ))}
               <div className="continue-btn">
-                <Link to="/delivery" className="btn">
-                  <span>{translations['davam_et']}</span>
+                <div
+                  className="btn"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (isAuth) {
+                      navigate("/delivery");
+                    } else {
+                      setLoginMenu(true);
+                    }
+                  }}>
+                  <span>{translations["davam_et"]}</span>
                   <img src="../rightwhitee.svg" alt="" />
-                </Link>
+                </div>
               </div>
             </div>
           ) : (
@@ -243,8 +256,7 @@ const Basket: React.FC = () => {
                 width: "100%",
                 textAlign: "center",
                 color: "#303030",
-              }}
-            >
+              }}>
               Hələ ki heç bir məhsul səbətə əlavə olunmayıb.
             </p>
           )}

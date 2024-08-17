@@ -10,10 +10,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { selectedCategoryStateProductPage } from "../../recoil/Atoms";
 import { useTranslations } from "../../TranslateContext";
 
+type InnerChild = {
+  id: number;
+  title: string;
+  img: string | null;
+};
+
 type Children = {
   id: number;
   title: string;
   img: string | null;
+  innerChild: InnerChild[];
 };
 
 interface Catalog {
@@ -83,7 +90,7 @@ const Catalogs: React.FC = () => {
   return (
     <div className="catalog-menu">
       <button className="button-catalog-menu" ref={buttonRef} onClick={handleCatalogMenu}>
-        <span>{translations['nav_catalog']}</span>
+        <span>{translations["nav_catalog"]}</span>
         <PiList className={`list-icon-catalog ${catalogMenu ? "active" : ""}`} />
       </button>
 
@@ -114,45 +121,35 @@ const Catalogs: React.FC = () => {
                   )}
                   {/* sub items */}
                   <div className={`sub-catalog ${sub === item?.id && item?.children?.length > 0 ? "active" : ""}`}>
-                    <div className="left">
-                      {item && item.children && item.children?.length > 0 && sub && sub === item?.id
-                        ? item.children?.map((item: Children) => (
-                            <Link
-                              to="/products"
-                              onClick={() => {
-                                setCatalogMenu(false);
-                                setSub(null);
-                                //if category title includes on the mini category title
-                                //select main category title on the category page
-                                const ifIncludesItemTitleOnTheMainCategory =
-                                  CategoriesForCatalog && CategoriesForCatalog.length > 0
-                                    ? CategoriesForCatalog.find(
-                                        (cat: Catalog) =>
-                                          cat.children &&
-                                          cat.children.length > 0 &&
-                                          cat.children.some((child) => child.title === item.title)
-                                      )
-                                    : null;
+                    {item && item.children && item.children?.length > 0 && sub && sub === item?.id
+                      ? item.children?.map((item: Children) => (
+                          <Link
+                            to="/products"
+                            onClick={() => {
+                              setCatalogMenu(false);
+                              setSub(null);
+                              //if category title includes on the mini category title
+                              //select main category title on the category page
+                              const ifIncludesItemTitleOnTheMainCategory =
+                                CategoriesForCatalog && CategoriesForCatalog.length > 0
+                                  ? CategoriesForCatalog.find(
+                                      (cat: Catalog) =>
+                                        cat.children &&
+                                        cat.children.length > 0 &&
+                                        cat.children.some((child) => child.title === item.title)
+                                    )
+                                  : null;
 
-                                if (ifIncludesItemTitleOnTheMainCategory) {
-                                  setSelectedCategory(ifIncludesItemTitleOnTheMainCategory?.id);
-                                }
-                              }}
-                              key={item?.id}
-                              className="catalog-link-inner">
-                              {item?.title}
-                            </Link>
-                          ))
-                        : ""}
-                    </div>
-
-                    <div className="right">
-                      {item && item.img ? (
-                        <img src={item && item.img ? item.img : ""} alt={`${item?.id}-image`} title={item?.title} />
-                      ) : (
-                        <p>Hələ ki, heç bir məhsul şəkili əlavə edilməyib.</p>
-                      )}
-                    </div>
+                              if (ifIncludesItemTitleOnTheMainCategory) {
+                                setSelectedCategory(ifIncludesItemTitleOnTheMainCategory?.id);
+                              }
+                            }}
+                            key={item?.id}
+                            className="catalog-link-inner">
+                            {item?.title}
+                          </Link>
+                        ))
+                      : ""}
                   </div>
                 </div>
               </div>

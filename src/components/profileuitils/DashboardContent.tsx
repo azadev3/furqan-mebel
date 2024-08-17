@@ -19,6 +19,7 @@ export interface UserInfo {
   surname: string;
   email: string;
   phone: string;
+  address: string | null,
 }
 
 export interface updateDataUser {

@@ -151,20 +151,20 @@ const ProductsInterface: React.FC = () => {
   const calculatePercentage = (item: ProductsInterface) => {
     const price = item?.price;
     const discounted_price = item?.discounted_price;
-  
+
     if (price && discounted_price) {
       const discountPercentage = ((parseInt(price) - parseInt(discounted_price)) / parseInt(price)) * 100;
-      return discountPercentage.toFixed(2); 
+      return discountPercentage.toFixed(2);
     }
     return null;
   };
-  
+
   const { translations } = useTranslations();
 
   return (
     <div className="popular-products-wrapper">
       <div className="popular-products">
-        <h1>{translations['populyar_mehsullar']}</h1>
+        <h1>{translations["populyar_mehsullar"]}</h1>
         <div className="container-with-popular-products">
           <div className="categories-swiper">
             <Swiper
@@ -332,13 +332,13 @@ const ProductsInterface: React.FC = () => {
                         ) : (
                           ""
                         )}
-                         {item?.discounted_price ? (
-                              <div className="discount-punt">
-                                <span>{calculatePercentage(item)?.split(".00")}%</span>
-                                </div>
-                            ) : (
-                              ""
-                            )}
+                        {item?.discounted_price ? (
+                          <div className="discount-punt">
+                            <span>{calculatePercentage(item)?.split(".00")}%</span>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
                       <div className="product-image">
                         <img src={item.img} alt={`${item.id}-image`} title={item.title} />
