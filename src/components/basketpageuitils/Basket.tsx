@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { basketItemState, LoginMenuState, UserIsAuthState } from "../../recoil/Atoms";
+import { atom, useRecoilValue, useSetRecoilState } from "recoil";
+import { basketItemState } from "../../recoil/Atoms";
 import { useAddBasket } from "../../useAddBasket";
 import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
@@ -142,10 +142,6 @@ const Basket: React.FC = () => {
   const navigate = useNavigate();
 
   const { translations } = useTranslations();
-
-  const isAuth = useRecoilValue(UserIsAuthState);
-
-  const [_, setLoginMenu] = useRecoilState(LoginMenuState);
 
   return (
     <div className="basket">
