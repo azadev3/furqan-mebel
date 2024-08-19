@@ -1,14 +1,9 @@
 import React from "react";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
-import { FavouriteItemType } from "../components/productpageuitils/filteruitils/productmainuitils/PaginationProducts";
-import { Link } from "react-router-dom";
-import { IoMdHeart } from "react-icons/io";
-import { CiHeart } from "react-icons/ci";
-import { useAddFavourite } from "../useAddFavourite";
+import { CatProductType } from "../components/productpageuitils/filteruitils/CategoriesForFilter";
+import FavProductCard from "../features/FavProductCard";
 
-const PaginationLikedProducts = ({ data, itemsPerPage }: { data: FavouriteItemType[]; itemsPerPage: number }) => {
-
-  const { addFavourite, favouriteItems } = useAddFavourite();
+const PaginationLikedProducts = ({ data, itemsPerPage }: { data: CatProductType[]; itemsPerPage: number }) => {
 
   const [currentPage, setCurrentPage] = React.useState<number>(1);
   const totalPages = Math.ceil(data?.length / itemsPerPage);
@@ -22,54 +17,7 @@ const PaginationLikedProducts = ({ data, itemsPerPage }: { data: FavouriteItemTy
   return (
     <div className="favorites">
       <div className="favorites-content">
-        {Object.values(currentData).map((item: FavouriteItemType) => (
-          <Link to={`/products/${item?.slug?.toLowerCase()}`}
-            style={{ cursor: "pointer", textDecoration: "none" }}
-            className="liked-items"
-            key={item.id}>
-            <img className="shop-bag" src="../shopbag.svg" alt="show" title="Səbət" />
-
-            <div
-              className="add-favourites"
-              onClick={(e) => {
-                addFavourite(
-                  {
-                    title: item?.title,
-                    price: item?.price,
-                    discounted_price: item?.discounted_price,
-                    content: item?.content,
-                    id: item?.id,
-                    img: item?.img,
-                    images: item?.images,
-                    is_favorite: item?.is_favorite,
-                    is_in_cart: item?.is_in_cart,
-                    is_popular: item?.is_popular,
-                    is_stock: item?.is_stock,
-                    parent_category_id: item?.parent_category_id,
-                    slug: item?.slug,
-                    modules: item?.modules,
-                    options: item?.options,
-                    category_name: item?.category_name,
-                  },
-                  e,
-                  item?.id
-                );
-              }}>
-              {favouriteItems[item?.id] ? <IoMdHeart className="fav-icon-fill" /> : <CiHeart className="fav-icon" />}
-            </div>
-            <div className="product-image">
-              <img src={item?.img} alt={`${item.id}-image`} title={item?.title} />
-            </div>
-            <div className="item-details">
-              <span className="category-name">{item?.category_name}</span>
-              <span className="product-name">{item?.title}</span>
-              <div className="prices">
-                <span>{item?.price} AZN</span>
-                {item.discounted_price ? <article className="discountprice">{item.discounted_price} AZN</article> : ""}
-              </div>
-            </div>
-          </Link>
-        ))}
+          <FavProductCard favProduct={Object.values(currentData)}/>
       </div>
 
       <div className="pagination">

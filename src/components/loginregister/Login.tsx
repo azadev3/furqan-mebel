@@ -33,8 +33,9 @@ const Login: React.FC = () => {
           setLoading(true);
           try {
             const response = await axios.post(`${Baseurl}/login`, values);
+            
             if (response.data || response.status === 200) {
-              localStorage.removeItem("baskets");
+         
               toast.success("Uğurludur, yönləndirilirsiniz.", {
                 position: "top-center",
               });
@@ -43,6 +44,8 @@ const Login: React.FC = () => {
               const JsonConverter = JSON.stringify(userInfo);
               document.cookie = `accessToken=${token}; Secure; SameSite=None`;
               document.cookie = `userInfo=${encodeURIComponent(JsonConverter)}; Secure; SameSite=None`;
+
+       
               resetForm();
               const timeout = setTimeout(() => {
                 setAuth(true);

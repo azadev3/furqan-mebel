@@ -19,9 +19,14 @@ type Props = {
 const Categories: React.FC<Props> = ({ handleSelect, selectedCategory }) => {
   const activeLanguage = useRecoilValue(SelectedLanguageState);
 
+  const [selectedAllCategory, setSelectedAllCategory] = React.useState<string | null>("");
 
   // FETCH CATEGORIES
-  const { data: CategoryProductsData, error, isLoading } = useQuery({
+  const {
+    data: CategoryProductsData,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ["categoryProductsKey", activeLanguage],
     queryFn: async () => {
       const response = await axios.get(`${Baseurl}/categories`, {
@@ -34,8 +39,23 @@ const Categories: React.FC<Props> = ({ handleSelect, selectedCategory }) => {
     staleTime: 1000000,
   });
 
+  const getAllProducts = async () => {
+    const response = await axios.get(`${Baseurl}/categories`, {
+      headers: {
+        "Accept-Language": activeLanguage,
+      },
+    });
+    if(response.data) {
+      setSelectedAllCategory("all");
+      
+    }
+  }
+
+
   if (isLoading) return <Loader />;
   if (error) return <Error />;
+
+
 
   return (
     <div className="categories">
@@ -54,15 +74,18 @@ const Categories: React.FC<Props> = ({ handleSelect, selectedCategory }) => {
         }}
         spaceBetween={14}
         slidesPerView={6.6}
-        className="mySwiper"
-      >
+        className="mySwiper">
+        <SwiperSlide className={selectedAllCategory === "all" ? "actived" : ""}
+        onClick={getAllProducts}
+        >
+          <span>Bütün məhsullar</span>
+        </SwiperSlide>
         {CategoryProductsData && CategoryProductsData.length > 0 ? (
           CategoryProductsData.map((item: CategoriesInterface) => (
             <SwiperSlide
               className={selectedCategory === item.id ? "actived" : ""}
               key={item.id}
-              onClick={() => handleSelect(item.id)}
-            >
+              onClick={() => handleSelect(item.id)}>
               <span>{item.title}</span>
             </SwiperSlide>
           ))

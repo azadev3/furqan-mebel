@@ -35,7 +35,7 @@ const FormAndTotalPrice: React.FC = () => {
         },
       });
       if (response.data) {
-        localStorage.removeItem("baskets");
+        localStorage.removeItem("basket");
         navigate("/paymentsuccess");
       } else {
         console.log(response.status);
@@ -62,10 +62,6 @@ const FormAndTotalPrice: React.FC = () => {
       setUserInfo(parsedInfo);
     }
   }, [getUserInfo]);
-
-  React.useEffect(() => {
-    console.log(userInfo, "userinfo");
-  }, [userInfo]);
 
   const isNullAdress = userInfo && (userInfo === null); 
 

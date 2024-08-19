@@ -138,7 +138,13 @@ const Dashboard: React.FC = () => {
         });
         document.cookie = "userInfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None";
         document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None";
-        localStorage.clear();
+       
+        Object.keys(localStorage).forEach((key) => {
+          if(key !== "favourites" && key !== "basket") {
+            localStorage.removeItem(key);
+          }
+        });
+        
         const timeout = setTimeout(() => {
           navigate("/");
           setAuth(false);

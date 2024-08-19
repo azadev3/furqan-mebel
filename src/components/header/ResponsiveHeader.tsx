@@ -20,7 +20,6 @@ import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import ProfileDropdown from "./ProfileDropdown";
 import getCookie from "../../getCookie";
-import { CartType } from "../basketpageuitils/Basket";
 import { CategoriesInterface } from "../homepageuitils/PopularProducts";
 import { useTranslations } from "../../TranslateContext";
 
@@ -167,7 +166,7 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
 
   const scrolled = useRecoilValue(scrollHeaderState);
 
-  const [isBasketProducts, setIsBasketProducts] = React.useState<CartType | null>(null);
+  const [isBasketProducts, setIsBasketProducts] = React.useState<any>(null);
 
   const selectedLanguage = useRecoilValue(SelectedLanguageState);
 

@@ -6,13 +6,11 @@ import ResponsiveHeader from "./ResponsiveHeader";
 import SearchModal from "./SearchModal";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  basketItemState,
   favouriteItemsState,
   LoginMenuState,
   profileDropdownState,
   scrollHeaderState,
   selectedCategoryStateProductPage,
-  userAddBasket,
   userAddedFavourite,
   UserIsAuthState,
 } from "../../recoil/Atoms";
@@ -22,8 +20,6 @@ import { SelectedLanguageState } from "./SelectedLanguage";
 import { useQuery } from "@tanstack/react-query";
 import { Baseurl } from "../../api/Baseurl";
 import axios from "axios";
-import { CartType } from "../basketpageuitils/Basket";
-import getCookie from "../../getCookie";
 import { CategoriesInterface } from "../homepageuitils/PopularProducts";
 import Catalogs from "./Catalogs";
 import { useTranslations } from "../../TranslateContext";
@@ -50,8 +46,7 @@ export interface NavbarItemType {
 }
 
 const Header: React.FC = () => {
-
-  const { translations } = useTranslations(); 
+  const { translations } = useTranslations();
 
   //FETCH LOGO
   const activeLanguage = useRecoilValue(SelectedLanguageState);
@@ -105,31 +100,11 @@ const Header: React.FC = () => {
 
   // Define navbar items
   const NavbarItems: NavbarItemType[] = [
-    { id: 1, title: `${translations['nav_anasehife']}`, to: "/" },
-    { id: 2, title: `${translations['nav_haqqimizda']}`, to: "/about" },
-    // {
-    //   id: 3,
-    //   title: `${translations['nav_mehsullar']}`,
-    //   icon: (
-    //     <FaAngleDown
-    //       className="down-icon"
-    //       style={{ transform: dropdown === 3 ? "rotate(180deg)" : "", transition: "150ms ease-in-out" }}
-    //     />
-    //   ),
-    //   subitem:
-    //   CategoryProductsData && CategoryProductsData.length > 0
-    //       ? CategoryProductsData.map((item: CategoriesInterface) => {
-    //           return {
-    //             id: item?.id,
-    //             title: item?.title,
-    //           };
-    //         })
-    //       : [],
-    //   to: "",
-    // },
-    { id: 4, title: `${translations['nav_blog']}`, to: "/blog" },
-    { id: 5, title: `${translations['nav_kredit']}`, to: "/credit" },
-    { id: 6, title: `${translations['nav_contact']}`, to: "/contact" },
+    { id: 1, title: `${translations["nav_anasehife"]}`, to: "/" },
+    { id: 2, title: `${translations["nav_haqqimizda"]}`, to: "/about" },
+    { id: 4, title: `${translations["nav_blog"]}`, to: "/blog" },
+    { id: 5, title: `${translations["nav_kredit"]}`, to: "/credit" },
+    { id: 6, title: `${translations["nav_contact"]}`, to: "/contact" },
   ];
 
   //responsive header
@@ -191,10 +166,7 @@ const Header: React.FC = () => {
   //FAVOURITES ITEM IS TRUE
   // Check if there are any favourites or basket in localStorage
   const [isAddedFav, setIsAddedFav] = useRecoilState(userAddedFavourite);
-  const [isAddedBasket, setIsBasket] = useRecoilState(userAddBasket);
-
   const favouritesItems = useRecoilValue(favouriteItemsState);
-  const basketItems = useRecoilValue(basketItemState);
 
   //favourite items
   React.useEffect(() => {
@@ -207,54 +179,26 @@ const Header: React.FC = () => {
       setIsAddedFav(false);
     }
   }, [favouritesItems]);
-  
+
   //basket items
+  const [isBasketData, setIsBasketData] = React.useState<boolean>(false);
   React.useEffect(() => {
-    const basketData = localStorage.getItem("baskets");
+    const basketData = localStorage.getItem("basket");
     const isBasket = basketData ? JSON.parse(basketData) : [];
-    if (Object.keys(isBasket).length > 0) {
-      setIsBasket(true);
+    if(Object.keys(isBasket)?.length > 0) {
+      setIsBasketData(true)
     } else {
-      setIsBasket(false);
+      setIsBasketData(false);
     }
-  }, [basketItems]);
+  }, [isBasketData]);
 
-  const [isBasketProducts, setIsBasketProducts] = React.useState<CartType | null>(null);
-
-  const selectedLanguage = useRecoilValue(SelectedLanguageState);
-
-  const getAllBasketProduct = async () => {
-    try {
-      const token = getCookie("accessToken");
-      const response = await axios.get(`${Baseurl}/cart`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Accept-Language": selectedLanguage,
-        },
-      });
-
-      if (response.data) {
-        setIsBasketProducts(response.data.cart);
-      } else {
-        console.log(response.status);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  React.useEffect(() => {
-    getAllBasketProduct();
-  }, [basketItems]);
-
-  // redirect subitem according to selected category 
+  // redirect subitem according to selected category
   const navigate = useNavigate();
   const [__, setCategoryTitle] = useRecoilState(selectedCategoryStateProductPage);
   const handleSelectedCategory = (categoryId: number | null) => {
     navigate("/products");
     setCategoryTitle(categoryId);
-  }
-
+  };
 
   return (
     <header
@@ -293,7 +237,6 @@ const Header: React.FC = () => {
               <CiSearch className="searchicon" />
             </div>
             <Catalogs />
-          
           </div>
           <div className="right-header">
             <nav className="navbar">
@@ -321,11 +264,13 @@ const Header: React.FC = () => {
                       ref={(ref) => submenuRefs.current.set(item.id, ref)}
                       className={`submenu ${dropdown === item.id ? "active" : ""}`}>
                       {item.subitem?.map((subitem: CategoriesInterface, i: number) => (
-                        <span className="sublink" key={i} 
-                        onClick={() => {
-                          setDropdown(null);
-                          handleSelectedCategory(subitem?.id)
-                        }}>
+                        <span
+                          className="sublink"
+                          key={i}
+                          onClick={() => {
+                            setDropdown(null);
+                            handleSelectedCategory(subitem?.id);
+                          }}>
                           {subitem?.title}
                         </span>
                       ))}
@@ -336,26 +281,12 @@ const Header: React.FC = () => {
             </nav>
 
             <div className="userprofile">
+              {/* basket icon */}
               <Link to="/mybasket" className="basket">
-                <span
-                  style={{
-                    display:
-                      isAuth && isBasketProducts && isBasketProducts?.cart_items.length <= 0
-                        ? "none"
-                        : !isAuth && Object.values(basketItems).length <= 0
-                        ? "none"
-                        : "",
-                  }}
-                  className="notification">
-                  {isAuth ? (
-                    isBasketProducts?.cart_items.length
-                  ) : (
-                    <React.Fragment>{Object.values(basketItems).length}</React.Fragment>
-                  )}
-                </span>
+                  <span className="notification"></span>
                 <img
                   src={
-                    isBasketPage || isAddedBasket
+                    isBasketPage || isBasketData
                       ? "../basketgreen.svg"
                       : isHomePage && !scrolled
                       ? "../basketwhite.png"
@@ -365,6 +296,7 @@ const Header: React.FC = () => {
                   title="Səbət"
                 />
               </Link>
+              {/* favourites icon */}
               <Link to="/favourites" className={`hearth ${isAddedFav ? "hearth-anim" : ""}`}>
                 <img
                   src={
@@ -378,6 +310,7 @@ const Header: React.FC = () => {
                   title="Favorilər"
                 />
               </Link>
+              {/* profile icon */}
               {isAuth ? (
                 <Link
                   ref={userRef}

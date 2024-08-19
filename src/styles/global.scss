@@ -5,11 +5,99 @@
 //include mulish
 @import url("https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap");
 
-
 .payment-success-page-wrapper .payment-success-page .card-repition .process {
   display: none !important;
 }
-.delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .name-surname .leftname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .name-surname .rightsurname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .name-surname .rightname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .apartment-adress .leftname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .apartment-adress .rightsurname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .apartment-adress .rightname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .zipcode-city .leftname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .zipcode-city .rightsurname select, .delivery-page-wrapper .deliverypage .container-delivery .form-and-total-price .top-form .form form .zipcode-city .rightname select {
+.delivery-page-wrapper
+  .deliverypage
+  .container-delivery
+  .form-and-total-price
+  .top-form
+  .form
+  form
+  .name-surname
+  .leftname
+  select,
+.delivery-page-wrapper
+  .deliverypage
+  .container-delivery
+  .form-and-total-price
+  .top-form
+  .form
+  form
+  .name-surname
+  .rightsurname
+  select,
+.delivery-page-wrapper
+  .deliverypage
+  .container-delivery
+  .form-and-total-price
+  .top-form
+  .form
+  form
+  .name-surname
+  .rightname
+  select,
+.delivery-page-wrapper
+  .deliverypage
+  .container-delivery
+  .form-and-total-price
+  .top-form
+  .form
+  form
+  .apartment-adress
+  .leftname
+  select,
+.delivery-page-wrapper
+  .deliverypage
+  .container-delivery
+  .form-and-total-price
+  .top-form
+  .form
+  form
+  .apartment-adress
+  .rightsurname
+  select,
+.delivery-page-wrapper
+  .deliverypage
+  .container-delivery
+  .form-and-total-price
+  .top-form
+  .form
+  form
+  .apartment-adress
+  .rightname
+  select,
+.delivery-page-wrapper
+  .deliverypage
+  .container-delivery
+  .form-and-total-price
+  .top-form
+  .form
+  form
+  .zipcode-city
+  .leftname
+  select,
+.delivery-page-wrapper
+  .deliverypage
+  .container-delivery
+  .form-and-total-price
+  .top-form
+  .form
+  form
+  .zipcode-city
+  .rightsurname
+  select,
+.delivery-page-wrapper
+  .deliverypage
+  .container-delivery
+  .form-and-total-price
+  .top-form
+  .form
+  form
+  .zipcode-city
+  .rightname
+  select {
   background-position: 97% !important;
 }
 .blog-inner-page-wrapper .inner-page-blog .top-description-blog .author-and-views .view {
@@ -30,7 +118,13 @@
 .product-page-wrapper .products-page .container-products .filter .filter-relations .price-placement .range {
   display: none !important;
 }
-.product-inner-page-wrapper .productinnerpage .similiar-products .carouselsimiliar-products .swiper-slide .item-details .category-name {
+.product-inner-page-wrapper
+  .productinnerpage
+  .similiar-products
+  .carouselsimiliar-products
+  .swiper-slide
+  .item-details
+  .category-name {
   display: none !important;
 }
 .swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active {
@@ -73,6 +167,9 @@ mark {
   background-color: rgb(31, 31, 31);
 }
 
+$hovercolor: #205a23;
+
+
 .app {
   overflow-x: hidden !important;
   width: 100%;
@@ -81,6 +178,7 @@ mark {
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
+  position: relative;
   background: #ffffff;
   .navigation-shower {
     width: 100%;
@@ -106,9 +204,134 @@ mark {
       font-size: 15px;
     }
   }
+
+  // CATALOG
+  .catalog-toggle-menu-overlay {
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+    transform: translateY(-10px);
+    transition: all 200ms ease-in-out;
+    position: absolute;
+    z-index: 2000;
+    top: 150px;
+    width: 100%;
+    max-height: 85vh;
+    min-height: 85vh;
+    background-color: rgba(19, 19, 19, 0.636);
+
+    .toggle-catalog-menu {
+      width: 90%;
+      max-width: 1440px;
+      margin: auto;
+      min-height: 85vh;
+      max-height: 85vh;
+      height: 100%;
+      background-color: rgb(246, 246, 246);
+      padding: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      justify-content: flex-start;
+      .main-categories {
+        width: 350px;
+        max-height: 80vh;
+        min-height: 80vh;
+        overflow-y: auto;
+        height: 100%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
+        border-right: 1px solid rgba(32, 75, 39, 0.224);
+        padding-right: 12px;
+        gap: 4px;
+        span {
+          text-align: start;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 6px 6px;
+          width: 100%;
+          color: black;
+          font-weight: 500;
+          font-size: 16px;
+          background-color: transparent;
+          border: 1px solid rgba(151, 185, 154, 0.208);
+          border-radius: 4px;
+          cursor: auto;
+          transition: 100ms ease-in-out;
+          &:hover {
+            background-color: rgb(232, 255, 234);
+            border: 1px solid transparent;
+          }
+          &.actived-cat {
+            background-color: rgb(122, 243, 122);
+          }
+        }
+      }
+
+      .right-sub-categories-container {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        display: grid;
+        justify-items: flex-start;
+        align-items: flex-start;
+        gap: 12px;
+        grid-template-columns: repeat(5, 1fr);
+        .links-categories {
+          width: 100%;
+          height: auto;
+          display: flex;
+          align-items: flex-start;
+          justify-content: flex-start;
+          flex-direction: column;
+          background-color: rgb(241, 241, 241);
+          padding: 12px;
+          gap: 8px;
+          a {
+            color: black;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: 100ms ease-in-out;
+            &:hover {
+              color: $hovercolor;
+            }
+          }
+
+          .other-links {
+            width: 100%;
+            height: auto;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: column;
+            .inner-child-link {
+              color: #505050;
+              font-size: 15px;
+              font-weight: 400;
+              transition: 100ms ease-in-out;
+              &:hover {
+                color: rgba(83, 184, 83, 0.532);
+              }
+            }
+          }
+        }
+      }
+
+    }
+
+    &.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+      user-select: auto;
+    }
+  }
 }
 
-$hovercolor: #205a23;
 
 //none overflow text code mixin
 @mixin noneOverflow {
@@ -944,9 +1167,10 @@ $border-top-color_1: rgb(57, 190, 57);
       from {
         opacity: 0;
         transform: scale(0.5) rotate(36deg);
-      } to {
+      }
+      to {
         opacity: 1;
-        transform: scale(1.0) rotate(360deg);
+        transform: scale(1) rotate(360deg);
       }
     }
     img {
@@ -987,8 +1211,8 @@ $border-top-color_1: rgb(57, 190, 57);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px; 
-    border: 2px solid #F94C10;
+    gap: 8px;
+    border: 2px solid #f94c10;
     border-radius: 2px;
     transition: all 200ms ease-in-out;
     text-decoration: none;
@@ -998,13 +1222,13 @@ $border-top-color_1: rgb(57, 190, 57);
       transition: 200ms ease-in-out;
     }
     span {
-      color: #F94C10;
+      color: #f94c10;
       font-weight: 700;
       font-size: 14px;
       transition: 200ms ease-in-out;
     }
     &:hover {
-      background-color: #F94C10;
+      background-color: #f94c10;
       span {
         color: #fff;
         transform: translateX(-12px);

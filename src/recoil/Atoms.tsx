@@ -88,3 +88,15 @@ export const showImgState = atom<string>({
   key: "showImgModalStateKey",
   default: "",
 });
+
+// catalog state
+export const catalogState = atom<boolean>({
+  key: "catalogstate",
+  default: false,
+})
+
+//loading state 
+export const LoadingState = atom<boolean>({
+  key: "loadingState",
+  default: false,
+});

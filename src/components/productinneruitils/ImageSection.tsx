@@ -1,5 +1,4 @@
 import React from "react";
-import { FaHeart } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
@@ -7,16 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Baseurl } from "../../api/Baseurl";
 import axios from "axios";
 import { ImagesPopularProducts, OptionsPopularProducts, ProductsInterface } from "../homepageuitils/PopularProducts";
-import { useAddBasket } from "../../useAddBasket";
-import { showImgState, userAddBasket } from "../../recoil/Atoms";
+import { showImgState } from "../../recoil/Atoms";
 import Loader from "../../uitils/Loader";
 import { FaSearch } from "react-icons/fa";
+import { addBasketFunctionStorage } from "../../features/AddBasket/AddBasket";
 
 const ImageSection: React.FC = () => {
   const { slugproduct } = useParams();
-
-  const { basketItems, loading, addBasket, removeBasket } = useAddBasket();
-  const isAddedBasket = useRecoilValue(userAddBasket);
 
   //FETCH ALL PRODUCTS
   const activeLanguage = useRecoilValue(SelectedLanguageState);
@@ -110,7 +106,6 @@ const ImageSection: React.FC = () => {
               />
 
             <FaSearch className="zoom" />
-            <FaHeart className="add-favourite" title="Add Favourites" />
           </>
         ) : (
           <Loader />
@@ -119,73 +114,21 @@ const ImageSection: React.FC = () => {
     );
   };
 
+  const [isAdded, setIsAdded] = React.useState<number | null>(null);
+
   return (
     <section className="image-section">
       <ProductImageWrapperComponent />
       <OtherImageNavigationComponent />
       <ColorsMaterialComponent />
-      {isAddedBasket && basketItems[productInner?.id] ? (
-        <button
-          className="remove-basket"
-          onClick={() =>
-            removeBasket(
-              {
-                id: productInner?.id,
-                category_name: productInner?.category_name,
-                content: productInner?.content,
-                discounted_price: productInner?.discounted_price,
-                img: productInner?.img,
-                is_favorite: productInner?.is_favorite,
-                is_in_cart: productInner?.is_in_cart,
-                is_popular: productInner?.is_popular,
-                is_stock: productInner?.is_stock,
-                parent_category_id: productInner?.parent_category_id,
-                price: productInner?.price,
-                slug: productInner?.slug,
-                title: productInner?.title,
-                images: productInner?.images,
-                modules: productInner?.modules,
-                options: productInner?.options,
-                quantity: productInner?.quantity,
-                is_new: productInner?.is_new,
-              },
-              productInner && productInner.id
-            )
-          }>
-          {loading ? <Loader /> : "Səbəttən Çıxart"}
-        </button>
-      ) : (
-        <button
-          className="add-basket"
-          onClick={() =>
-            addBasket(
-              {
-                quantity: productInner?.quantity,
-                is_new: productInner?.is_new,
-                id: productInner?.id,
-                category_name: productInner?.category_name,
-                content: productInner?.content,
-                discounted_price: productInner?.discounted_price,
-                img: productInner?.img,
-                is_favorite: productInner?.is_favorite,
-                is_in_cart: productInner?.is_in_cart,
-                is_popular: productInner?.is_popular,
-                is_stock: productInner?.is_stock,
-                parent_category_id: productInner?.parent_category_id,
-                price: productInner?.price,
-                slug: productInner?.slug,
-                title: productInner?.title,
-                images: productInner?.images,
-                modules: productInner?.modules,
-                options: productInner?.options,
-              },
-              undefined,
-              productInner && productInner.id
-            )
-          }>
-          {loading ? <Loader /> : "Səbətə Əlavə Et"}
-        </button>
-      )}
+      <button className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
+      onClick={() => {
+        addBasketFunctionStorage(productInner);
+        setIsAdded(productInner?.id);
+      }}
+      >
+        {isAdded ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
+      </button>
     </section>
   );
 };

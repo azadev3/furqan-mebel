@@ -1,14 +1,16 @@
 import React from "react";
 import PaginationLikedProducts from "../../uitils/PaginationLikedProducts";
+import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
 
-const Favorites: React.FC = () => {
-  const favItems = localStorage.getItem("favourites");
+type props = {
+  products: CatProductType[],
+}
 
-  const dataFav = favItems ? JSON.parse(favItems) : [];
-
+const Favorites: React.FC<props> = ({products}) => {
+ 
   return (
     <div className="favorites">
-      <PaginationLikedProducts data={Array.isArray(dataFav) ? dataFav : Object.values(dataFav)} itemsPerPage={8} />
+      <PaginationLikedProducts data={products} itemsPerPage={8} />
     </div>
   );
 };

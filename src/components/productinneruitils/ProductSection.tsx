@@ -86,17 +86,6 @@ const ProductSection: React.FC = () => {
   //   }));
   // };
 
-  const countSaleCount = (price: string, discounted_price: string) => {
-    const totalPrice = parseFloat(price);
-    const discountPrice = parseFloat(discounted_price);
-
-    if (!isNaN(totalPrice) && !isNaN(discountPrice)) {
-      const discountCount = totalPrice - discountPrice;
-      const discountPercentage = (discountCount / totalPrice) * 100;
-      return discountPercentage;
-    }
-  };
-
   const sliderValue = useRecoilValue(SliderValue);
 
   const { translations } = useTranslations();
@@ -104,7 +93,7 @@ const ProductSection: React.FC = () => {
   return (
     <section className="product-section">
       <div className="details-section">
-        <p>Masa və stullar</p>
+        <p>{productInner && productInner?.category_name || ""}</p>
         <div className="title-and-description">
           <h2>{productInner?.title}</h2>
           <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productInner?.content) }} />
@@ -114,11 +103,8 @@ const ProductSection: React.FC = () => {
       <div className="quantity-and-dimensions">
         <div className="sale">
           <strong className="price">{productInner?.price} AZN</strong>
-          {productInner && productInner?.discounted_price ? <span className="discountprice">{productInner?.discounted_price}</span> : ""}
           {productInner && productInner?.discounted_price ? (
-            <span className="sale-count">
-              {countSaleCount(`${productInner?.price}`, `${productInner?.discounted_price}`)} sale!
-            </span>
+            <span className="discountprice">{productInner?.discounted_price}</span>
           ) : (
             ""
           )}
@@ -126,7 +112,7 @@ const ProductSection: React.FC = () => {
       </div>
 
       <div className="credit-terms">
-        <h4>{translations['kredit_sertleri']}</h4>
+        <h4>{translations["kredit_sertleri"]}</h4>
 
         <div className="terms-wrapper">
           <div className="top-container">
@@ -134,11 +120,11 @@ const ProductSection: React.FC = () => {
               <SliderSizes />
             </div>
             <div className="comission">
-              <span>{translations['komissiya_haqqi']}</span>
+              <span>{translations["komissiya_haqqi"]}</span>
               <p>azn</p>
             </div>
             <div className="monthly-payment">
-              <span>{translations['ayliq_odenis']}</span>
+              <span>{translations["ayliq_odenis"]}</span>
               <p style={{ fontSize: "16px" }}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
             </div>
           </div>
@@ -151,7 +137,7 @@ const ProductSection: React.FC = () => {
       </div>
 
       <article className="set-modules">
-        <h3>{translations['deste_daxil_modullar']}</h3>
+        <h3>{translations["deste_daxil_modullar"]}</h3>
         <div className="grid-modules">
           {allProductsData && allProductsData.length > 0 ? (
             allProductsData.map(
@@ -160,19 +146,8 @@ const ProductSection: React.FC = () => {
                 item.modules.map((modules: ModulesProducts, i: number) => (
                   <div className="item-module" key={i}>
                     <p>{modules?.title}</p>
-                    {/* <div className="counter-area">
-                <button className="decrement" onClick={() => modulesCounterDecrementFunction(item?.id.toString())}>
-                  -
-                </button>
-                <span className="count">{count[item?.id] || 1}</span>
-                <button className="increment" onClick={() => modulesCounterIncrementFunction(item?.id.toString())}>
-                  +
-                </button>
-              </div> */}
-
                     <div className="prices">
                       <strong>{item?.price} AZN</strong>
-                      {/* <span>discountprice</span> */}
                     </div>
                   </div>
                 ))

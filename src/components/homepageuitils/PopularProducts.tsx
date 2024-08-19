@@ -2,17 +2,14 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";
 import "swiper/css";
-import { CiHeart } from "react-icons/ci";
-import { useQuery } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
 import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import Loader from "../../uitils/Loader";
-import { IoMdHeart } from "react-icons/io";
-import { useAddFavourite } from "../../useAddFavourite";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { useTranslations } from "../../TranslateContext";
+import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
 
 export type ChildrenCategory = {
   id: number;
@@ -71,47 +68,20 @@ export interface ProductsInterface {
 }
 
 const ProductsInterface: React.FC = () => {
-  const { addFavourite, favouriteItems } = useAddFavourite();
+
+  const activeLanguage = useRecoilValue(SelectedLanguageState);
 
   // filtered items according to category names
-  const [selectedCategory, setSelectedCategory] = React.useState<number>();
-  const [popularProducts, setPopularProducts] = React.useState<ProductsInterface[]>([]);
+  const [popularProducts, setPopularProducts] = React.useState<CatProductType[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  // FETCH CATEGORIES
-  const activeLanguage = useRecoilValue(SelectedLanguageState);
-  const { data: CategoryProductsData } = useQuery({
-    queryKey: ["categoryProductsKey", activeLanguage],
-    queryFn: async () => {
-      const response = await axios.get(`${Baseurl}/categories`, {
-        headers: {
-          "Accept-Language": activeLanguage,
-        },
-      });
-      return response.data?.categories;
-    },
-    staleTime: 1000000,
-  });
-
-  //set first category mounted component
-  React.useEffect(() => {
-    if (CategoryProductsData && CategoryProductsData.length > 0) {
-      const firstCategory = CategoryProductsData[0]?.id;
-      setSelectedCategory(firstCategory);
-      getPopularProductForCategory(firstCategory);
-    }
-  }, [CategoryProductsData]);
-
-  // FETCH PRODUCTS for CATEGORY_ID PARAMS
-  const getPopularProductForCategory = async (category_id: number | string) => {
+  // FETCH PRODUCTS
+  const getPopularProductForCategory = async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${Baseurl}/popular_products`, {
         headers: {
           "Accept-Language": activeLanguage,
-        },
-        params: {
-          category_id: category_id,
         },
       });
 
@@ -126,11 +96,10 @@ const ProductsInterface: React.FC = () => {
       setLoading(false);
     }
   };
-
-  // filtering
-  const filteredItems = popularProducts.filter((item: ProductsInterface) => {
-    return item.parent_category_id === selectedCategory;
-  });
+  //set first category mounted component
+  React.useEffect(() => {
+    getPopularProductForCategory();
+  }, []);
 
   // if mobile, convert swiper on the filtered items div
   const [mobile, setMobile] = React.useState<boolean>(false);
@@ -148,7 +117,7 @@ const ProductsInterface: React.FC = () => {
     return () => window.removeEventListener("resize", mobileResize);
   }, []);
 
-  const calculatePercentage = (item: ProductsInterface) => {
+  const calculatePercentage = (item: CatProductType) => {
     const price = item?.price;
     const discounted_price = item?.discounted_price;
 
@@ -166,39 +135,7 @@ const ProductsInterface: React.FC = () => {
       <div className="popular-products">
         <h1>{translations["populyar_mehsullar"]}</h1>
         <div className="container-with-popular-products">
-          <div className="categories-swiper">
-            <Swiper
-              breakpoints={{
-                268: {
-                  slidesPerView: 2.5,
-                  spaceBetween: 12,
-                },
-                568: {
-                  slidesPerView: 4.3,
-                },
-                968: {
-                  slidesPerView: 6.6,
-                },
-              }}
-              spaceBetween={14}
-              slidesPerView={6.6}
-              className="mySwiper">
-              {CategoryProductsData && CategoryProductsData.length > 0
-                ? CategoryProductsData.map((item: CategoriesInterface) => (
-                    <SwiperSlide
-                      className={`${selectedCategory === item.id ? "active" : ""}`}
-                      key={item.id}
-                      onClick={() => {
-                        getPopularProductForCategory(item.id);
-                        setSelectedCategory(item.id);
-                      }}>
-                      {item.title}
-                    </SwiperSlide>
-                  ))
-                : ""}
-            </Swiper>
-          </div>
-
+         
           {mobile ? (
             <div className="categories-filtering-items">
               <Swiper spaceBetween={12} slidesPerView={1.2}>
@@ -206,44 +143,13 @@ const ProductsInterface: React.FC = () => {
                   <Loader />
                 ) : (
                   <React.Fragment>
-                    {filteredItems.map((item: ProductsInterface) => (
+                    {popularProducts && popularProducts?.length > 0 ? popularProducts.map((item: CatProductType) => (
                       <SwiperSlide key={item.id}>
                         <Link
                           to={`/products/${item?.slug.toLowerCase()}`}
-                          className={`subitem ${selectedCategory === item?.parent_category_id ? "addanim" : ""}`}>
+                          className="subitem">
                           <img className="shop-bag" src="../shopbag.svg" alt="show" title="Səbət" />
-                          <div
-                            className="add-favourites"
-                            onClick={(e) => {
-                              addFavourite(
-                                {
-                                  title: item?.title,
-                                  price: item?.price,
-                                  discounted_price: item?.discounted_price,
-                                  content: item?.content,
-                                  id: item?.id,
-                                  img: item?.img,
-                                  images: item?.images,
-                                  is_favorite: item?.is_favorite,
-                                  is_in_cart: item?.is_in_cart,
-                                  is_popular: item?.is_popular,
-                                  is_stock: item?.is_stock,
-                                  parent_category_id: item?.parent_category_id,
-                                  slug: item?.slug,
-                                  modules: item?.modules,
-                                  options: item?.options,
-                                  category_name: item?.category_name,
-                                },
-                                e,
-                                item?.id
-                              );
-                            }}>
-                            {favouriteItems[item?.id] ? (
-                              <IoMdHeart className="fav-icon-fill" />
-                            ) : (
-                              <CiHeart className="fav-icon" />
-                            )}
-                          </div>
+                          
                           <div className="punts">
                             {item?.is_new ? (
                               <div className="new-punt">
@@ -254,7 +160,7 @@ const ProductsInterface: React.FC = () => {
                             )}
                             {item?.discounted_price ? (
                               <div className="discount-punt">
-                                <span>{calculatePercentage(item)?.split(".00")}</span>
+                                <span>{Math.round(parseFloat(item?.discounted_price))}</span>
                               </div>
                             ) : (
                               ""
@@ -273,7 +179,7 @@ const ProductsInterface: React.FC = () => {
                           </div>
                         </Link>
                       </SwiperSlide>
-                    ))}
+                    )) : ""}
                   </React.Fragment>
                 )}
               </Swiper>
@@ -284,46 +190,15 @@ const ProductsInterface: React.FC = () => {
                 <Loader />
               ) : (
                 <React.Fragment>
-                  {filteredItems.slice(0, 4).map((item: ProductsInterface) => (
+                  {popularProducts && popularProducts?.length > 0 ? popularProducts.slice(0, 4).map((item: CatProductType) => (
                     <Link
                       to={`/products/${item?.slug.toLowerCase()}`}
                       key={item.id}
-                      className={`subitem ${selectedCategory === item.parent_category_id ? "addanim" : ""}`}>
+                      className="subitem">
                       <div className="add-basket">
                         <HiOutlineShoppingBag className="shopping-bag" />
                       </div>
-                      <div
-                        className="add-favourites"
-                        onClick={(e) => {
-                          addFavourite(
-                            {
-                              title: item?.title,
-                              price: item?.price,
-                              discounted_price: item?.discounted_price,
-                              content: item?.content,
-                              id: item?.id,
-                              img: item?.img,
-                              images: item?.images,
-                              is_favorite: item?.is_favorite,
-                              is_in_cart: item?.is_in_cart,
-                              is_popular: item?.is_popular,
-                              is_stock: item?.is_stock,
-                              parent_category_id: item?.parent_category_id,
-                              slug: item?.slug,
-                              modules: item?.modules,
-                              options: item?.options,
-                              category_name: item?.category_name,
-                            },
-                            e,
-                            item?.id
-                          );
-                        }}>
-                        {favouriteItems[item?.id] ? (
-                          <IoMdHeart className="fav-icon-fill" />
-                        ) : (
-                          <CiHeart className="fav-icon" />
-                        )}
-                      </div>
+                      
                       <div className="punts">
                         {item?.is_new ? (
                           <div className="new-punt">
@@ -352,7 +227,7 @@ const ProductsInterface: React.FC = () => {
                         </div>
                       </div>
                     </Link>
-                  ))}
+                  )) : ""}
                 </React.Fragment>
               )}
             </div>

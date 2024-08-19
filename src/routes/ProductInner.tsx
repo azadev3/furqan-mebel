@@ -10,7 +10,7 @@ import { SelectedLanguageState } from "../components/header/SelectedLanguage";
 import { useQuery } from "@tanstack/react-query";
 import { Baseurl } from "../api/Baseurl";
 import axios from "axios";
-import { ProductsInterface } from "../components/homepageuitils/PopularProducts";
+import { CatProductType } from "../components/productpageuitils/filteruitils/CategoriesForFilter";
 
 const ProductInner: React.FC = () => {
   const { slugproduct } = useParams();
@@ -31,7 +31,7 @@ const ProductInner: React.FC = () => {
     staleTime: 1000000,
   });
 
-  const productInner = allProductsData && allProductsData?.length > 0 && allProductsData.find((item: ProductsInterface) => {
+  const productInner = allProductsData && allProductsData?.length > 0 && allProductsData.find((item: CatProductType) => {
     return item?.slug.toLowerCase() === slugproduct?.toLowerCase();
   });
 

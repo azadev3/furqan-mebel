@@ -1,0 +1,188 @@
+.product-card, .fav-product-card {
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  max-height: 316px;
+  min-height: 316px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 8px;
+  transition: 100ms ease-in-out;
+}
+.product-card .product-image-wrapper, .fav-product-card .product-image-wrapper {
+  width: 100%;
+  height: 220px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.product-card .product-image-wrapper img, .fav-product-card .product-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  transition: transform 200ms ease-in-out;
+}
+.product-card .product-image-wrapper .new-product-flag, .product-card .product-image-wrapper .product-discounted-percentage-flag, .fav-product-card .product-image-wrapper .new-product-flag, .fav-product-card .product-image-wrapper .product-discounted-percentage-flag {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: #43B749;
+  padding: 3px;
+  min-width: 34px;
+  width: 34px;
+  height: 34px;
+}
+.product-card .product-image-wrapper .new-product-flag span, .product-card .product-image-wrapper .product-discounted-percentage-flag span, .fav-product-card .product-image-wrapper .new-product-flag span, .fav-product-card .product-image-wrapper .product-discounted-percentage-flag span {
+  color: #FAFAFA;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.product-card .product-image-wrapper .product-discounted-percentage-flag, .fav-product-card .product-image-wrapper .product-discounted-percentage-flag {
+  background: #FAFAFA;
+  border: 1px solid #F2F2F5;
+  top: 60px;
+}
+.product-card .product-image-wrapper .product-discounted-percentage-flag span, .fav-product-card .product-image-wrapper .product-discounted-percentage-flag span {
+  color: #43B749;
+  font-weight: 500;
+  font-size: 12px;
+}
+.product-card .product-image-wrapper .add-fav-icon, .fav-product-card .product-image-wrapper .add-fav-icon {
+  left: 20px;
+  top: 20px;
+  min-width: 36px;
+  background-color: #FFFFFF;
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  padding: 3px;
+  position: absolute;
+  z-index: 10;
+  cursor: pointer;
+  transition: 80ms ease-in-out;
+}
+.product-card .product-image-wrapper .add-fav-icon:hover, .fav-product-card .product-image-wrapper .add-fav-icon:hover {
+  transform: scale(1.1);
+}
+.product-card .product-image-wrapper .add-fav-icon:active, .fav-product-card .product-image-wrapper .add-fav-icon:active {
+  transform: scale(0.98);
+}
+.product-card .product-image-wrapper .add-fav-icon .icon, .fav-product-card .product-image-wrapper .add-fav-icon .icon {
+  color: #000000;
+  font-size: 24px;
+}
+.product-card .product-image-wrapper .add-fav-icon .iconadded, .fav-product-card .product-image-wrapper .add-fav-icon .iconadded {
+  font-size: 24px;
+  color: red;
+}
+.product-card .product-description, .fav-product-card .product-description {
+  transition: 100ms ease-in-out;
+  width: 100%;
+  min-height: 88px;
+  max-height: 88px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+.product-card .product-description .top, .fav-product-card .product-description .top {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+.product-card .product-description .top .category-name, .fav-product-card .product-description .top .category-name {
+  color: #BFBFBF;
+  font-weight: 400;
+  font-size: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.product-card .product-description .top .product-name, .fav-product-card .product-description .top .product-name {
+  transition: 150ms ease-in-out;
+  color: #000000;
+  font-weight: 500;
+  font-size: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.product-card .product-description .top .isStock, .fav-product-card .product-description .top .isStock {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(35, 88, 35);
+}
+.product-card .product-description .top .noStock, .fav-product-card .product-description .top .noStock {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(133, 36, 36);
+}
+.product-card .product-description .prices, .fav-product-card .product-description .prices {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+}
+.product-card .product-description .prices .price, .fav-product-card .product-description .prices .price {
+  color: #212121;
+  font-weight: 400;
+  font-size: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.product-card .product-description .prices .discountprice, .fav-product-card .product-description .prices .discountprice {
+  color: #BFBFBF;
+  font-weight: 400;
+  font-size: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-decoration: line-through;
+}
+.product-card .product-description:hover .top .product-name, .fav-product-card .product-description:hover .top .product-name {
+  color: #BFBFBF !important;
+}
+.product-card .product-description:active, .fav-product-card .product-description:active {
+  transform: scale(0.99);
+}
+.product-card:hover .product-image-wrapper img, .fav-product-card:hover .product-image-wrapper img {
+  transform: scale(1.1);
+}/*# sourceMappingURL=productcard.css.map */

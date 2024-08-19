@@ -21,6 +21,7 @@ import { useRecoilState } from "recoil";
 import {
   ActiveLoginPageState,
   ActiveRegisterPageState,
+  catalogState,
   LoginMenuState,
   scrollHeaderState,
   showImgState,
@@ -36,14 +37,15 @@ import Register from "./components/loginregister/Register";
 import { FaArrowLeft } from "react-icons/fa6";
 import Login from "./components/loginregister/Login";
 import getCookie from "./getCookie";
-import { useAddFavourite } from "./useAddFavourite";
 import { FavouriteItemType } from "./components/productpageuitils/filteruitils/productmainuitils/PaginationProducts";
 import axios from "axios";
 import { Baseurl } from "./api/Baseurl";
 import Thanks from "./Thanks";
 import { useTranslations } from "./TranslateContext";
+import CatalogToggleMenu from "./components/header/CatalogToggleMenu";
 
 const App: React.FC = () => {
+
   const [isAuth, setAuth] = useRecoilState(UserIsAuthState);
 
   React.useEffect(() => {
@@ -55,7 +57,7 @@ const App: React.FC = () => {
   }, []);
 
   //scroll header codes
-  const [__, setScrolled] = useRecoilState(scrollHeaderState);
+  const [_, setScrolled] = useRecoilState(scrollHeaderState);
 
   React.useEffect(() => {
     const scrollSizer = () => {
@@ -92,8 +94,7 @@ const App: React.FC = () => {
     return () => document.removeEventListener("mousedown", outsideClicked);
   }, [setLoginMenu, setActiveLogin, setActiveRegister]);
 
-  // SEND FAVOURITES ITEMS TO DATABASE IF USER AUTHENTIFICATED
-  const { favouriteItems } = useAddFavourite();
+  // SEND FAVOURITE ITEMS TO DATABASE IF USER AUTHENTICATED
   const sendFavouritesDatabase = async (favItems: FavouriteItemType[]) => {
     try {
       if (!favItems || favItems.length === 0) {
@@ -123,19 +124,29 @@ const App: React.FC = () => {
 
       if (response.data) {
         console.log(response.data);
+        localStorage.removeItem("favourites");
       } else {
-        console.log(response.status);
+        console.error("Response status:", response.status);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error sending favourites to database:", error);
     }
   };
-
   React.useEffect(() => {
-    if (isAuth && Object.values(favouriteItems).length > 0) {
-      sendFavouritesDatabase(Object.values(favouriteItems));
+    const favouriteItems = localStorage.getItem("favourites");
+
+    if (favouriteItems) {
+      try {
+        const parsedFavItems: FavouriteItemType[] = JSON.parse(favouriteItems);
+
+        if (isAuth && Array.isArray(parsedFavItems) && parsedFavItems.length > 0) {
+          sendFavouritesDatabase(parsedFavItems);
+        }
+      } catch (error) {
+        console.error("Error parsing favourite items:", error);
+      }
     }
-  }, [favouriteItems]);
+  }, [isAuth]);
 
   //show image modal (inner product)
   const [showedImg, setShowedImg] = useRecoilState(showImgState);
@@ -171,13 +182,29 @@ const App: React.FC = () => {
 
   const { translations } = useTranslations();
 
+  //catalog modal
+  const [catalogMenu, setCatalogMenu] = useRecoilState(catalogState);
+
+  const catalogMenuDivRef = React.useRef<HTMLDivElement | null>(null);
+  //outside close
+  React.useEffect(() => {
+    const outsideClicked = (e: MouseEvent) => {
+      if (catalogMenuDivRef.current && !catalogMenuDivRef.current.contains(e.target as Node)) {
+        setCatalogMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", outsideClicked);
+    return () => document.removeEventListener("mousedown", outsideClicked);
+  }, []);
+
   return (
     <div className="app">
       {/* call your modal */}
       <div className={`call-your-modal-overlay ${callYourModal ? "active" : ""}`}>
         <div className="call-your-modal" ref={callYourModalRef}>
           <img src="../closebtn.svg" alt="close-btn" className="closebtn" onClick={() => setCallYourModal(false)} />
-          <h1>{translations['zeng_sifaris_et']}</h1>
+          <h1>{translations["zeng_sifaris_et"]}</h1>
           <form action="" className="form">
             <div className="field-input">
               <label htmlFor="name">Ad</label>
@@ -188,7 +215,7 @@ const App: React.FC = () => {
               <input type="text" name="tel" id="tel" placeholder="+994 70 000 00 00" />
             </div>
           </form>
-          <button type="submit">{translations['gonder']}</button>
+          <button type="submit">{translations["gonder"]}</button>
         </div>
       </div>
 
@@ -263,6 +290,11 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* CATALOG modal */}
+      <div className={`catalog-toggle-menu-overlay ${catalogMenu ? "active" : ""}`} ref={catalogMenuDivRef}>
+        <CatalogToggleMenu />
       </div>
 
       <ToastContainer transition={Zoom} autoClose={1200} pauseOnHover={false} draggable={true} />
