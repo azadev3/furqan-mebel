@@ -283,7 +283,7 @@ const Header: React.FC = () => {
             <div className="userprofile">
               {/* basket icon */}
               <Link to="/mybasket" className="basket">
-                  <span className="notification"></span>
+                  <span className="notification">{}</span>
                 <img
                   src={
                     isBasketPage || isBasketData

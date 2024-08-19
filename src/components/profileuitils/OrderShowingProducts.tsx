@@ -55,13 +55,13 @@ const OrderShowingProducts: React.FC = () => {
                     </div>
                     <div className="texts">
                       <span>{item?.product?.title}</span>
-                      <p>{item?.product?.content}</p>
+                      <p>{item?.product?.category_name}</p>
                     </div>
                   </div>
                 </td>
-                <td>{item?.product?.price} AZN</td>
+                <td>{item && item?.product && item?.product?.price ? parseFloat(item?.product.price) * item?.quantity : ""} AZN</td>
               </tr>
-            )) : "sa"} 
+            )) : ""} 
           </tbody>
         </table>
       </div>

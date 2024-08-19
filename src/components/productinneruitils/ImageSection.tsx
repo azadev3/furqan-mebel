@@ -6,13 +6,17 @@ import { useQuery } from "@tanstack/react-query";
 import { Baseurl } from "../../api/Baseurl";
 import axios from "axios";
 import { ImagesPopularProducts, OptionsPopularProducts, ProductsInterface } from "../homepageuitils/PopularProducts";
-import { showImgState } from "../../recoil/Atoms";
+import { showImgState, UserIsAuthState } from "../../recoil/Atoms";
 import Loader from "../../uitils/Loader";
 import { FaSearch } from "react-icons/fa";
-import { addBasketFunctionStorage } from "../../features/AddBasket/AddBasket";
+import { addBasketFunction, addBasketFunctionStorage } from "../../features/AddBasket/AddBasket";
+import getCookie from "../../getCookie";
 
 const ImageSection: React.FC = () => {
   const { slugproduct } = useParams();
+
+  const isAuth = useRecoilValue(UserIsAuthState);
+  const token = getCookie("accessToken");
 
   //FETCH ALL PRODUCTS
   const activeLanguage = useRecoilValue(SelectedLanguageState);
@@ -123,8 +127,13 @@ const ImageSection: React.FC = () => {
       <ColorsMaterialComponent />
       <button className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
       onClick={() => {
-        addBasketFunctionStorage(productInner);
+        if(isAuth && token) {
+          addBasketFunction(productInner?.id, productInner, activeLanguage, token);
+          setIsAdded(productInner?.id);
+        } else {
+          addBasketFunctionStorage(productInner);
         setIsAdded(productInner?.id);
+        }
       }}
       >
         {isAdded ? "Məhsul səbəttədir" : "Səbətə əlavə et"}

@@ -9,6 +9,15 @@ import { Baseurl } from "../../api/Baseurl";
 import { toast } from "react-toastify";
 import Loader from "../../uitils/Loader";
 
+interface LoginData {
+  id: number,
+  name: string,
+  surname: string,
+  email: string,
+  phone: string,
+  user_info: any,
+}
+
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,16 +44,21 @@ const Login: React.FC = () => {
             const response = await axios.post(`${Baseurl}/login`, values);
             
             if (response.data || response.status === 200) {
-         
+              const user:LoginData = response.data?.user;
               toast.success("Uğurludur, yönləndirilirsiniz.", {
                 position: "top-center",
               });
               const token = response.data?.token;
-              const userInfo = response.data?.user;
+              const userInfo = {
+                id: user?.id,
+                name: user?.name,
+                surname: user?.surname,
+                email: user?.email,
+                phone: user?.phone,
+              }
               const JsonConverter = JSON.stringify(userInfo);
               document.cookie = `accessToken=${token}; Secure; SameSite=None`;
               document.cookie = `userInfo=${encodeURIComponent(JsonConverter)}; Secure; SameSite=None`;
-
        
               resetForm();
               const timeout = setTimeout(() => {

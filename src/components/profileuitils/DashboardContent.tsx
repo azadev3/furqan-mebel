@@ -35,26 +35,60 @@ export interface updateDataUser {
   deleted_at: string;
 }
 
+interface ProfileUser {
+  id: number,
+  name: string,
+  surname: string,
+  email: string,
+  phone: string,
+  user_info: any,
+  all_orders: number | string,
+  prepared_orders: number | string,
+  completed_orders: number | string,
+}
+
 const DashboardContent: React.FC = () => {
+
+  const token = getCookie("accessToken");
+
+  //get profile 
+  const [profileData, setProfileData] = React.useState<ProfileUser>();
+  const getProfile = async () => {
+    try {
+      const response = await axios.get(`${Baseurl}/profile`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if(response.data) {
+        console.log(response.data);
+        setProfileData(response.data?.user)
+      } else {
+        console.log(response.status);
+      }
+    } catch (error) { 
+      console.log(error);
+    }
+  } 
 
   //statistics data
   const Statistics: StatisticsType[] = [
     {
       id: 1,
       title: "Bütün sifarişlər",
-      count: "154",
+      count: `${profileData && profileData?.all_orders ? profileData?.all_orders : "0"}`,
       icon: "../Rocket.svg",
     },
     {
       id: 2,
       title: "Hazırlanan sifarişlər",
-      count: "05",
+      count: `${profileData && profileData?.completed_orders ? profileData?.completed_orders : "0"}`,
       icon: "../Receipt.svg",
     },
     {
       id: 3,
       title: "Tamamlanmış sifarişlər",
-      count: "149",
+      count: `${profileData && profileData?.prepared_orders ? profileData?.prepared_orders : "0"}`,
       icon: "../Package.svg",
     },
   ];
@@ -145,6 +179,10 @@ const DashboardContent: React.FC = () => {
       setLoading(false);
     }
   };
+
+  React.useEffect(() => {
+    getProfile();
+  }, []);
 
   return (
     <div className="dashboard-route-content">

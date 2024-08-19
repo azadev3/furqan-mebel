@@ -26,9 +26,9 @@ const SelectedLanguage: React.FC = () => {
       <article className={`az ${activeLang === "az" ? "active-lang" : ""}`} onClick={() => handleSelectLanguage("az")}>
         <span>az</span>
       </article>
-      <article className={`ru ${activeLang === "ru" ? "active-lang" : ""}`} onClick={() => handleSelectLanguage("ru")}>
+      {/* <article className={`ru ${activeLang === "ru" ? "active-lang" : ""}`} onClick={() => handleSelectLanguage("ru")}>
         <span>ru</span>
-      </article>
+      </article> */}
     </div>
   );
 };

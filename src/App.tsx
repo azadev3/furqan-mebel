@@ -43,9 +43,9 @@ import { Baseurl } from "./api/Baseurl";
 import Thanks from "./Thanks";
 import { useTranslations } from "./TranslateContext";
 import CatalogToggleMenu from "./components/header/CatalogToggleMenu";
+import { CatProductType } from "./components/productpageuitils/filteruitils/CategoriesForFilter";
 
 const App: React.FC = () => {
-
   const [isAuth, setAuth] = useRecoilState(UserIsAuthState);
 
   React.useEffect(() => {
@@ -144,6 +144,66 @@ const App: React.FC = () => {
         }
       } catch (error) {
         console.error("Error parsing favourite items:", error);
+      }
+    }
+  }, [isAuth]);
+
+  // SEND BASKET ITEMS TO DATABASE IF USER AUTHENTICATED
+  const sendBasketItemsToDB = async (items: CatProductType[]) => {
+    try {
+      if (!items || items.length === 0) {
+        console.error("No basket items to send.");
+        return;
+      }
+
+      const token = getCookie("accessToken");
+
+      const sendBasketItemID = items
+        .map((item: CatProductType) => item.id)
+        .filter((id) => id !== null && id !== undefined);
+
+      const sendQuantities = items
+        .map((item: CatProductType) => item.quantity || 1)
+        .filter((quantity) => quantity !== null && quantity !== undefined);
+
+      if (sendBasketItemID.length === 0) {
+        console.error("No valid IDs found in basket items.");
+        return;
+      }
+
+      const data = {
+        product_ids: sendBasketItemID,
+        quantities: sendQuantities,
+      };
+
+      const response = await axios.post(`${Baseurl}/addAll`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data) {
+        console.log(response.data);
+        localStorage.removeItem("basket");
+      } else {
+        console.error("Response status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error sending basket to database:", error);
+    }
+  };
+  React.useEffect(() => {
+    const basketItems = localStorage.getItem("basket");
+
+    if (basketItems) {
+      try {
+        const parsedBasketItems: CatProductType[] = JSON.parse(basketItems);
+
+        if (isAuth && Array.isArray(parsedBasketItems) && parsedBasketItems.length > 0) {
+          sendBasketItemsToDB(parsedBasketItems);
+        }
+      } catch (error) {
+        console.error("Error parsing basket items:", error);
       }
     }
   }, [isAuth]);

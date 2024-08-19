@@ -1097,7 +1097,7 @@
           display: flex;
           gap: 24px;
           .image-section {
-            flex: 1.1;
+            flex: 1.9;
             width: 100%;
             height: auto;
             background-color: transparent;
@@ -1342,7 +1342,7 @@
             height: auto;
             background: #f9f9f9;
             border-radius: 18px;
-            padding: 18px 30px;
+            padding: 18px 16px;
             display: flex;
             align-items: flex-start;
             justify-content: flex-start;
@@ -1367,14 +1367,14 @@
                 flex-direction: column;
                 h2 {
                   color: #000000;
-                  font-size: 36px;
+                  font-size: 24px;
                   line-height: 54px;
                   font-weight: 500;
                 }
                 p {
                   color: #797b85;
                   font-weight: 400;
-                  font-size: 16px;
+                  font-size: 14px;
                   line-height: 26px;
                 }
               }
@@ -1437,7 +1437,7 @@
               h4 {
                 color: #414141;
                 font-weight: 500;
-                font-size: 20px;
+                font-size: 16px;
               }
 
               .terms-wrapper {
@@ -1452,7 +1452,7 @@
                   display: flex;
                   align-items: center;
                   justify-content: flex-start;
-                  gap: 24px;
+                  gap: 4px;
                   .left-ranger {
                     margin-right: calc(48px - 24px);
                     width: 180px;
@@ -1471,7 +1471,7 @@
                     max-width: 184px;
                     height: 82px;
                     border-radius: 18px;
-                    padding: 10px 14px;
+                    padding: 6px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -1480,7 +1480,7 @@
                     span {
                       color: #000000;
                       font-weight: 400;
-                      font-size: 16px;
+                      font-size: 14px;
                       text-align: center;
                     }
                     p {
@@ -1499,10 +1499,11 @@
                   display: flex;
                   align-items: center;
                   justify-content: flex-start;
+                  margin-top: 12px;
                   p {
                     color: #c9c9c9;
                     font-weight: 400;
-                    font-size: 14px;
+                    font-size: 12px;
                     span {
                       color: #de1616;
                     }

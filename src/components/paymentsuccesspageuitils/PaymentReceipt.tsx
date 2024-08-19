@@ -58,24 +58,23 @@ const PaymentReceipt: React.FC = () => {
           {ordersData && ordersData.length > 0 ? (
             ordersData.map((order: Orders) => (
               <div className="receipt-item" key={order.id}>
-                {order.order_items &&
+                {order && order?.order_items && order?.order_items?.length > 0 &&
                   order.order_items.map((orderItem: OrderItems) => (
                     <div className="top-product-item" key={orderItem.id}>
                       <div className="leftpro">
                         <div className="productimg">
                           <img
-                            src={orderItem.product.img ? orderItem.product.img : ""}
-                            alt={`${orderItem.product.id}-product`}
-                            title={orderItem.product.category_name}
+                            src={orderItem?.product?.img ? orderItem?.product?.img : ""}
+                            alt={`${orderItem?.product?.id}-product`}
+                            title={orderItem?.product?.category_name}
                           />
                         </div>
                         <div className="titlespro">
-                          <span>{orderItem.product.category_name}</span>
-                          <p>{orderItem.product.content}</p>
+                          <span>{orderItem?.product?.category_name}</span>
                         </div>
                       </div>
                       <div className="rightpro">
-                        <span>{orderItem.product.price}</span>
+                        <span>{orderItem?.product?.price} AZN</span>
                       </div>
                     </div>
                   ))}

@@ -34,6 +34,7 @@ export interface CatProductType {
   price: string;
   slug: string;
   title: string;
+  quantity: number;
 }
 export const CategoriesForFilterIsSelectedCategoryProductState = atom<CatProductType[]>({
   key: "CategoriesForFilterIsSelectedCategoryProductState",

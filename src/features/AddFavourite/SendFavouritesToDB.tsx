@@ -16,5 +16,7 @@ export const sendFavouritesToDB = async (favitems: CatProductType[], token: stri
     } else {
       console.log(response.status);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 };
