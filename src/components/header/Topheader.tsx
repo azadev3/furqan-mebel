@@ -10,12 +10,11 @@ export const CallYourModalState = atom<boolean>({
 });
 
 const Topheader: React.FC = () => {
-
   const [_, setCallYourModal] = useRecoilState(CallYourModalState);
 
   const handleCallYourModal = () => {
     setCallYourModal(true);
-  }
+  };
 
   const { translations } = useTranslations();
 
@@ -24,8 +23,8 @@ const Topheader: React.FC = () => {
       <header className="topheader">
         <div className="left-links">
           <div className="links">
-            <Link to="/stores">{translations['magazalar']}</Link>
-            <Link to="/vacations">{translations['vakansiyalar']}</Link>
+            <Link to="/stores">{translations["magazalar"]}</Link>
+            <Link to="/vacations">{translations["vakansiyalar"]}</Link>
           </div>
 
           <span className="time">
@@ -36,10 +35,15 @@ const Topheader: React.FC = () => {
         </div>
 
         <div className="right-links-language">
-          <Link to="" className="whatsapp">
+          <a
+            href={`https://wa.me/${translations["whatsapp_number"].replace(/\s+/g, "")}`}
+            className="whatsapp"
+            target="_blank"
+            rel="noopener noreferrer">
             <img src="../WhatsApp.svg" alt="whatsapp" title="WhatsApp" />
-            <span>+994 123 45 67</span>
-          </Link>
+            <span>{translations["whatsapp_number"]}</span>
+          </a>
+
           <Link to="" className="call-us" onClick={handleCallYourModal}>
             <img src="../call.svg" alt="call" title="Zəng sifariş et" />
             <span>Zəng sifariş et</span>
