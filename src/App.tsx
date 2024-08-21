@@ -44,6 +44,11 @@ import Thanks from "./Thanks";
 import { useTranslations } from "./TranslateContext";
 import CatalogToggleMenu from "./components/header/CatalogToggleMenu";
 import { CatProductType } from "./components/productpageuitils/filteruitils/CategoriesForFilter";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import { CgClose } from "react-icons/cg";
 
 const App: React.FC = () => {
   const [isAuth, setAuth] = useRecoilState(UserIsAuthState);
@@ -211,22 +216,8 @@ const App: React.FC = () => {
   //show image modal (inner product)
   const [showedImg, setShowedImg] = useRecoilState(showImgState);
 
-  const imgModalDivRef = React.useRef<HTMLDivElement | null>(null);
-
-  React.useEffect(() => {
-    const outsideClickImgModal = (e: MouseEvent) => {
-      if (imgModalDivRef && imgModalDivRef.current && imgModalDivRef.current.contains(e.target as Node)) {
-        setShowedImg("");
-      }
-    };
-
-    document.addEventListener("mousedown", outsideClickImgModal);
-    return () => document.removeEventListener("mousedown", outsideClickImgModal);
-  }, []);
-
   //call your modal
   const [callYourModal, setCallYourModal] = useRecoilState(CallYourModalState);
-
   const callYourModalRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
@@ -280,11 +271,21 @@ const App: React.FC = () => {
       </div>
 
       {/* show img modal */}
-      <div className={`image-modal-overlay ${showedImg ? "active" : ""}`} ref={imgModalDivRef}>
-        <div className="image-modal">
-          <img src={showedImg} alt="" />
-        </div>
+      <div className={`image-modal-overlay ${showedImg && showedImg?.length > 0 ? "active" : ""}`}>
+        <CgClose className="close-modal-icon" onClick={() => setShowedImg([])}/>
+      <div className="image-modal">
+        <Swiper 
+        navigation={true}
+        modules={[ Navigation ]}
+        className="mySwiper">
+          {showedImg.map((img, index) => (
+            <SwiperSlide key={index}>
+              <img src={img} alt={`product-image-${index}`} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
+    </div>
 
       <div className={`overlay ${loginMenu ? "active" : ""}`}>
         <div className={`login-menu-wrapper ${loginMenu ? "active" : ""}`} ref={loginMenuRef}>

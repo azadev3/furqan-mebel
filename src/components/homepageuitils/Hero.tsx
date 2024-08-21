@@ -20,6 +20,8 @@ type HeroDataType = {
   title: string;
   content: string;
   video: string;
+  image: string,
+  is_image: boolean,
 };
 
 const Hero: React.FC = () => {
@@ -37,6 +39,7 @@ const Hero: React.FC = () => {
           "Accept-Language": activeLanguage,
         },
       });
+      console.log(response.data?.hero, 'saaalmaaaa')
       return response.data?.hero;
     },
     staleTime: 1000000,
@@ -58,7 +61,11 @@ const Hero: React.FC = () => {
                 <SwiperSlide key={item.id}>
                   <div className="hero">
                     <div className="filter"></div>
-                    <video loop muted autoPlay controls={false} src={item?.video}></video>
+                    {item?.is_image ? (
+                      <img src={item?.image} alt={`${item?.id}-image`} title={item?.title} />
+                    ) : (
+                      <video loop muted autoPlay controls={false} src={item?.video}></video>
+                    )}
 
                     <div className="content-texts">
                       <h1 className="text-main">{item?.title}</h1>

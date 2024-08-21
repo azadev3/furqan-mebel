@@ -292,6 +292,9 @@
                 color: #000000;
                 font-weight: 500;
                 font-size: 20px;
+                @include noneOverflow();
+                -webkit-line-clamp: 1;
+                line-clamp: 1;
                 color: #000000;
               }
               .prices {

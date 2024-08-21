@@ -83,10 +83,10 @@ export const userAddBasket = atom<boolean>({
   default: false,
 })
 
-//show product inner image modal
-export const showImgState = atom<string>({
+// Recoil atom for showing images in modal
+export const showImgState = atom<string[]>({
   key: "showImgModalStateKey",
-  default: "",
+  default: [],
 });
 
 // catalog state

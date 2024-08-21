@@ -2030,6 +2030,76 @@
 }
 
 @media only screen and (max-width: 568px) {
+  .header-wrapper.header-wrapper-isHome {
+    top: 0 !important;
+  }
+  .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .image-section .colors-material .material-container {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 30px;
+  }
+  .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .left-ranger {
+    height: auto !important;
+  }
+  .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .comission, .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .monthly-payment {
+    max-width: unset;
+    width: 100%;
+  }
+  .app .navigation-shower {
+    display: none;
+  }
+  .product-inner-page-wrapper .productinnerpage .similiar-products .carouselsimiliar-products .swiper-slide .item-details .product-name {
+    @include noneOverflow();
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+  .header-wrapper .search-modal .modal .content-searched .search-result-item .right .right-prices .price {
+    font-size: 14px;
+  }
+  .product-page-wrapper .products-page .container-products .products-main .container-product-main {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .product-page-wrapper .products-page .container-products .products-main {
+    overflow: unset;
+    margin-top: 40px;
+  }
+  .header-wrapper .responsive-header .rightmobile-header .hearth {
+    min-width: 26px !important;
+    width: 26px !important;
+    height: 26px !important;
+  }
+  .homepage-wrapper .homepage .hero-wrapper .hero {
+    height: 500px !important;
+  }
+  .dashboard-page-wrapper .dashboard-page .container-dashboard .routed-contents .order-details .order-detail-top .card-one strong {
+    font-size: 14px !important;
+  }
+  .dashboard-page-wrapper .dashboard-page .container-dashboard .routed-contents .order-details .order-detail-top .card-one {
+    padding: 12px;
+  }
+  .basket-page-wrapper .basketpage .basket .basket-item-card {
+    flex-direction: column;
+    height: auto;
+    gap: 20px;
+    padding: 10px 8px;
+  }
+  .basket-page-wrapper .basketpage .basket .continue button {
+    width: 70%;
+    min-width: 75%;
+  }
+  .basket-page-wrapper .basketpage .similiar-products .carouselsimiliar-products {
+    height: 250px;
+  }
+  .basket-page-wrapper .basketpage .basket .basket-item-card .left-information .image-info {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+  }
+  .basket-page-wrapper .basketpage .basket .basket-item-card .left-information .descriptions h3 {
+    font-size: 14px;
+  }
+  .basket-page-wrapper .basketpage .basket .basket-item-card .left-information .descriptions p {
+    font-size: 14px;
+  }
   .thanks-page {
     margin-top: 60px;
     padding-left: 24px;

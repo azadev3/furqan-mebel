@@ -23,6 +23,9 @@ import axios from "axios";
 import { CategoriesInterface } from "../homepageuitils/PopularProducts";
 import Catalogs from "./Catalogs";
 import { useTranslations } from "../../TranslateContext";
+import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
+import getCookie from "../../getCookie";
+import { BasketDataInterface } from "../basketpageuitils/Basket";
 
 export interface Logo {
   id: number;
@@ -182,11 +185,13 @@ const Header: React.FC = () => {
 
   //basket items
   const [isBasketData, setIsBasketData] = React.useState<boolean>(false);
+  const [basketDataLS, setBasketDataLS] = React.useState<CatProductType[]>([]);
   React.useEffect(() => {
     const basketData = localStorage.getItem("basket");
     const isBasket = basketData ? JSON.parse(basketData) : [];
-    if(Object.keys(isBasket)?.length > 0) {
-      setIsBasketData(true)
+    if (Object.keys(isBasket)?.length > 0) {
+      setIsBasketData(true);
+      setBasketDataLS(isBasket);
     } else {
       setIsBasketData(false);
     }
@@ -199,6 +204,35 @@ const Header: React.FC = () => {
     navigate("/products");
     setCategoryTitle(categoryId);
   };
+
+  const [basketProducts, setBasketProducts] = React.useState<BasketDataInterface[]>([]);
+  const token = getCookie("accessToken");
+  const getBasketProducts = async () => {
+    try {
+      const response = await axios.get(`${Baseurl}/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Accept-Language": activeLanguage,
+        },
+      });
+
+      if (response.data) {
+        setBasketProducts(response.data?.cart || []);
+      } else {
+        console.log(response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching basket products:", error);
+    } 
+  };
+  React.useEffect(() => {
+    if(isAuth && token && basketProducts) {
+      getBasketProducts();
+    }
+  }, [isAuth, token]);
+
+
+
 
   return (
     <header
@@ -283,7 +317,7 @@ const Header: React.FC = () => {
             <div className="userprofile">
               {/* basket icon */}
               <Link to="/mybasket" className="basket">
-                  <span className="notification">{}</span>
+                <span className="notification">{isAuth && token ? basketProducts && basketProducts?.length : basketDataLS?.length}</span>
                 <img
                   src={
                     isBasketPage || isBasketData

@@ -10,7 +10,7 @@ import getCookie from "../../getCookie";
 import { UserIsAuthState } from "../../recoil/Atoms";
 import Loader from "../../uitils/Loader";
 
-interface BasketDataInterface {
+export interface BasketDataInterface {
   id: number;
   quantity: number;
   product: CatProductType;
@@ -165,7 +165,11 @@ const Basket: React.FC = () => {
   const removeProduct = (id: number) => {
     if (isAuth && token) {
       removeProductBasket(id);
-      location.reload();
+      const timeout = setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+      
+      return () => clearTimeout(timeout);
     } else {
       const updatedBasket = basketItems.filter((item) => item.id !== id);
       updateBasketInLocalStorage(updatedBasket);

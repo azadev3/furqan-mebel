@@ -100,6 +100,7 @@
   select {
   background-position: 97% !important;
 }
+
 .blog-inner-page-wrapper .inner-page-blog .top-description-blog .author-and-views .view {
   display: none !important;
 }
@@ -168,7 +169,6 @@ mark {
 }
 
 $hovercolor: #205a23;
-
 
 .app {
   overflow-x: hidden !important;
@@ -320,7 +320,6 @@ $hovercolor: #205a23;
           }
         }
       }
-
     }
 
     &.active {
@@ -331,7 +330,6 @@ $hovercolor: #205a23;
     }
   }
 }
-
 
 //none overflow text code mixin
 @mixin noneOverflow {
@@ -1016,12 +1014,68 @@ $border-top-color_1: rgb(57, 190, 57);
   display: flex;
   align-items: center;
   justify-content: center;
+  .close-modal-icon {
+    position: absolute;
+    z-index: 10;
+    top: 60px;
+    right: 60px;
+    font-size: 36px;
+    cursor: pointer;
+    &:hover {
+      color: red;
+    }
+  }
   .image-modal {
     width: 800px;
     height: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .swiper {
+      width: 100%;
+      user-select: none;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .swiper-button-prev {
+      background-color: #ffffff;
+      min-width: 45px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      &::after {
+        content: "<";
+        font-size: 32px;
+        color: green;
+      }
+    }
+    .swiper-button-next {
+      background-color: #ffffff;
+      min-width: 45px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      &::after {
+        content: ">";
+        font-size: 32px;
+        color: green;
+      }
+    }
+
     img {
       width: 100%;
       height: 100%;
@@ -1239,4 +1293,10 @@ $border-top-color_1: rgb(57, 190, 57);
       }
     }
   }
+}
+
+.homepage-wrapper .homepage .popular-products-wrapper .popular-products .container-with-popular-products .categories-filtering-items .subitem .item-details .product-name {
+  @include noneOverflow();
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
 }

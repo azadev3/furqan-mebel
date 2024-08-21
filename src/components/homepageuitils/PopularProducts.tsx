@@ -44,6 +44,7 @@ export type ImagesPopularProducts = {
 export type ModulesProducts = {
   id: number;
   title: string;
+  price: string,
 };
 
 export interface ProductsInterface {

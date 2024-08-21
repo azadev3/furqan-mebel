@@ -6,17 +6,12 @@ import { useQuery } from "@tanstack/react-query";
 import { Baseurl } from "../../api/Baseurl";
 import axios from "axios";
 import { ImagesPopularProducts, OptionsPopularProducts, ProductsInterface } from "../homepageuitils/PopularProducts";
-import { showImgState, UserIsAuthState } from "../../recoil/Atoms";
+import { showImgState } from "../../recoil/Atoms";
 import Loader from "../../uitils/Loader";
 import { FaSearch } from "react-icons/fa";
-import { addBasketFunction, addBasketFunctionStorage } from "../../features/AddBasket/AddBasket";
-import getCookie from "../../getCookie";
 
 const ImageSection: React.FC = () => {
   const { slugproduct } = useParams();
-
-  const isAuth = useRecoilValue(UserIsAuthState);
-  const token = getCookie("accessToken");
 
   //FETCH ALL PRODUCTS
   const activeLanguage = useRecoilValue(SelectedLanguageState);
@@ -86,58 +81,47 @@ const ImageSection: React.FC = () => {
     );
   };
 
-  //IMAGE AREA PRODUCT INNER
-  const ProductImageWrapperComponent: React.FC = () => {
-    const [_, setShowedImg] = useRecoilState(showImgState);
 
-    const selectedImage =
-      productInner &&
-      productInner.images &&
-      productInner.images.find((item: ImagesPopularProducts) => item.id === smallImgSelected);
+// IMAGE AREA PRODUCT INNER
+const ProductImageWrapperComponent: React.FC = () => {
+  const [_, setShowedImg] = useRecoilState(showImgState);
 
-    const showImageModal = (img: string) => {
-      setShowedImg(img);
-    };
+  const selectedImage =
+    productInner &&
+    productInner.images &&
+    productInner.images.find((item: ImagesPopularProducts) => item.id === smallImgSelected);
 
-    return (
-      <div className="image-wrapper"  onClick={() => showImageModal(selectedImage?.img || productInner?.img || "")}>
-        {productInner && productInner.img.length > 0 ? (
-          <>
-              <img
-                src={selectedImage ? selectedImage.img : productInner?.img || ""}
-                alt={selectedImage ? `${selectedImage.id}-image` : `${productInner?.id}-image`}
-                title={selectedImage ? selectedImage.img : productInner?.title || ""}
-              />
-
-            <FaSearch className="zoom" />
-          </>
-        ) : (
-          <Loader />
-        )}
-      </div>
-    );
+  const showImageModal = () => {
+    // Gather all images for the modal
+    const allImages = productInner?.images.map((img:any) => img.img) || [];
+    setShowedImg(allImages);
   };
 
-  const [isAdded, setIsAdded] = React.useState<number | null>(null);
+  return (
+    <div className="image-wrapper" onClick={showImageModal}>
+      {productInner && productInner.img.length > 0 ? (
+        <>
+          <img
+            src={selectedImage ? selectedImage.img : productInner?.img || ""}
+            alt={selectedImage ? `${selectedImage.id}-image` : `${productInner?.id}-image`}
+            title={selectedImage ? selectedImage.img : productInner?.title || ""}
+          />
+          <FaSearch className="zoom" />
+        </>
+      ) : (
+        <Loader />
+      )}
+    </div>
+  );
+};
+
 
   return (
     <section className="image-section">
       <ProductImageWrapperComponent />
       <OtherImageNavigationComponent />
       <ColorsMaterialComponent />
-      <button className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
-      onClick={() => {
-        if(isAuth && token) {
-          addBasketFunction(productInner?.id, productInner, activeLanguage, token);
-          setIsAdded(productInner?.id);
-        } else {
-          addBasketFunctionStorage(productInner);
-        setIsAdded(productInner?.id);
-        }
-      }}
-      >
-        {isAdded ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
-      </button>
+    
     </section>
   );
 };

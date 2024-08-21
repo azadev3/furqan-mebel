@@ -10,6 +10,9 @@ import DOMPurify from "dompurify";
 import Loader from "../../uitils/Loader";
 import SliderSizes, { SliderValue } from "../../SliderSizes";
 import { useTranslations } from "../../TranslateContext";
+import { UserIsAuthState } from "../../recoil/Atoms";
+import getCookie from "../../getCookie";
+import { addBasketFunction, addBasketFunctionStorage } from "../../features/AddBasket/AddBasket";
 
 // type SetModuleTypes = {
 //   id: number;
@@ -44,63 +47,19 @@ const ProductSection: React.FC = () => {
         })
       : "";
 
-  // const SetModuleItems: SetModuleTypes[] = [
-  //   {
-  //     id: 1,
-  //     discountPrice: "20000000 AZN",
-  //     price: "1240000 AZN",
-  //     title: "Espero çarpayı bazasız",
-  //   },
-  //   {
-  //     id: 2,
-  //     discountPrice: "20000000 AZN",
-  //     price: "1240000 AZN",
-  //     title: "Espero çarpayı bazasız",
-  //   },
-  //   {
-  //     id: 3,
-  //     discountPrice: "20000000 AZN",
-  //     price: "1240000 AZN",
-  //     title: "Espero çarpayı bazasız",
-  //   },
-  //   {
-  //     id: 4,
-  //     discountPrice: "20000000 AZN",
-  //     price: "1240000 AZN",
-  //     title: "Espero çarpayı bazasız",
-  //   },
-  // ];
-
-  // //counter for modules
-  // const [count, setCount] = React.useState<{ [key: string]: number }>({ 0: 0 });
-  // const modulesCounterIncrementFunction = (id: string) => {
-  //   setCount((prevCount) => ({
-  //     ...prevCount,
-  //     [id]: (prevCount[id] ?? 0) + 1,
-  //   }));
-  // };
-  // const modulesCounterDecrementFunction = (id: string) => {
-  //   setCount((prevCount) => ({
-  //     ...prevCount,
-  //     [id]: Math.max((prevCount[id] ?? 0) - 1, 0),
-  //   }));
-  // };
-
   const sliderValue = useRecoilValue(SliderValue);
 
   const { translations } = useTranslations();
 
+  const [isAdded, setIsAdded] = React.useState<number | null>(null);
+  
+  const isAuth = useRecoilValue(UserIsAuthState);
+  const token = getCookie("accessToken");
+
   return (
     <section className="product-section">
-      <div className="details-section">
-        <p>{productInner && productInner?.category_name || ""}</p>
-        <div className="title-and-description">
-          <h2>{productInner?.title}</h2>
-          <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productInner?.content) }} />
-        </div>
-      </div>
 
-      <div className="quantity-and-dimensions">
+<div className="quantity-and-dimensions">
         <div className="sale">
           <strong className="price">{productInner?.price} AZN</strong>
           {productInner && productInner?.discounted_price ? (
@@ -110,6 +69,32 @@ const ProductSection: React.FC = () => {
           )}
         </div>
       </div>
+
+      
+      <button className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
+      onClick={() => {
+        if(isAuth && token) {
+          addBasketFunction(productInner?.id, productInner, activeLanguage, token);
+          setIsAdded(productInner?.id);
+        } else {
+          addBasketFunctionStorage(productInner);
+        setIsAdded(productInner?.id);
+        }
+      }}
+      >
+        {isAdded ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
+      </button>
+
+
+      <div className="details-section">
+        <p>{productInner && productInner?.category_name || ""}</p>
+        <div className="title-and-description">
+          <h2>{productInner?.title}</h2>
+          <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productInner?.content) }} />
+        </div>
+      </div>
+
+     
 
       <div className="credit-terms">
         <h4>{translations["kredit_sertleri"]}</h4>
@@ -147,7 +132,7 @@ const ProductSection: React.FC = () => {
                   <div className="item-module" key={i}>
                     <p>{modules?.title}</p>
                     <div className="prices">
-                      <strong>{item?.price} AZN</strong>
+                      <strong>{modules?.price} AZN</strong>
                     </div>
                   </div>
                 ))

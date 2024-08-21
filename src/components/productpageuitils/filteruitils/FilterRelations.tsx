@@ -1,24 +1,25 @@
 import React, { ChangeEvent } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { rangeMinMaxInputState } from "../../../recoil/Atoms";
 import { useTranslations } from "../../../TranslateContext";
+import axios from "axios";
+import { Baseurl } from "../../../api/Baseurl";
+import { SelectedLanguageState } from "../../header/SelectedLanguage";
+import { OthersFilterData, PriceMinMaxState } from "../ProductsMain";
+import _ from "lodash";
+import { useQuery } from "@tanstack/react-query";
 
-type ColorsType = {
+type Optionsfilter = {
   id: number;
-  colorname: string;
-  colorcode: string;
-  boxshadow?: string;
+  icon: string | null;
+  title: string;
 };
 
-type MaterialType = {
+interface FilterData {
   id: number;
-  material: string;
-};
-
-type StylesType = {
-  id: number;
-  style: string;
-};
+  title: string;
+  options: Optionsfilter[];
+}
 
 type RangeInputType = {
   id: number;
@@ -27,79 +28,24 @@ type RangeInputType = {
 };
 
 const FilterRelations: React.FC = () => {
-  const Colors: ColorsType[] = [
-    {
-      id: 1,
-      colorname: "red",
-      colorcode: "#ED0000",
-    },
-    {
-      id: 2,
-      colorname: "blue",
-      colorcode: "#064CFF",
-    },
-    {
-      id: 3,
-      colorname: "green",
-      colorcode: "#B0ED00",
-    },
-    {
-      id: 4,
-      colorname: "white",
-      colorcode: "#FFFFFF",
-      boxshadow: "0px 0px 11px 0px #6969691F",
-    },
-    {
-      id: 5,
-      colorname: "black",
-      colorcode: "#000000",
-    },
-    {
-      id: 6,
-      colorname: "slowgreen",
-      colorcode: "#FAFF1B",
-    },
+  const activeLang = useRecoilValue(SelectedLanguageState);
+  const { translations } = useTranslations();
 
-    {
-      id: 7,
-      colorname: "orange",
-      colorcode: "#FF961B",
+  // get filters
+  const { data: filterData } = useQuery<FilterData[]>({
+    queryKey: ["filterDataKey", activeLang],
+    queryFn: async () => {
+      const response = await axios.get(`${Baseurl}/filters`, {
+        headers: {
+          "Accept-Language": activeLang,
+        },
+      });
+      console.log(response.data?.filters, "filterler");
+      return response.data?.filters;
     },
-  ];
+  });
 
-  const Materials: MaterialType[] = [
-    {
-      id: 1,
-      material: "Taxta",
-    },
-    {
-      id: 2,
-      material: "Şüşə",
-    },
-    {
-      id: 3,
-      material: "Plastik",
-    },
-  ];
-
-  const Styles: StylesType[] = [
-    {
-      id: 1,
-      style: "Minimalist",
-    },
-    {
-      id: 2,
-      style: "Avanqard",
-    },
-    {
-      id: 3,
-      style: "Minimalist",
-    },
-    {
-      id: 4,
-      style: "Minimalist",
-    },
-  ];
+  const [__, setPriceMinMax] = useRecoilState(PriceMinMaxState);
 
   const RangeInputs: RangeInputType[] = [
     {
@@ -114,28 +60,62 @@ const FilterRelations: React.FC = () => {
     },
   ];
 
-  //select filtering for according colors
-  const [selectedColor, setSelectedColor] = React.useState<number | null>(null);
+  //select filtering for according MATERIALS
+  const [selectedMaterial, setSelectedMaterial] = React.useState<{ [key: number]: boolean }>({});
+  const [___, setOthersFilterData] = useRecoilState(OthersFilterData);
 
-  const handleSelectColor = (id: number | null) => {
-    setSelectedColor(id);
+  const handleSelectMaterials = async (id: number) => {
+    setSelectedMaterial((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
   };
 
-  //select filtering for according materials
-  const [selectedMaterial, setSelectedMaterial] = React.useState<number | null>(null);
+  React.useEffect(() => {
+    const selectedOptionIds = Object.keys(selectedMaterial)
+      .filter((key) => selectedMaterial[parseInt(key)])
+      .map((key) => parseInt(key));
 
-  const handleSelectMaterials = (id: number | null) => {
-    setSelectedMaterial(id);
-  };
+    const params = selectedOptionIds.length ? selectedOptionIds.map((id) => `option_id[]=${id}`).join("&") : "";
 
-  //select filtering for according styles
-  const [selectedStyle, setSelectedStyle] = React.useState<number | null>(null);
+    axios
+      .get(`${Baseurl}/all_products?${params}`, {
+        headers: {
+          "Accept-Language": activeLang,
+        },
+      })
+      .then((response) => {
+        setOthersFilterData(response.data?.products);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [selectedMaterial]);
 
-  const handleSelectStyle = (id: number | null) => {
-    setSelectedStyle(id);
-  };
-
+  //Min max inputs
   const [inputValue, setInputValue] = useRecoilState(rangeMinMaxInputState);
+  const [minPrice, setMinPrice] = React.useState("");
+  const [maxPrice, setMaxPrice] = React.useState("");
+
+  // Debounce
+  const debouncedFetchProducts = React.useCallback(
+    _.debounce(async (min: string, max: string) => {
+      try {
+        const response = await axios.get(`${Baseurl}/all_products?min_price=${min}&max_price=${max}`, {
+          headers: {
+            "Accept-Language": activeLang,
+          },
+        });
+        if (response.data) {
+          setPriceMinMax(response.data?.products);
+        }
+      } catch (error) {
+        console.error("İstek başarısız oldu:", error);
+      }
+    }, 500),
+    []
+  );
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>, id: number) => {
     const value = e.target.value;
@@ -144,19 +124,25 @@ const FilterRelations: React.FC = () => {
       ...prevState,
       [id]: value,
     }));
-  };
 
-  const { translations } = useTranslations();
+    if (id === 1) {
+      setMinPrice(value);
+    } else if (id === 2) {
+      setMaxPrice(value);
+    }
+
+    debouncedFetchProducts(id === 1 ? value : minPrice, id === 2 ? value : maxPrice);
+  };
 
   return (
     <div className="filter-relations">
       <div className="title-top">
         <img src="../filtericon.svg" alt="" />
-        <span>{translations['filter']}</span>
+        <span>{translations["filter"]}</span>
       </div>
 
       <div className="price-placement">
-        <span>{translations['qiymet_araligi_filter']}</span>
+        <span>{translations["qiymet_araligi_filter"]}</span>
 
         <div className="min-max">
           {RangeInputs.map((inputs: RangeInputType) => (
@@ -177,47 +163,23 @@ const FilterRelations: React.FC = () => {
           <strong className="price10">{inputValue[2]}</strong>
         </div>
 
-        <div className="filter-for-colors">
-          <span>Rəng</span>
-          <div className="colors">
-            {Colors.map((color: ColorsType) => (
-              <span
-                className={selectedColor === color.id ? "selected-color" : ""}
-                onClick={() => handleSelectColor(color.id)}
-                key={color.id}
-                style={{ backgroundColor: color?.colorcode, boxShadow: color.id === 4 ? color.boxshadow : "" }}></span>
-            ))}
-          </div>
-        </div>
-
-        <div className="material">
-          <span>{translations['material_filter']}</span>
-
-          <div className="materials">
-            {Materials.map((item: MaterialType) => (
-              <span
-                onClick={() => handleSelectMaterials(item.id)}
-                key={item.id}
-                className={`material-item ${selectedMaterial === item.id ? "selectedmaterial" : ""}`}>
-                {item.material}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="for-styles-filtering">
-          <span>{translations['terz_filter']}</span>
-          <div className="styles-content">
-            {Styles.map((item: StylesType) => (
-              <span
-                onClick={() => handleSelectStyle(item.id)}
-                className={`item-style ${selectedStyle === item.id ? "selectedstyle" : ""}`}
-                key={item.id}>
-                {item.style}
-              </span>
-            ))}
-          </div>
-        </div>
+        {filterData && filterData.length > 0
+          ? filterData.map((item: FilterData) => (
+              <div className="material" key={item.title}>
+                <span>{item.title}</span>
+                <div className="materials">
+                  {item.options.map((option: Optionsfilter) => (
+                    <span
+                      onClick={() => handleSelectMaterials(option.id)}
+                      key={option.id}
+                      className={`material-item ${selectedMaterial[option.id] ? "selectedmaterial" : ""}`}>
+                      {option.title}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))
+          : ""}
       </div>
     </div>
   );

@@ -4,7 +4,6 @@ import { IoClose } from "react-icons/io5";
 import { Logo, NavbarItemType } from "./Header";
 import { FaRegUser } from "react-icons/fa6";
 import {
-  basketItemState,
   LoginMenuState,
   profileDropdownState,
   scrollHeaderState,
@@ -22,14 +21,15 @@ import ProfileDropdown from "./ProfileDropdown";
 import getCookie from "../../getCookie";
 import { CategoriesInterface } from "../homepageuitils/PopularProducts";
 import { useTranslations } from "../../TranslateContext";
+import { BasketDataInterface } from "../basketpageuitils/Basket";
+import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
 
 type Props = {
   setSearchModal: React.Dispatch<SetStateAction<boolean>>;
 };
 
 const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
-
-  const { translations } = useTranslations(); 
+  const { translations } = useTranslations();
 
   //FETCH LOGO
   const activeLanguage = useRecoilValue(SelectedLanguageState);
@@ -104,31 +104,11 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
 
   // Define navbar items
   const NavbarItems: NavbarItemType[] = [
-    { id: 1, title: `${translations['nav_anasehife']}`, to: "/" },
-    { id: 2, title: `${translations['nav_haqqimizda']}`, to: "/about" },
-    // {
-    //   id: 3,
-    //   title: `${translations['nav_mehsullar']}`,
-    //   icon: (
-    //     <FaAngleDown
-    //       className="down-icon"
-    //       style={{ transform: dropdown === 3 ? "rotate(180deg)" : "", transition: "150ms ease-in-out" }}
-    //     />
-    //   ),
-    //   subitem:
-    //   CategoryProductsData && CategoryProductsData.length > 0
-    //       ? CategoryProductsData.map((item: CategoriesInterface) => {
-    //           return {
-    //             id: item?.id,
-    //             title: item?.title,
-    //           };
-    //         })
-    //       : [],
-    //   to: "",
-    // },
-    { id: 4, title: `${translations['nav_blog']}`, to: "/blog" },
-    { id: 5, title: `${translations['nav_kredit']}`, to: "/credit" },
-    { id: 6, title: `${translations['nav_contact']}`, to: "/contact" },
+    { id: 1, title: `${translations["nav_anasehife"]}`, to: "/" },
+    { id: 2, title: `${translations["nav_haqqimizda"]}`, to: "/about" },
+    { id: 4, title: `${translations["nav_blog"]}`, to: "/blog" },
+    { id: 5, title: `${translations["nav_kredit"]}`, to: "/credit" },
+    { id: 6, title: `${translations["nav_contact"]}`, to: "/contact" },
   ];
 
   //search modal
@@ -149,7 +129,6 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
 
   const isAddedBasket = useRecoilValue(userAddBasket);
   const isAddedFav = useRecoilValue(userAddedFavourite);
-  const basketItems = useRecoilValue(basketItemState);
 
   const dynamicLocation = useMatch("/profile/*");
   const [_, setLoginMenu] = useRecoilState(LoginMenuState);
@@ -165,43 +144,52 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
   const profileDropdownModalRef = React.useRef<HTMLDivElement | null>(null);
 
   const scrolled = useRecoilValue(scrollHeaderState);
+  //basket items
+  const [isBasketData, setIsBasketData] = React.useState<boolean>(false);
+  const [basketDataLS, setBasketDataLS] = React.useState<CatProductType[]>([]);
+  React.useEffect(() => {
+    const basketData = localStorage.getItem("basket");
+    const isBasket = basketData ? JSON.parse(basketData) : [];
+    if (Object.keys(isBasket)?.length > 0) {
+      setIsBasketData(true);
+      setBasketDataLS(isBasket);
+    } else {
+      setIsBasketData(false);
+    }
+  }, [isBasketData]);
 
-  const [isBasketProducts, setIsBasketProducts] = React.useState<any>(null);
+  const navigate = useNavigate();
+  const [__, setCategoryTitle] = useRecoilState(selectedCategoryStateProductPage);
+  const handleSelectedCategory = (categoryId: number | null) => {
+    navigate("/products");
+    setCategoryTitle(categoryId);
+  };
 
-  const selectedLanguage = useRecoilValue(SelectedLanguageState);
-
-  const getAllBasketProduct = async () => {
+  const [basketProducts, setBasketProducts] = React.useState<BasketDataInterface[]>([]);
+  const token = getCookie("accessToken");
+  const getBasketProducts = async () => {
     try {
-      const token = getCookie("accessToken");
       const response = await axios.get(`${Baseurl}/cart`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Accept-Language": selectedLanguage,
+          "Accept-Language": activeLanguage,
         },
       });
 
       if (response.data) {
-        setIsBasketProducts(response.data.cart);
+        setBasketProducts(response.data?.cart || []);
       } else {
         console.log(response.status);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching basket products:", error);
     }
   };
-
   React.useEffect(() => {
-    getAllBasketProduct();
-  }, [basketItems]);
-  
-    // redirect subitem according to selected category 
-    const navigate = useNavigate();
-    const [__, setCategoryTitle] = useRecoilState(selectedCategoryStateProductPage);
-    const handleSelectedCategory = (categoryId: number | null) => {
-      navigate("/products");
-      setCategoryTitle(categoryId);
+    if (isAuth && token && basketProducts) {
+      getBasketProducts();
     }
-  
+  }, [isAuth, token]);
 
   return (
     <header className="responsive-header">
@@ -244,11 +232,11 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
                 ref={(ref) => submenuRefs.current.set(item.id, ref)}
                 className={`submenu ${dropdown === item.id ? "active" : ""}`}>
                 {item.subitem?.map((subitem: CategoriesInterface) => (
-                  <span className="sublink"
+                  <span
+                    className="sublink"
                     key={subitem.id}
                     onClick={() => {
-                      setDropdown(null), setToggleMenu(false),
-                      handleSelectedCategory(subitem?.id)
+                      setDropdown(null), setToggleMenu(false), handleSelectedCategory(subitem?.id);
                     }}>
                     {subitem.title}
                   </span>
@@ -282,11 +270,7 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
 
         <Link to="/mybasket" className="basket">
           <span className="notification">
-            {isAuth ? (
-              isBasketProducts?.cart_items.length
-            ) : (
-              <React.Fragment>{Object.values(basketItems).length}</React.Fragment>
-            )}
+            {isAuth && token ? basketProducts && basketProducts?.length : basketDataLS?.length}
           </span>
           <img
             src={
@@ -303,7 +287,11 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
         <Link to="/favourites" className={`hearth ${isAddedFav ? "hearth-anim" : ""}`}>
           <img
             src={
-              isFavouritePage || isAddedFav ? "../hearthfill.svg" : isHomePage && !scrolled ? "../qlb.svg" : "../hearth.svg"
+              isFavouritePage || isAddedFav
+                ? "../hearthfill.svg"
+                : isHomePage && !scrolled
+                ? "../qlb.svg"
+                : "../hearth.svg"
             }
             alt="hearth"
             title="Favorilər"

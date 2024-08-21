@@ -33,7 +33,6 @@ export interface Orders {
 }
 
 const PaymentReceipt: React.FC = () => {
-  //fetch orders
   const selectedLang = useRecoilValue(SelectedLanguageState);
   const { data: ordersData, isLoading } = useQuery<Orders[]>({
     queryKey: ["ordersDataKey", selectedLang],
@@ -45,7 +44,7 @@ const PaymentReceipt: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      return response.data?.orders;
+      return response.data?.orders || [];
     },
   });
 
@@ -55,29 +54,46 @@ const PaymentReceipt: React.FC = () => {
         <Loader />
       ) : (
         <React.Fragment>
+          Bütün sifarişlər:
           {ordersData && ordersData.length > 0 ? (
             ordersData.map((order: Orders) => (
               <div className="receipt-item" key={order.id}>
-                {order && order?.order_items && order?.order_items?.length > 0 &&
-                  order.order_items.map((orderItem: OrderItems) => (
-                    <div className="top-product-item" key={orderItem.id}>
-                      <div className="leftpro">
-                        <div className="productimg">
-                          <img
-                            src={orderItem?.product?.img ? orderItem?.product?.img : ""}
-                            alt={`${orderItem?.product?.id}-product`}
-                            title={orderItem?.product?.category_name}
-                          />
+                {order?.order_items?.length > 0 &&
+                  order.order_items.map((orderItem: OrderItems) =>
+                    orderItem?.product ? (
+                      <div className="top-product-item" key={orderItem.id}>
+                        <div className="leftpro">
+                          <div className="productimg">
+                            {orderItem?.product?.img ? (
+                              <img
+                                src={orderItem?.product?.img || ""}
+                                alt={`${orderItem?.product?.id}-product`}
+                                title={orderItem?.product?.category_name || ""}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                          {orderItem?.product?.category_name ? (
+                            <div className="titlespro">
+                              <span>{orderItem?.product?.category_name || ""}</span>
+                            </div>
+                          ) : (
+                            ""
+                          )}
                         </div>
-                        <div className="titlespro">
-                          <span>{orderItem?.product?.category_name}</span>
-                        </div>
+                        {orderItem?.product?.price ? (
+                          <div className="rightpro">
+                            <span>{orderItem?.product?.price || "N/A"} AZN</span>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
-                      <div className="rightpro">
-                        <span>{orderItem?.product?.price} AZN</span>
-                      </div>
-                    </div>
-                  ))}
+                    ) : (
+                      ""
+                    )
+                  )}
               </div>
             ))
           ) : (

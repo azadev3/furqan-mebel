@@ -11,25 +11,26 @@ import { addFavouriteFunction } from "./AddFavourite/AddFavouriteFunction";
 import getCookie from "../getCookie";
 import { SelectedLanguageState } from "../components/header/SelectedLanguage";
 
-type props = {
+type Props = {
   selectedCategoryProducts: CatProductType[];
+  priceAscData: CatProductType[];
+  priceMinMaxData: CatProductType[];
+  otherFilterData: CatProductType[];
 };
 
-const ProductCard: React.FC<props> = ({ selectedCategoryProducts }) => {
-
+const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, priceMinMaxData, otherFilterData }) => {
   const isAuth = useRecoilValue(UserIsAuthState);
   const token = getCookie("accessToken");
   const selectedLanguage = useRecoilValue(SelectedLanguageState);
 
   const [added, setAdded] = React.useState<{ [key: number]: boolean }>({});
 
-  // GIVE FAV ITEMS ON LS THE COMPONENT RENDERED
+  // GIVE FAV ITEMS ON LS WHEN THE COMPONENT RENDERS
   React.useEffect(() => {
     const savedFavorites = localStorage.getItem("favourites");
     if (savedFavorites) {
       try {
         const parsedFavorites = JSON.parse(savedFavorites);
-
         if (!Array.isArray(parsedFavorites)) {
           throw new Error("Parsed favorites is not an array");
         }
@@ -48,64 +49,74 @@ const ProductCard: React.FC<props> = ({ selectedCategoryProducts }) => {
 
   const navigate = useNavigate();
 
+  const handleFavouriteClick = (data: CatProductType) => {
+    setAdded((prev) => ({
+      ...prev,
+      [data.id]: !prev[data.id],
+    }));
+
+    if (isAuth && token) {
+      addFavouriteFunction(data.id, selectedCategoryProducts, selectedLanguage, token);
+    } else {
+      addFavouriteFunctionStorage(data);
+    }
+  };
+
+  const renderProducts = (data: CatProductType[]) => {
+    return data?.length > 0 ? (
+      data.map((data: CatProductType) => (
+        <section className="product-card" key={data.id}>
+          <div className="product-image-wrapper">
+            <div className="add-fav-icon" onClick={() => handleFavouriteClick(data)}>
+              {added[data.id] ? <FaHeart className="iconadded" /> : <CiHeart className="icon" />}
+            </div>
+            <img src={data.img} alt={`${data.id}-image`} title={data.title} />
+            {data.is_new && (
+              <div className="new-product-flag">
+                <span>yeni</span>
+              </div>
+            )}
+            {data.discounted_price && (
+              <div className="product-discounted-percentage-flag">
+                <span>{data.discounted_price.split(".00").join("%")}</span>
+              </div>
+            )}
+          </div>
+          <article className="product-description" onClick={() => navigate(`/products/${data.slug}`)}>
+            <div className="top">
+              <span className="category-name">{data.category_name}</span>
+              <h3 className="product-name">{data.title}</h3>
+              {data.is_stock ? (
+                <strong className="isStock">Stokda var</strong>
+              ) : (
+                <strong className="noStock">Stokda yoxdur</strong>
+              )}
+            </div>
+            <div className="prices">
+              <span className="price">{data.price}</span>
+              <span className="discountprice">{data.discounted_price}</span>
+            </div>
+          </article>
+        </section>
+      ))
+    ) : (
+      <p>No products found.</p>
+    );
+  };
+
   return (
     <React.Fragment>
-      {selectedCategoryProducts && selectedCategoryProducts?.length > 0
-        ? selectedCategoryProducts?.map((product: CatProductType) => (
-            <section
-              className="product-card"
-              key={product?.id}>
-              <div className="product-image-wrapper">
-                <div
-                  className="add-fav-icon"
-                  onClick={() => {
-                    setAdded((prev) => ({
-                      ...prev,
-                      [product?.id]: !prev[product?.id],
-                    }));
-                    if(isAuth && token) {
-                      addFavouriteFunction(product?.id, selectedCategoryProducts, selectedLanguage, token);
-                    } else {
-                      addFavouriteFunctionStorage(product);
-                    }
-                  }}>
-                  {added[product?.id] ? <FaHeart className="iconadded" /> : <CiHeart className="icon" />}
-                </div>
-                <img src={product?.img} alt={`${product?.id}-image`} title={product?.title} />
-                {product?.is_new && (
-                  <div className="new-product-flag">
-                    <span>yeni</span>
-                  </div>
-                )}
-                {product?.discounted_price && (
-                  <div className="product-discounted-percentage-flag">
-                    <span>{product?.discounted_price.split(".00").join("%")}</span>
-                  </div>
-                )}
-              </div>
-              <article className="product-description"
-              onClick={() => {
-                navigate(`/products/${product?.slug}`);
-              }}
-              >
-                <div className="top">
-                  <span className="category-name">{product?.category_name}</span>
-                  <h3 className="product-name">{product?.title}</h3>
-                  {product?.is_stock ? (
-                    <strong className="isStock">Stokda var</strong>
-                  ) : (
-                    <strong className="noStock">Stokda yoxdur</strong>
-                  )}
-                </div>
-
-                <div className="prices">
-                  <span className="price">{product?.price}</span>
-                  <span className="discountprice">{product?.discounted_price}</span>
-                </div>
-              </article>
-            </section>
-          ))
-        : "Məhsul yoxdur."}
+      {priceAscData?.length > 0 ? (
+        renderProducts(priceAscData)
+      ) : priceMinMaxData?.length > 0 ? (
+        renderProducts(priceMinMaxData)
+      ) : otherFilterData?.length > 0 ? (
+        renderProducts(otherFilterData)
+      ) : selectedCategoryProducts?.length > 0 ? (
+        renderProducts(selectedCategoryProducts)
+      ) : (
+        <p>Məhsul yoxdur.</p>
+      )}
     </React.Fragment>
   );
 };

@@ -7,7 +7,7 @@ const Success:React.FC = () => {
                <div className="success-icon">
                     <img src="../verify.svg" alt="" />
                </div>
-               <span>Uğurlu Ödəniş!</span>
+               <span>Uğurlu Əməliyyat!</span>
           </div>
      </div>
   )
