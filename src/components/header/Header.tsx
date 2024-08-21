@@ -9,7 +9,6 @@ import {
   favouriteItemsState,
   LoginMenuState,
   profileDropdownState,
-  scrollHeaderState,
   selectedCategoryStateProductPage,
   userAddedFavourite,
   UserIsAuthState,
@@ -26,6 +25,7 @@ import { useTranslations } from "../../TranslateContext";
 import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
 import getCookie from "../../getCookie";
 import { BasketDataInterface } from "../basketpageuitils/Basket";
+import useScroll from "../../useScroll";
 
 export interface Logo {
   id: number;
@@ -161,7 +161,7 @@ const Header: React.FC = () => {
   //if home location add class the header-wrapper
   const isHomePage = location.pathname === "/";
 
-  const scrolled = useRecoilValue(scrollHeaderState);
+  const isScrolled = useScroll();
 
   //if clicked Daxil ol open register or login modal fixed
   const [_, setLoginMenu] = useRecoilState(LoginMenuState);
@@ -183,20 +183,6 @@ const Header: React.FC = () => {
     }
   }, [favouritesItems]);
 
-  //basket items
-  const [isBasketData, setIsBasketData] = React.useState<boolean>(false);
-  const [basketDataLS, setBasketDataLS] = React.useState<CatProductType[]>([]);
-  React.useEffect(() => {
-    const basketData = localStorage.getItem("basket");
-    const isBasket = basketData ? JSON.parse(basketData) : [];
-    if (Object.keys(isBasket)?.length > 0) {
-      setIsBasketData(true);
-      setBasketDataLS(isBasket);
-    } else {
-      setIsBasketData(false);
-    }
-  }, [isBasketData]);
-
   // redirect subitem according to selected category
   const navigate = useNavigate();
   const [__, setCategoryTitle] = useRecoilState(selectedCategoryStateProductPage);
@@ -205,9 +191,13 @@ const Header: React.FC = () => {
     setCategoryTitle(categoryId);
   };
 
-  const [basketProducts, setBasketProducts] = React.useState<BasketDataInterface[]>([]);
   const token = getCookie("accessToken");
-  const getBasketProducts = async () => {
+  const [isBasketData, setIsBasketData] = React.useState<boolean>(false);
+  const [basketDataLS, setBasketDataLS] = React.useState<CatProductType[]>([]);
+  const [basketProducts, setBasketProducts] = React.useState<BasketDataInterface[]>([]);
+  const [notificationCount, setNotificationCount] = React.useState<number>(0);
+
+  const getBasketProducts = React.useCallback(async () => {
     try {
       const response = await axios.get(`${Baseurl}/cart`, {
         headers: {
@@ -217,31 +207,43 @@ const Header: React.FC = () => {
       });
 
       if (response.data) {
-        setBasketProducts(response.data?.cart || []);
+        const updatedBasketProducts = response.data?.cart || [];
+        setBasketProducts(updatedBasketProducts);
       } else {
         console.log(response.status);
       }
     } catch (error) {
       console.error("Error fetching basket products:", error);
-    } 
-  };
-  React.useEffect(() => {
-    if(isAuth && token && basketProducts) {
-      getBasketProducts();
     }
-  }, [isAuth, token]);
+  }, [token, activeLanguage, basketDataLS]);
 
+  React.useEffect(() => {
+    if (isAuth && token) {
+      getBasketProducts();
+    } else {
+      const basketData = localStorage.getItem("basket");
+      const isBasket = basketData ? JSON.parse(basketData) : [];
+      setBasketDataLS(isBasket);
+      setIsBasketData(isBasket.length > 0);
+    }
+  }, [isAuth, token, getBasketProducts]);
 
-
+  React.useEffect(() => {
+    if (isAuth && token) {
+      setNotificationCount(basketProducts?.length);
+    } else {
+      setNotificationCount(basketDataLS?.length);
+    }
+  }, [basketProducts, basketDataLS, isAuth, token]);
 
   return (
     <header
       className={`header-wrapper ${
         isHomePage
-          ? scrolled
+          ? isScrolled
             ? "scroll-header-wrapper"
             : "header-wrapper-isHome"
-          : scrolled
+          : isScrolled
           ? "scroll-header-wrapper"
           : "header-wrapper"
       }`}>
@@ -317,12 +319,12 @@ const Header: React.FC = () => {
             <div className="userprofile">
               {/* basket icon */}
               <Link to="/mybasket" className="basket">
-                <span className="notification">{isAuth && token ? basketProducts && basketProducts?.length : basketDataLS?.length}</span>
+                <span className="notification">{notificationCount || "0"}</span>
                 <img
                   src={
                     isBasketPage || isBasketData
                       ? "../basketgreen.svg"
-                      : isHomePage && !scrolled
+                      : isHomePage && !isScrolled
                       ? "../basketwhite.png"
                       : "../basketimg.svg"
                   }
@@ -336,7 +338,7 @@ const Header: React.FC = () => {
                   src={
                     isFavouritePage || isAddedFav
                       ? "../hearthfill.svg"
-                      : isHomePage && !scrolled
+                      : isHomePage && !isScrolled
                       ? "../qlb.svg"
                       : "../hearth.svg"
                   }
@@ -351,7 +353,7 @@ const Header: React.FC = () => {
                   to={dynamicLocation ? dynamicLocation : "/profile/dashboard"}
                   className="profile"
                   onClick={handleDropdownProfile}>
-                  <FaRegUser className="user" color={isProfile ? "#43B749" : isHomePage && !scrolled ? "#fff" : ""} />
+                  <FaRegUser className="user" color={isProfile ? "#43B749" : isHomePage && !isScrolled ? "#fff" : ""} />
                 </Link>
               ) : (
                 <div
@@ -359,7 +361,7 @@ const Header: React.FC = () => {
                   style={{ cursor: "pointer" }}
                   className="login"
                   title="Daxil ol">
-                  <img src={isHomePage && !scrolled ? "../profilewhite.png" : "../Person.svg"} alt="person" />
+                  <img src={isHomePage && !isScrolled ? "../profilewhite.png" : "../Person.svg"} alt="person" />
                   <span>Daxil ol</span>
                 </div>
               )}

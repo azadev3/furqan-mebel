@@ -374,6 +374,52 @@
       justify-content: flex-end;
       gap: 20px;
       position: relative;
+
+      
+      .catalog-menu {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background-color: rgb(65 121 85 / 54%);
+        padding: 0px 12px;
+        border-radius: 4px;
+        justify-content: center;
+        .button-catalog-menu {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 2px 0px;
+          border-radius: 8px;
+          border: none;
+          outline: none;
+          transition: 60ms ease-in-out;
+          cursor: pointer;
+          background-color: transparent;
+
+          &:active {
+            transform: scale(0.99);
+          }
+
+          span {
+            transition: 100ms ease-in-out;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 400;
+          }
+
+          .list-icon-catalog {
+            transition: 200ms ease-in-out;
+            color: #ffffff;
+            font-size: 24px;
+
+            &.active {
+              transform: rotate(90deg);
+            }
+          }
+        }
+      }
+
       img {
         width: 24px;
         height: 24px;

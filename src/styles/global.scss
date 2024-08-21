@@ -1300,3 +1300,44 @@ $border-top-color_1: rgb(57, 190, 57);
   -webkit-line-clamp: 1;
   line-clamp: 1;
 }
+.product-inner-page-wrapper .productinnerpage .similiar-products .carouselsimiliar-products .swiper-slide .item-details .product-name {
+  @include noneOverflow();
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .details-section .title-and-description h2 {
+  line-height: 36px;
+}
+.basket-page-wrapper .basketpage .similiar-products .carouselsimiliar-products {
+  height: 300px !important;
+}
+.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .left-ranger {
+  height: auto !important;
+  margin: 0 !important;
+}
+.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .comission, .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .monthly-payment {
+  min-width: 80px !important;
+}
+.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .comission span, .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .monthly-payment span {
+  font-size: 10px !important;
+}
+.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .comission p, .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .monthly-payment p {
+  font-size: 13px;
+  font-weight: 600;
+}
+.payment-info {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  width: 100%;
+  row-gap: 4px;
+}
+.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .comission, .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .monthly-payment {
+  height: 50px !important;
+  gap: 0;
+}
+.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container {
+  width: 100% !important;
+}
+.homepage-wrapper .homepage .popular-products-wrapper .popular-products .container-with-popular-products .categories-filtering-items .add-basket {
+  display: none !important;
+}

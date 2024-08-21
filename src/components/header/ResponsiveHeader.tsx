@@ -6,7 +6,6 @@ import { FaRegUser } from "react-icons/fa6";
 import {
   LoginMenuState,
   profileDropdownState,
-  scrollHeaderState,
   selectedCategoryStateProductPage,
   userAddBasket,
   userAddedFavourite,
@@ -23,6 +22,8 @@ import { CategoriesInterface } from "../homepageuitils/PopularProducts";
 import { useTranslations } from "../../TranslateContext";
 import { BasketDataInterface } from "../basketpageuitils/Basket";
 import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
+import useScroll from "../../useScroll";
+import Catalogs from "./Catalogs";
 
 type Props = {
   setSearchModal: React.Dispatch<SetStateAction<boolean>>;
@@ -143,7 +144,8 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
   const userRef = React.useRef<HTMLAnchorElement | null>(null);
   const profileDropdownModalRef = React.useRef<HTMLDivElement | null>(null);
 
-  const scrolled = useRecoilValue(scrollHeaderState);
+  const isScrolled = useScroll();
+
   //basket items
   const [isBasketData, setIsBasketData] = React.useState<boolean>(false);
   const [basketDataLS, setBasketDataLS] = React.useState<CatProductType[]>([]);
@@ -261,8 +263,10 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
       </Link>
 
       <div className="rightmobile-header">
+      <Catalogs />
+
         <img
-          src={isHomePage && !scrolled ? "../sw.svg" : scrolled ? "../search-normal.svg" : "../search-normal.svg"}
+          src={isHomePage && !isScrolled ? "../sw.svg" : isScrolled ? "../search-normal.svg" : "../search-normal.svg"}
           alt="search"
           title="Axtar"
           onClick={handleSearchModal}
@@ -276,7 +280,7 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
             src={
               isBasketPage || isAddedBasket
                 ? "../basketgreen.svg"
-                : isHomePage && !scrolled
+                : isHomePage && !isScrolled
                 ? "../basketwhite.png"
                 : "../basketimg.svg"
             }
@@ -289,7 +293,7 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
             src={
               isFavouritePage || isAddedFav
                 ? "../hearthfill.svg"
-                : isHomePage && !scrolled
+                : isHomePage && !isScrolled
                 ? "../qlb.svg"
                 : "../hearth.svg"
             }
@@ -304,11 +308,14 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
             to={dynamicLocation ? dynamicLocation : "/profile/dashboard"}
             className="profile"
             onClick={handleDropdownProfile}>
-            <FaRegUser className="user" color={isProfile ? "#43B749" : scrolled ? "#000" : isHomePage ? "#fff" : ""} />
+            <FaRegUser
+              className="user"
+              color={isProfile ? "#43B749" : isScrolled ? "#000" : isHomePage ? "#fff" : ""}
+            />
           </Link>
         ) : (
           <div onClick={() => setLoginMenu(true)} style={{ cursor: "pointer" }} className="login" title="Daxil ol">
-            <img src={isHomePage && !scrolled ? "../profilewhite.png" : "../Person.svg"} alt="person" />
+            <img src={isHomePage && !isScrolled ? "../profilewhite.png" : "../Person.svg"} alt="person" />
             <span>Daxil ol</span>
           </div>
         )}
@@ -316,12 +323,12 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
         {toggleMenu ? (
           <IoClose
             className="close"
-            style={{ color: isHomePage && !scrolled ? "#fff" : "" }}
+            style={{ color: isHomePage && !isScrolled ? "#fff" : "" }}
             onClick={handleToggleClick}
           />
         ) : (
           <img
-            src={isHomePage && !scrolled ? "../menuwhite.svg" : "../menu.svg"}
+            src={isHomePage && !isScrolled ? "../menuwhite.svg" : "../menu.svg"}
             alt="menu"
             onClick={handleToggleClick}
           />

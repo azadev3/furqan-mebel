@@ -25,6 +25,7 @@ type HeroDataType = {
 };
 
 const Hero: React.FC = () => {
+  const { translations } = useTranslations();
   const activeLanguage = useRecoilValue(SelectedLanguageState);
 
   const {
@@ -39,13 +40,11 @@ const Hero: React.FC = () => {
           "Accept-Language": activeLanguage,
         },
       });
-      console.log(response.data?.hero, 'saaalmaaaa')
       return response.data?.hero;
     },
-    staleTime: 1000000,
+    staleTime: 10000000,
   });
 
-  const { translations } = useTranslations();
 
   return (
     <div className="hero-wrapper">

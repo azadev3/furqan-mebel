@@ -12,8 +12,8 @@ const marks = [
 ];
 
 const StyledSlider = styled(Slider)(({ }) => ({
-  maxWidth: '180px',
-  minWidth: '180px',
+  maxWidth: '120px',
+  minWidth: '120px',
   '& .MuiSlider-thumb': {
     backgroundColor: '#fff',
     border: '2px solid #0f0',

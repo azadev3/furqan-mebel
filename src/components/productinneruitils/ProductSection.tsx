@@ -14,14 +14,8 @@ import { UserIsAuthState } from "../../recoil/Atoms";
 import getCookie from "../../getCookie";
 import { addBasketFunction, addBasketFunctionStorage } from "../../features/AddBasket/AddBasket";
 
-// type SetModuleTypes = {
-//   id: number;
-//   price: string;
-//   title: string;
-//   discountPrice: string;
-// };
-
 const ProductSection: React.FC = () => {
+  const { translations } = useTranslations();
   const { slugproduct } = useParams();
 
   //FETCH ALL PRODUCTS
@@ -48,18 +42,16 @@ const ProductSection: React.FC = () => {
       : "";
 
   const sliderValue = useRecoilValue(SliderValue);
-
-  const { translations } = useTranslations();
-
   const [isAdded, setIsAdded] = React.useState<number | null>(null);
-  
+
   const isAuth = useRecoilValue(UserIsAuthState);
   const token = getCookie("accessToken");
 
   return (
     <section className="product-section">
+      <div className="quantity-and-dimensions">
+        <h2 style={{fontWeight: "500"}}>{productInner?.title}</h2>
 
-<div className="quantity-and-dimensions">
         <div className="sale">
           <strong className="price">{productInner?.price} AZN</strong>
           {productInner && productInner?.discounted_price ? (
@@ -70,31 +62,26 @@ const ProductSection: React.FC = () => {
         </div>
       </div>
 
-      
-      <button className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
-      onClick={() => {
-        if(isAuth && token) {
-          addBasketFunction(productInner?.id, productInner, activeLanguage, token);
-          setIsAdded(productInner?.id);
-        } else {
-          addBasketFunctionStorage(productInner);
-        setIsAdded(productInner?.id);
-        }
-      }}
-      >
+      <button
+        className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
+        onClick={() => {
+          if (isAuth && token) {
+            addBasketFunction(productInner?.id, productInner, activeLanguage, token);
+            setIsAdded(productInner?.id);
+          } else {
+            addBasketFunctionStorage(productInner);
+            setIsAdded(productInner?.id);
+          }
+        }}>
         {isAdded ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
       </button>
 
-
       <div className="details-section">
-        <p>{productInner && productInner?.category_name || ""}</p>
+        <p>{(productInner && productInner?.category_name) || ""}</p>
         <div className="title-and-description">
-          <h2>{productInner?.title}</h2>
           <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productInner?.content) }} />
         </div>
       </div>
-
-     
 
       <div className="credit-terms">
         <h4>{translations["kredit_sertleri"]}</h4>
@@ -104,13 +91,15 @@ const ProductSection: React.FC = () => {
             <div className="left-ranger">
               <SliderSizes />
             </div>
+            <div className="payment-info">
             <div className="comission">
               <span>{translations["komissiya_haqqi"]}</span>
               <p>azn</p>
             </div>
             <div className="monthly-payment">
               <span>{translations["ayliq_odenis"]}</span>
-              <p style={{ fontSize: "16px" }}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
+              <p style={{ fontSize: "14px" }}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
+            </div>
             </div>
           </div>
           <article className="title-bottom">
