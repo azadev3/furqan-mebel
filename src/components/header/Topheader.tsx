@@ -28,9 +28,7 @@ const Topheader: React.FC = () => {
           </div>
 
           <span className="time">
-            <span>09:00</span>
-            <span>-</span>
-            <span>19:00</span>
+            {translations['work_hours']}
           </span>
         </div>
 
