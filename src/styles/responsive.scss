@@ -2044,7 +2044,6 @@
 }
 
 @media only screen and (max-width: 568px) {
-
   .app .catalog-toggle-menu-overlay .toggle-catalog-menu {
     width: 100%;
     height: 100vh;
@@ -2756,7 +2755,6 @@
   }
   .header-wrapper .responsive-header .rightmobile-header .catalog-menu {
     padding: 0px 4px;
-    background-color: transparent;
   }
   .header-wrapper .responsive-header .rightmobile-header .catalog-menu .button-catalog-menu span {
     font-size: 14px;
@@ -2773,7 +2771,13 @@
   .app .catalog-toggle-menu-overlay .toggle-catalog-menu .right-sub-categories-container .links-categories a {
     font-size: 14px;
   }
-  .app .catalog-toggle-menu-overlay .toggle-catalog-menu .right-sub-categories-container .links-categories .other-links .inner-child-link {
+  .app
+    .catalog-toggle-menu-overlay
+    .toggle-catalog-menu
+    .right-sub-categories-container
+    .links-categories
+    .other-links
+    .inner-child-link {
     font-size: 13px;
   }
   .app .catalog-toggle-menu-overlay .toggle-catalog-menu .main-categories span {
