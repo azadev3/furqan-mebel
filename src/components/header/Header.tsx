@@ -226,7 +226,7 @@ const Header: React.FC = () => {
       setBasketDataLS(isBasket);
       setIsBasketData(isBasket.length > 0);
     }
-  }, [isAuth, token, getBasketProducts]);
+  }, [isAuth, token]);
 
   React.useEffect(() => {
     if (isAuth && token) {

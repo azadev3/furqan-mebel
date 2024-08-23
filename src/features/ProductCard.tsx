@@ -94,7 +94,7 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
             </div>
             <div className="prices">
               <span className="price">{data.price}</span>
-              <span className="discountprice">{data.discounted_price}</span>
+              {data.discounted_price ? <span className="discountprice">{data.discounted_price}</span> : ""}
             </div>
           </article>
         </section>
@@ -104,18 +104,20 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
     );
   };
 
+  React.useEffect(() => {
+    console.log("seclen", selectedCategoryProducts);
+  }, [selectedCategoryProducts]);
+
   return (
     <React.Fragment>
-      {priceAscData?.length > 0 ? (
-        renderProducts(priceAscData)
-      ) : priceMinMaxData?.length > 0 ? (
-        renderProducts(priceMinMaxData)
-      ) : otherFilterData?.length > 0 ? (
-        renderProducts(otherFilterData)
-      ) : selectedCategoryProducts?.length > 0 ? (
-        renderProducts(selectedCategoryProducts)
+      {!selectedCategoryProducts ? (
+        <>
+          {priceAscData?.length > 0 && renderProducts(priceAscData)}
+          {priceMinMaxData?.length > 0 && renderProducts(priceMinMaxData)}
+          {otherFilterData?.length > 0 && renderProducts(otherFilterData)}
+        </>
       ) : (
-        <p>Məhsul yoxdur.</p>
+        renderProducts(selectedCategoryProducts)
       )}
     </React.Fragment>
   );

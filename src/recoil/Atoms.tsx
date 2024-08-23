@@ -13,6 +13,11 @@ export const selectedCategoryStateProductPage = atom<number | null>({
   key: "selectedCategoryState",
   default: null,
 });
+export const selectedCategoryStateProductPageTwo = atom<number | null>({
+  key: "selectedCategoryStateProductPageTwo",
+  default: null,
+});
+
 
 //checkbox state
 export const checkboxCheckedState = atom<number | null>({

@@ -1,28 +1,30 @@
 import React from "react";
-import { atom, useRecoilValue } from "recoil";
+import { atom, useRecoilState, useRecoilValue } from "recoil";
 import { CategoriesForFilterIsSelectedCategoryProductState, CatProductType } from "./filteruitils/CategoriesForFilter";
 import { LoadingState } from "../../recoil/Atoms";
 import Loader from "../../uitils/Loader";
 import ProductCard from "../../features/ProductCard";
+import axios from "axios";
+import { SelectedLanguageState } from "../header/SelectedLanguage";
 
 export const PriceAscDataState = atom<CatProductType[]>({
-  key: "PriceAscDataStateKey",
+  key: "PriceAscDataState",
   default: [],
 });
 
 export const PriceMinMaxState = atom<CatProductType[]>({
-  key: "PriceMinMaxStateKey",
+  key: "PriceMinMaxState",
   default: [],
 });
 
 export const OthersFilterData = atom<CatProductType[]>({
-  key: "OthersFilterDataKey",
+  key: "OthersFilterData",
   default: [],
 });
 
 const ProductsMain: React.FC = () => {
   const isLoading = useRecoilValue(LoadingState);
-  const selectedCategoryProducts = useRecoilValue(CategoriesForFilterIsSelectedCategoryProductState);
+  const [selectedCategoryProducts, setSelectedProd] = useRecoilState(CategoriesForFilterIsSelectedCategoryProductState);
 
   const hasSelectedCatProd = selectedCategoryProducts && selectedCategoryProducts?.length > 0;
 
@@ -34,6 +36,25 @@ const ProductsMain: React.FC = () => {
   
   //others filter data
   const otherFilterData = useRecoilValue(OthersFilterData);
+  
+  const activelanguage = useRecoilValue(SelectedLanguageState);
+
+  const getAllProducts = async () => {
+    try {
+      const response = await axios.get("https://admin.furqanmebel.az/api/all_products", {
+        headers: {
+          "Accept-Language": activelanguage,
+        },
+      });
+      if (response.data) {
+        setSelectedProd(response.data?.products);
+      } else {
+        console.log(response.status);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="products-main">
@@ -49,7 +70,10 @@ const ProductsMain: React.FC = () => {
               otherFilterData={otherFilterData}
             />
           ) : (
-            "Məhsul yoxdur."
+            <div className="no-content-msg">
+              <p>Məhsul yoxdur.</p>
+              <button onClick={getAllProducts}>Bütün məhsullara bax</button>
+            </div>
           )}
         </React.Fragment>
       </div>

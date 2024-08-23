@@ -10,17 +10,15 @@ type props = {
 
 const FavProductCard: React.FC<props> = ({ favProduct }) => {
   const navigate = useNavigate();
-  
+
   return (
     <React.Fragment>
       {favProduct && favProduct?.length > 0
         ? favProduct?.map((favproduct: CatProductType) => (
             <section className="fav-product-card" key={favproduct?.id}>
               <div className="product-image-wrapper">
-                <div
-                style={{pointerEvents: "none"}}
-                  className="add-fav-icon">
-                  <FaHeart className="iconadded"/>
+                <div style={{ pointerEvents: "none" }} className="add-fav-icon">
+                  <FaHeart className="iconadded" />
                 </div>
                 <img src={favproduct?.img} alt={`${favproduct?.id}-image`} title={favproduct?.title} />
                 {favproduct?.is_new && (
@@ -34,11 +32,11 @@ const FavProductCard: React.FC<props> = ({ favProduct }) => {
                   </div>
                 )}
               </div>
-              <article className="product-description"
-              onClick={() => {
-                navigate(`/products/${favproduct?.slug}`)
-              }}
-              >
+              <article
+                className="product-description"
+                onClick={() => {
+                  navigate(`/products/${favproduct?.slug}`);
+                }}>
                 <div className="top">
                   <span className="category-name">{favproduct?.category_name}</span>
                   <h3 className="product-name">{favproduct?.title}</h3>
@@ -46,7 +44,11 @@ const FavProductCard: React.FC<props> = ({ favProduct }) => {
 
                 <div className="prices">
                   <span className="price">{favproduct?.price}</span>
-                  <span className="discountprice">{favproduct?.discounted_price}</span>
+                  {favproduct.discounted_price ? (
+                    <span className="discountprice">{favproduct?.discounted_price}</span>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </article>
             </section>

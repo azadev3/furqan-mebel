@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { Route, Routes } from "react-router-dom";
 import Homepage from "./routes/Homepage";
 import Header from "./components/header/Header";
@@ -30,7 +30,7 @@ import {
 import Dashboard from "./routes/Dashboard";
 import BlogInnerPage from "./routes/BlogInnerPage";
 import ProductInner from "./routes/ProductInner";
-import { ToastContainer, Zoom } from "react-toastify";
+import { toast, ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoCloseOutline } from "react-icons/io5";
 import Register from "./components/loginregister/Register";
@@ -249,43 +249,93 @@ const App: React.FC = () => {
     return () => document.removeEventListener("mousedown", outsideClicked);
   }, []);
 
+  // SEND CALL
+  const [name, setName] = React.useState<string>("");
+  const [telephone, setTelephone] = React.useState<string>("");
+
+  const submitForm = async () => {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("phone", telephone);
+
+    try {
+      const response = await axios.post(`${Baseurl}/call_order`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200) {
+        setTelephone("");
+        setName("");
+        toast.success("Zəng istəyiniz göndərildi. Sizinlə əlaqə saxlanılacaq", {
+          position: "top-center",
+        });
+      } else {
+        console.log(response.status);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.success("Bir problem oldu", {
+        position: "top-center",
+      });
+    }
+  };
   return (
     <div className="app">
       {/* call your modal */}
       <div className={`call-your-modal-overlay ${callYourModal ? "active" : ""}`}>
+        <ToastContainer transition={Zoom} />
         <div className="call-your-modal" ref={callYourModalRef}>
           <img src="../closebtn.svg" alt="close-btn" className="closebtn" onClick={() => setCallYourModal(false)} />
           <h1>{translations["zeng_sifaris_et"]}</h1>
           <form action="" className="form">
             <div className="field-input">
               <label htmlFor="name">Ad</label>
-              <input type="text" name="name" id="name" placeholder="Jhon" />
+              <input
+                type="text"
+                name="name"
+                id="name"
+                placeholder="John"
+                value={name}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setName(e?.target?.value);
+                }}
+              />
             </div>
             <div className="field-input">
               <label htmlFor="tel">Əlaqə nömrəsi</label>
-              <input type="text" name="tel" id="tel" placeholder="+994 70 000 00 00" />
+              <input
+                type="text"
+                name="tel"
+                id="tel"
+                placeholder="+994 70 000 00 00"
+                value={telephone}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setTelephone(e?.target?.value);
+                }}
+              />
             </div>
           </form>
-          <button type="submit">{translations["gonder"]}</button>
+          <button type="submit" onClick={submitForm}>
+            {translations["gonder"]}
+          </button>
         </div>
       </div>
 
       {/* show img modal */}
       <div className={`image-modal-overlay ${showedImg && showedImg?.length > 0 ? "active" : ""}`}>
-        <CgClose className="close-modal-icon" onClick={() => setShowedImg([])}/>
-      <div className="image-modal">
-        <Swiper 
-        navigation={true}
-        modules={[ Navigation ]}
-        className="mySwiper">
-          {showedImg.map((img, index) => (
-            <SwiperSlide key={index}>
-              <img src={img} alt={`product-image-${index}`} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <CgClose className="close-modal-icon" onClick={() => setShowedImg([])} />
+        <div className="image-modal">
+          <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+            {showedImg.map((img, index) => (
+              <SwiperSlide key={index}>
+                <img src={img} alt={`product-image-${index}`} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </div>
-    </div>
 
       <div className={`overlay ${loginMenu ? "active" : ""}`}>
         <div className={`login-menu-wrapper ${loginMenu ? "active" : ""}`} ref={loginMenuRef}>

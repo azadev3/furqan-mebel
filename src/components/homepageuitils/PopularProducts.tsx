@@ -44,7 +44,7 @@ export type ImagesPopularProducts = {
 export type ModulesProducts = {
   id: number;
   title: string;
-  price: string,
+  price: string;
 };
 
 export interface ProductsInterface {
@@ -69,7 +69,6 @@ export interface ProductsInterface {
 }
 
 const ProductsInterface: React.FC = () => {
-
   const activeLanguage = useRecoilValue(SelectedLanguageState);
 
   // filtered items according to category names
@@ -136,7 +135,6 @@ const ProductsInterface: React.FC = () => {
       <div className="popular-products">
         <h1>{translations["populyar_mehsullar"]}</h1>
         <div className="container-with-popular-products">
-         
           {mobile ? (
             <div className="categories-filtering-items">
               <Swiper spaceBetween={12} slidesPerView={1.2}>
@@ -144,43 +142,47 @@ const ProductsInterface: React.FC = () => {
                   <Loader />
                 ) : (
                   <React.Fragment>
-                    {popularProducts && popularProducts?.length > 0 ? popularProducts.map((item: CatProductType) => (
-                      <SwiperSlide key={item.id}>
-                        <Link
-                          to={`/products/${item?.slug.toLowerCase()}`}
-                          className="subitem">
-                          <img className="shop-bag" src="../shopbag.svg" alt="show" title="Səbət" />
-                          
-                          <div className="punts">
-                            {item?.is_new ? (
-                              <div className="new-punt">
-                                <span>Yeni</span>
+                    {popularProducts && popularProducts?.length > 0
+                      ? popularProducts.map((item: CatProductType) => (
+                          <SwiperSlide key={item.id}>
+                            <Link to={`/products/${item?.slug.toLowerCase()}`} className="subitem">
+                              <img className="shop-bag" src="../shopbag.svg" alt="show" title="Səbət" />
+
+                              <div className="punts">
+                                {item?.is_new ? (
+                                  <div className="new-punt">
+                                    <span>Yeni</span>
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                                {item?.discounted_price ? (
+                                  <div className="discount-punt">
+                                    <span>{Math.round(parseFloat(item?.discounted_price))}</span>
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
                               </div>
-                            ) : (
-                              ""
-                            )}
-                            {item?.discounted_price ? (
-                              <div className="discount-punt">
-                                <span>{Math.round(parseFloat(item?.discounted_price))}</span>
+                              <div className="product-image">
+                                <img src={item?.img} alt={`${item?.id}-image`} title={item?.title} />
                               </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                          <div className="product-image">
-                            <img src={item?.img} alt={`${item?.id}-image`} title={item?.title} />
-                          </div>
-                          <div className="item-details">
-                            <span className="category-name">{item?.category_name}</span>
-                            <span className="product-name">{item?.title}</span>
-                            <div className="prices">
-                              <span>{item.price} AZN</span>
-                              <article className="discountprice">{item.discounted_price} AZN</article>
-                            </div>
-                          </div>
-                        </Link>
-                      </SwiperSlide>
-                    )) : ""}
+                              <div className="item-details">
+                                <span className="category-name">{item?.category_name}</span>
+                                <span className="product-name">{item?.title}</span>
+                                <div className="prices">
+                                  <span>{item.price} AZN</span>
+                                  {item.discounted_price ? (
+                                    <article className="discountprice">{item.discounted_price} AZN</article>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                              </div>
+                            </Link>
+                          </SwiperSlide>
+                        ))
+                      : ""}
                   </React.Fragment>
                 )}
               </Swiper>
@@ -191,44 +193,47 @@ const ProductsInterface: React.FC = () => {
                 <Loader />
               ) : (
                 <React.Fragment>
-                  {popularProducts && popularProducts?.length > 0 ? popularProducts.slice(0, 4).map((item: CatProductType) => (
-                    <Link
-                      to={`/products/${item?.slug.toLowerCase()}`}
-                      key={item.id}
-                      className="subitem">
-                      <div className="add-basket">
-                        <HiOutlineShoppingBag className="shopping-bag" />
-                      </div>
-                      
-                      <div className="punts">
-                        {item?.is_new ? (
-                          <div className="new-punt">
-                            <span>Yeni</span>
+                  {popularProducts && popularProducts?.length > 0
+                    ? popularProducts.slice(0, 4).map((item: CatProductType) => (
+                        <Link to={`/products/${item?.slug.toLowerCase()}`} key={item.id} className="subitem">
+                          <div className="add-basket">
+                            <HiOutlineShoppingBag className="shopping-bag" />
                           </div>
-                        ) : (
-                          ""
-                        )}
-                        {item?.discounted_price ? (
-                          <div className="discount-punt">
-                            <span>{calculatePercentage(item)?.split(".00")}%</span>
+
+                          <div className="punts">
+                            {item?.is_new ? (
+                              <div className="new-punt">
+                                <span>Yeni</span>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                            {item?.discounted_price ? (
+                              <div className="discount-punt">
+                                <span>{calculatePercentage(item)?.split(".00")}%</span>
+                              </div>
+                            ) : (
+                              ""
+                            )}
                           </div>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                      <div className="product-image">
-                        <img src={item.img} alt={`${item.id}-image`} title={item.title} />
-                      </div>
-                      <div className="item-details">
-                        <span className="category-name">{item.category_name}</span>
-                        <span className="product-name">{item.title}</span>
-                        <div className="prices">
-                          <span>{item.price} AZN</span>
-                          <article className="discountprice">{item.discounted_price} AZN</article>
-                        </div>
-                      </div>
-                    </Link>
-                  )) : ""}
+                          <div className="product-image">
+                            <img src={item.img} alt={`${item.id}-image`} title={item.title} />
+                          </div>
+                          <div className="item-details">
+                            <span className="category-name">{item.category_name}</span>
+                            <span className="product-name">{item.title}</span>
+                            <div className="prices">
+                              <span>{item.price} AZN</span>
+                              {item.discounted_price ? (
+                                <article className="discountprice">{item.discounted_price} AZN</article>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </div>
+                        </Link>
+                      ))
+                    : ""}
                 </React.Fragment>
               )}
             </div>

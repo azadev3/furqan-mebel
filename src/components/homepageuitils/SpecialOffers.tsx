@@ -1,86 +1,90 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import { useTranslations } from "../../TranslateContext";
+import { useQuery } from "@tanstack/react-query";
+import { useRecoilValue } from "recoil";
+import { SelectedLanguageState } from "../header/SelectedLanguage";
+import axios from "axios";
+import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
+import moment from "moment";
 
-type LeftOfferType = {
-  id: string;
+export interface CampaignsInterface {
+  id: number;
   title: string;
-  discount: string;
-  text: string;
-  image: string;
-};
-type RightOfferType = {
-  id: string;
-  title: string;
-  maxcashback: string;
-  code: string;
-};
+  campaign_price: string;
+  campaign_end_time: string;
+  product: CatProductType[];
+}
 
 const SpecialOffers: React.FC = () => {
-  //define offers
-  const LeftOffers: LeftOfferType[] = [
-    {
-      id: uuidv4(),
-      title: "Best Online Deals, Free Stuff",
-      discount: "15% OFF",
-      text: "Sadəcə bu həftə...Qaçırmayın",
-      image: "../imageforoffers.jpeg",
-    },
-  ];
 
-  const RightOffers: RightOfferType[] = [
-    {
-      id: uuidv4(),
-      title: "10% cash-back on personal care",
-      maxcashback: "$12",
-      code: "CADHL837",
-    },
-  ];
+  const activeLang = useRecoilValue(SelectedLanguageState);
 
-  const { translations } = useTranslations(); 
+  const { translations } = useTranslations();
+
+  const { data: Campaigns } = useQuery<CampaignsInterface[]>({
+    queryKey: ["campaignDataKey", activeLang],
+    queryFn: async () => {
+      const response = await axios.get("https://admin.furqanmebel.az/api/campaigns", {
+        headers: {
+          "Accept-Language": activeLang,
+        },
+      });
+      console.log(response.data?.blogs);
+      return response.data?.blogs;
+    },
+    staleTime: 1000000,
+  });
+
+  const hasCampaigns = Campaigns && Campaigns?.length > 0;
 
   return (
     <div className="special-offers-wrapper">
       <div className="special-offers">
-        <h1>{translations['xususi_teklifler']}</h1>
+        <h1>{translations["xususi_teklifler"]}</h1>
 
         <div className="gridoffer">
           <div className="left">
-            {LeftOffers.map((leftitem: LeftOfferType) => (
-              <React.Fragment key={leftitem.id}>
-                <img src={leftitem.image} alt={`${leftitem.id}-image`} title={leftitem.title} />
-                <div className="text-for-left">
-                  <div className="discount">
-                    <span>xüsusi təklif</span>
-                    <span className="discount-count">{leftitem.discount}</span>
-                  </div>
-                  <h1>{leftitem.title}</h1>
-                  <p>{leftitem.text}</p>
-                  <Link to="" className="formore">
-                    <span>Daha çox</span>
-                    <img src="../rightwhite.svg" alt="right" title="Daha çox" />
-                  </Link>
-                </div>
-              </React.Fragment>
-            ))}
+            {hasCampaigns &&
+              Campaigns?.map((item: CampaignsInterface) => {
+                const product: any = item?.product;
+                if (product && Object.keys(product).length > 0) {
+                  return (
+                    <React.Fragment key={item.id}>
+                      <img src={product.img} alt={`${product.id}-image`} title={product.title} />
+                      <div className="text-for-left">
+                        <div className="discount">
+                          <span>xüsusi təklif</span>
+                          <span className="discount-count">{product.discounted_price || product.price} AZN</span>
+                        </div>
+                        <h1>{product.title}</h1>
+                        <Link to={`/products/${product?.slug}`} className="formore">
+                          <span>Daha çox</span>
+                          <img src="../rightorange.svg" alt="right" title="Daha çox" />
+                        </Link>
+                      </div>
+                    </React.Fragment>
+                  );
+                } else {
+                  return <p>Bu kampanyada məhsul yoxdur.</p>;
+                }
+              })}
           </div>
 
           <div className="right">
-            {RightOffers.map((item: RightOfferType) => (
-              <React.Fragment key={item.id}>
-                <span>Müntəzəm təklif</span>
-                <h1>{item.title}</h1>
-                <div className="cash-and-code">
-                  <span>Max cashback: {item.maxcashback}</span>
-                  <span>Code: {item.code}</span>
-                </div>
-                <Link to="" className="formore">
-                  <span>Daha çox</span>
-                  <img src="../rightorange.svg" alt="right" title="Daha çox" />
-                </Link>
-              </React.Fragment>
-            ))}
+            {hasCampaigns &&
+              Campaigns?.map((item: CampaignsInterface) => (
+                <React.Fragment key={item.id}>
+                  <span>{translations["muntezem_teklif"]}</span>
+                  <span style={{ fontSize: "24px", padding: "12px 0px", fontWeight: "600" }}>
+                    {moment(item?.campaign_end_time).format("DD.MM.YYYY")}
+                  </span>
+                  <h1>{item.title}</h1>
+                  <div className="cash-and-code">
+                    <span>{item?.campaign_price} AZN</span>
+                  </div>
+                </React.Fragment>
+              ))}
           </div>
         </div>
       </div>

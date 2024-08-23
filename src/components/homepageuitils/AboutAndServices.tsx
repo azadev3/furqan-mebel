@@ -14,7 +14,7 @@ interface Abouts {
   img: string;
 }
 
-interface Services {
+export interface Services {
   id: number;
   title: string;
   content: string;

@@ -7,6 +7,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { catalogState } from "../../recoil/Atoms";
 import { CgClose } from "react-icons/cg";
+import { CategoriesForFilterIsSelectedCategoryProductState } from "../productpageuitils/filteruitils/CategoriesForFilter";
 
 export const clickedCategoryForFilter = atom<number | null>({
   key: "clickedCategoryForFilter",
@@ -59,7 +60,24 @@ const CatalogToggleMenu: React.FC = () => {
     setHoveredCategory(id);
   };
 
-  const [_, setClickedCategory] = useRecoilState(clickedCategoryForFilter);
+  const [____, setSelectedProd] = useRecoilState(CategoriesForFilterIsSelectedCategoryProductState);
+
+  const getProductsToCatID = async (catid: number) => {
+    try {
+      const response = await axios.get(`https://admin.furqanmebel.az/api/all_products?category_id=${catid}`, {
+        headers: {
+          "Accept-Language": activelanguage,
+        },
+      });
+      if (response.data) {
+        setSelectedProd(response.data?.products);
+      } else {
+        console.log(response.status);
+      }
+    } catch (error) {
+      console.log(error);
+    } 
+  };
 
   return (
     <div className="toggle-catalog-menu">
@@ -97,8 +115,8 @@ const CatalogToggleMenu: React.FC = () => {
                           key={children?.id}
                           onClick={() => {
                             //navigate products and show clicked category names
-                            setClickedCategory(children?.id);
                             setCatalogMenu(false);
+                            getProductsToCatID(children?.id)
                           }}>
                           {children?.title}
                         </Link>
@@ -109,24 +127,24 @@ const CatalogToggleMenu: React.FC = () => {
                           children &&
                           children?.children &&
                           children?.children?.length > 0
-                            ? children?.children?.map((children: InnerChilds) => (
+                            ? children?.children?.map((innerchilds: InnerChilds) => (
                                 <Link
                                   onClick={() => {
                                     //navigate products and show clicked category names
-                                    setClickedCategory(children?.id);
                                     setCatalogMenu(false);
+                                    getProductsToCatID(innerchilds?.id)
                                   }}
                                   to="/products"
                                   className="inner-child-link"
-                                  key={children?.id}>
-                                  {children?.title}
+                                  key={innerchilds?.id}>
+                                  {innerchilds?.title}
                                 </Link>
                               ))
                             : ""}
                         </div>
                       </div>
                     ))
-                  : "Hələ ki bura heç nə əlavə olunmayıb";
+                  : "Hələ ki heç nə əlavə olunmayıb";
               }
             })
           : ""}

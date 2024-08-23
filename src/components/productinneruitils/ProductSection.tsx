@@ -5,14 +5,14 @@ import { SelectedLanguageState } from "../header/SelectedLanguage";
 import { useQuery } from "@tanstack/react-query";
 import { Baseurl } from "../../api/Baseurl";
 import axios from "axios";
-import { ModulesProducts, ProductsInterface } from "../homepageuitils/PopularProducts";
+import { ModulesProducts } from "../homepageuitils/PopularProducts";
 import DOMPurify from "dompurify";
-import Loader from "../../uitils/Loader";
 import SliderSizes, { SliderValue } from "../../SliderSizes";
 import { useTranslations } from "../../TranslateContext";
 import { UserIsAuthState } from "../../recoil/Atoms";
 import getCookie from "../../getCookie";
 import { addBasketFunction, addBasketFunctionStorage } from "../../features/AddBasket/AddBasket";
+import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
 
 const ProductSection: React.FC = () => {
   const { translations } = useTranslations();
@@ -36,7 +36,7 @@ const ProductSection: React.FC = () => {
 
   const productInner =
     allProductsData && allProductsData.length > 0
-      ? allProductsData.find((item: ProductsInterface) => {
+      ? allProductsData.find((item: CatProductType) => {
           return item?.slug.toLowerCase() === slugproduct?.toLowerCase();
         })
       : "";
@@ -50,7 +50,7 @@ const ProductSection: React.FC = () => {
   return (
     <section className="product-section">
       <div className="quantity-and-dimensions">
-        <h2 style={{fontWeight: "500"}}>{productInner?.title}</h2>
+        <h2 style={{ fontWeight: "500" }}>{productInner?.title}</h2>
 
         <div className="sale">
           <strong className="price">{productInner?.price} AZN</strong>
@@ -62,7 +62,8 @@ const ProductSection: React.FC = () => {
         </div>
       </div>
 
-      <button
+      {productInner && productInner?.is_stock ? (
+        <button
         className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
         onClick={() => {
           if (isAuth && token) {
@@ -75,6 +76,9 @@ const ProductSection: React.FC = () => {
         }}>
         {isAdded ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
       </button>
+      ) : (
+        <p style={{color: "red"}}>Stokda yoxdur</p>
+      )}
 
       <div className="details-section">
         <p>{(productInner && productInner?.category_name) || ""}</p>
@@ -92,14 +96,14 @@ const ProductSection: React.FC = () => {
               <SliderSizes />
             </div>
             <div className="payment-info">
-            <div className="comission">
-              <span>{translations["komissiya_haqqi"]}</span>
-              <p>azn</p>
-            </div>
-            <div className="monthly-payment">
-              <span>{translations["ayliq_odenis"]}</span>
-              <p style={{ fontSize: "14px" }}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
-            </div>
+              <div className="comission">
+                <span>{translations["komissiya_haqqi"]}</span>
+                <p>azn</p>
+              </div>
+              <div className="monthly-payment">
+                <span>{translations["ayliq_odenis"]}</span>
+                <p style={{ fontSize: "14px" }}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
+              </div>
             </div>
           </div>
           <article className="title-bottom">
@@ -111,24 +115,27 @@ const ProductSection: React.FC = () => {
       </div>
 
       <article className="set-modules">
-        <h3>{translations["deste_daxil_modullar"]}</h3>
+        {productInner && Array(productInner)?.map((item: CatProductType) => {
+          if(item && item?.modules && item?.modules?.length > 0) {
+            return <h3 key={item?.id}>{translations["deste_daxil_modullar"]}</h3>
+          } else {
+            return ""
+          }
+        })}
         <div className="grid-modules">
-          {allProductsData && allProductsData.length > 0 ? (
-            allProductsData.map(
-              (item: ProductsInterface) =>
-                item.modules &&
-                item.modules.map((modules: ModulesProducts, i: number) => (
-                  <div className="item-module" key={i}>
-                    <p>{modules?.title}</p>
-                    <div className="prices">
-                      <strong>{modules?.price} AZN</strong>
+          {productInner &&
+            Array(productInner)?.map((item: CatProductType) =>
+              item?.modules && item?.modules?.length > 0
+                ? item?.modules?.map((modules: ModulesProducts) => (
+                    <div className="item-module" key={modules?.id}>
+                      <p>{modules?.title}</p>
+                      <div className="prices">
+                        <strong>{modules?.price} AZN</strong>
+                      </div>
                     </div>
-                  </div>
-                ))
-            )
-          ) : (
-            <Loader />
-          )}
+                  ))
+                : ""
+            )}
         </div>
       </article>
     </section>

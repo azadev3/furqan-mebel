@@ -7,18 +7,12 @@ import axios from "axios";
 import { Baseurl } from "../api/Baseurl";
 import Loader from "../uitils/Loader";
 import { useTranslations } from "../TranslateContext";
+import { Services } from "../components/homepageuitils/AboutAndServices";
 
 type AboutType = {
   id: number;
   content: string;
   img: string;
-};
-
-type ServiceType = {
-  id: number;
-  title: string;
-  description: string;
-  icon: string;
 };
 
 const AboutPage: React.FC = () => {
@@ -36,37 +30,22 @@ const AboutPage: React.FC = () => {
     },
   });
 
-  const ServicesItems: ServiceType[] = [
-    {
-      id: 1,
-      title: "2 il Qarantiya",
-      description: "Lorem ipsum dolor sit amet consectetur. Sed amet pulvinar cursus volutpat dolor.",
-      icon: "../certificate 1.svg",
+   //Fetch services data
+   const activeLanguage = useRecoilValue(SelectedLanguageState);
+   const { data: ServicesData } = useQuery<Services[]>({
+    queryKey: ["servicesDataKey", activeLanguage],
+    queryFn: async () => {
+      const response = await axios.get(`${Baseurl}/services`, {
+        headers: {
+          "Accept-Language": activeLanguage,
+        },
+      });
+      return response.data.services;
     },
-
-    {
-      id: 2,
-      title: "Sərfəli Qiymət",
-      description: "Lorem ipsum dolor sit amet consectetur. Sed amet pulvinar cursus volutpat dolor.",
-      icon: "../moneybag.svg",
-    },
-
-    {
-      id: 3,
-      title: "Pulsuz Çatdırılma",
-      description: "Lorem ipsum dolor sit amet consectetur. Sed amet pulvinar cursus volutpat dolor.",
-      icon: "../truck.svg",
-    },
-
-    {
-      id: 4,
-      title: "Lux Mebellər",
-      description: "Lorem ipsum dolor sit amet consectetur. Sed amet pulvinar cursus volutpat dolor.",
-      icon: "../arn.svg",
-    },
-  ];
-
+  });
   const { translations } = useTranslations();
+
+  const hasServicesData = ServicesData && ServicesData?.length > 0;
 
   return (
     <div className="about-page-wrapper">
@@ -96,21 +75,21 @@ const AboutPage: React.FC = () => {
         <div className="services-us">
           <h2>{translations["xidmetlerimiz"]}</h2>
           <div className="grid-services">
-            {ServicesItems.map((item: ServiceType, index: number) => (
+            {hasServicesData && ServicesData?.map((item: Services, index: number) => (
               <div className="item-service" key={item.id}>
                 <div className="icon">
                   <img
                     style={{ borderRadius: "100px" }}
                     width="633"
                     height="633"
-                    src={item.icon ? item.icon : ""}
+                    src={item.img ? item.img : ""}
                     alt={`${index}-icon`}
                   />
                 </div>
 
                 <div className="titles-bottom">
                   <span>{item?.title}</span>
-                  <p>{item?.description}</p>
+                  <p>{item?.content}</p>
                 </div>
               </div>
             ))}

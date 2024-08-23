@@ -1,13 +1,19 @@
 import React from "react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../../header/SelectedLanguage";
-import { Categories, Children, clickedCategoryForFilter, InnerChilds } from "../../header/CatalogToggleMenu";
+import { Categories, Children, InnerChilds } from "../../header/CatalogToggleMenu";
 import axios from "axios";
 import { Baseurl } from "../../../api/Baseurl";
 import { useQuery } from "@tanstack/react-query";
 import { ImagesPopularProducts, ModulesProducts } from "../../homepageuitils/PopularProducts";
-import { LoadingState } from "../../../recoil/Atoms";
 import { FaAngleDown } from "react-icons/fa6";
+import { BiCategoryAlt } from "react-icons/bi";
+import { LoadingState } from "../../../recoil/Atoms";
+
+export const CategoriesForFilterIsSelectedCategoryProductState = atom<CatProductType[]>({
+  key: "CategoriesForFilterIsSelectedCategoryProductState",
+  default: [],
+});
 
 export type Options = {
   id: number;
@@ -36,15 +42,10 @@ export interface CatProductType {
   title: string;
   quantity: number;
 }
-export const CategoriesForFilterIsSelectedCategoryProductState = atom<CatProductType[]>({
-  key: "CategoriesForFilterIsSelectedCategoryProductState",
-  default: [],
-});
 
 const CategoriesForFilter: React.FC = () => {
   // FETCH CATEGORIES
   const activelanguage = useRecoilValue(SelectedLanguageState);
-
   const { data: CategoryProductsData } = useQuery<Categories[]>({
     queryKey: ["categoryProductsKey", activelanguage],
     queryFn: async () => {
@@ -58,141 +59,156 @@ const CategoriesForFilter: React.FC = () => {
     staleTime: 1000000,
   });
 
-  //give the clicked category id
-  const clickedCategory = useRecoilValue(clickedCategoryForFilter);
+  const hasCategoryData = CategoryProductsData && CategoryProductsData?.length > 0;
+  const hasChildrenData =
+    hasCategoryData &&
+    CategoryProductsData?.map((item: Categories) => {
+      return item?.children;
+    });
 
-  //show the clicked category items
-  const categoryItems = CategoryProductsData
-    ? CategoryProductsData.flatMap((item: Categories) =>
-        item.children ? item.children.filter((child: Children) => child.id === clickedCategory) : []
-      )
-    : [];
-
-  const [filterCat, setForFilterCat] = React.useState<boolean>(true);
-
-  const openFilterCategory = () => {
-    setForFilterCat((prevCategory) => !prevCategory);
+  //open or close sub catalogs
+  const [open, setOpen] = React.useState<{ [key: number]: boolean }>({});
+  const handleOpen = (id: number) => {
+    setOpen((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+  const [openChildren, setOpenChildren] = React.useState<{ [key: number]: boolean }>({});
+  const handleOpenChildren = (id: number) => {
+    setOpenChildren((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
   };
 
-  const [selectedAllCategoryItem, setSelectedAllCategoryItem] = React.useState<string>("get_all_products");
-  const [selectedFilterCategoryItem, setSelectedFilterCategoryItem] = React.useState<number | null>(null);
-  const [_, setCategoryProducts] = useRecoilState(CategoriesForFilterIsSelectedCategoryProductState);
+  //GET PRODUCTS FOR CATEGORY_ID
   const [__, setLoading] = useRecoilState(LoadingState);
 
-  //get category product on the category_id
-  const getCategoryProduct = async (category_id: number) => {
-    setLoading(true);
+  const [____, setSelectedProd] = useRecoilState(CategoriesForFilterIsSelectedCategoryProductState);
+
+  const getProductsToCatID = async (catid: number) => {
     try {
-      const response = await axios.get(`${Baseurl}/all_products?category_id=${category_id}`, {
+      const response = await axios.get(`https://admin.furqanmebel.az/api/all_products?category_id=${catid}`, {
         headers: {
           "Accept-Language": activelanguage,
         },
       });
       if (response.data) {
-        setCategoryProducts(response.data?.products);
-        setSelectedFilterCategoryItem(category_id);
-        setSelectedAllCategoryItem("");
+        setSelectedProd(response.data?.products);
+        console.log(response.data?.products, 'tikladin ha')
       } else {
         console.log(response.status);
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
-
-  //get all products
+  
   const getAllProducts = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${Baseurl}/all_products`, {
+      const response = await axios.get("https://admin.furqanmebel.az/api/all_products", {
         headers: {
           "Accept-Language": activelanguage,
         },
       });
       if (response.data) {
-        setCategoryProducts(response.data?.products);
-        setSelectedAllCategoryItem("get_all_products");
-        setSelectedFilterCategoryItem(null);
+        setSelectedProd(response.data?.products);
       } else {
         console.log(response.status);
       }
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 200);
     }
   };
-  React.useEffect(() => {
-    getAllProducts();
-  }, []);
 
-  //if user clicked left filter categories open her catalog
-  const [opened, setOpened] = React.useState<number | null>(null);
-  const openCatalog = (id: number | null) => {
-    setOpened((prev) => (prev ? null : id));
-  };
+
 
   return (
     <section className="categories-for-filter">
-      <div className="head" onClick={openFilterCategory}>
-        <span>Kateqoriya:</span>
-        {categoryItems && categoryItems?.map((item: Children) => <span key={item?.id} className="selection-cat">{item?.title}</span>)}
-        <img src="../down.svg" alt="down" />
+      <div className="top-title">
+        <span>Kateqoriyalar</span>
+        <BiCategoryAlt className="category-icon" />
       </div>
 
-      {filterCat && (
-        <div className="filter-category-submenu">
-          <span
-            className={selectedAllCategoryItem === "get_all_products" ? "selected-item" : ""}
-            onClick={getAllProducts}>
-            Bütün məhsullar
-          </span>
-          {categoryItems && categoryItems?.length > 0
-            ? categoryItems?.map((children: Children) =>
-                children && children.children && children?.children?.length > 0
-                  ? children?.children?.map((inner: InnerChilds) => (
-                      <span
-                        key={inner?.id}
-                        className={selectedFilterCategoryItem === inner?.id ? "selected-item" : ""}
-                        onClick={() => getCategoryProduct(inner?.id)}>
-                        {inner?.title}
-                      </span>
-                    ))
-                  : ""
-              )
-            : CategoryProductsData && CategoryProductsData?.length > 0
-            ? CategoryProductsData?.map((item: Categories) => (
+      <div className="categories-main-items">
+        <section className="all-products" onClick={getAllProducts}>
+          <span>Bütün məhsullar</span>
+        </section>
+
+        <div className="other-categories">
+          {hasCategoryData &&
+            CategoryProductsData?.map((categories: Categories) => (
+              <div className="category" key={categories?.id}>
                 <div
-                  key={item?.id}
-                  className="category-link"
+                  className="headlink"
                   onClick={() => {
-                    openCatalog(item?.id);
+                    handleOpen(categories?.id);
                   }}>
-                  <div className="headlink">
-                  <span className={selectedFilterCategoryItem === item?.id ? "selected-item" : ""}>{item?.title}</span>
-                  <FaAngleDown className="downicon" style={{ transform: opened === item?.id ? 'rotate(180deg)' : "" }}/>
-                  </div>
-                    <div className={`links-inner-category ${opened === item?.id ? "active" : ""}`}>
-                      {item?.children && item?.children?.length > 0
-                        ? item?.children?.map((children: Children) => (
-                            <span 
-                            onClick={() => {
-                              getCategoryProduct(children?.id)
-                            }}
-                            key={children?.id} 
-                            className="inner-links">
-                              {children?.title}
-                            </span>
-                          ))
-                        : ""}
-                    </div>
+                  <span>{categories?.title}</span>
+                  <FaAngleDown className={`dropdownicon ${open[categories?.id] ? "active" : ""}`} />
                 </div>
-              ))
-            : ""}
+                {open[categories?.id] && (
+                  <span
+                    className="get-all"
+                    onClick={() => {
+                      getProductsToCatID(categories?.id);
+                    }}>
+                    Bu kateqoriyadakı bütün məhsullar
+                  </span>
+                )}
+
+                {open[categories?.id] && (
+                  <React.Fragment>
+                    {hasCategoryData &&
+                      hasChildrenData &&
+                      categories?.children?.map((children: Children) => (
+                        <div className="children" key={children?.id}>
+                          <div
+                            className="headlink"
+                            onClick={() => {
+                              handleOpenChildren(children?.id);
+                            }}>
+                            <span>{children?.title}</span>
+                            <FaAngleDown className={`dropdownicon ${openChildren[children?.id] ? "active" : ""}`} />
+                          </div>
+                          {openChildren[children?.id] && (
+                            <React.Fragment>
+                              <span
+                                className="get-all"
+                                onClick={() => {
+                                  getProductsToCatID(children?.id);
+                                }}>
+                                Bu kateqoriyadakı bütün məhsullar
+                              </span>
+                              {children && children?.children?.length > 0
+                                ? children?.children?.map((innerchild: InnerChilds) => (
+                                    <div
+                                      onClick={() => {
+                                        getProductsToCatID(innerchild?.id);
+                                      }}
+                                      key={innerchild?.id}
+                                      className="inner-child-link">
+                                      {innerchild?.title}
+                                    </div>
+                                  ))
+                                : ""}
+                            </React.Fragment>
+                          )}
+                        </div>
+                      ))}
+                  </React.Fragment>
+                )}
+              </div>
+            ))}
         </div>
-      )}
+      </div>
     </section>
   );
 };
