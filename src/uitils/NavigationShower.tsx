@@ -54,10 +54,6 @@ const NavigationShower: React.FC<props> = (props) => {
       })
     });
 
-    const productSlug = isProductInnerPage?.params?.slugproduct;
-    
-    
-
   return (
     <div className="navigation-shower">
       <span className="prevpage" style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
