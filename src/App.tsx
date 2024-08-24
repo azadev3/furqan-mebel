@@ -17,7 +17,7 @@ import PaymentSuccessPage from "./routes/PaymentSuccessPage";
 import FavouritesPage from "./routes/FavouritesPage";
 import StorePage from "./routes/StorePage";
 import CreditConditionsPage from "./routes/CreditConditionsPage";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   ActiveLoginPageState,
   ActiveRegisterPageState,
@@ -197,6 +197,7 @@ const App: React.FC = () => {
       console.error("Error sending basket to database:", error);
     }
   };
+
   React.useEffect(() => {
     const basketItems = localStorage.getItem("basket");
 
@@ -234,20 +235,7 @@ const App: React.FC = () => {
   const { translations } = useTranslations();
 
   //catalog modal
-  const [catalogMenu, setCatalogMenu] = useRecoilState(catalogState);
-
-  const catalogMenuDivRef = React.useRef<HTMLDivElement | null>(null);
-  //outside close
-  React.useEffect(() => {
-    const outsideClicked = (e: MouseEvent) => {
-      if (catalogMenuDivRef.current && !catalogMenuDivRef.current.contains(e.target as Node)) {
-        setCatalogMenu(false);
-      }
-    };
-
-    document.addEventListener("mousedown", outsideClicked);
-    return () => document.removeEventListener("mousedown", outsideClicked);
-  }, []);
+  const catalogMenu = useRecoilValue(catalogState);
 
   // SEND CALL
   const [name, setName] = React.useState<string>("");
@@ -404,7 +392,7 @@ const App: React.FC = () => {
       </div>
 
       {/* CATALOG modal */}
-      <div className={`catalog-toggle-menu-overlay ${catalogMenu ? "active" : ""}`} ref={catalogMenuDivRef}>
+      <div className={`catalog-toggle-menu-overlay ${catalogMenu ? "active" : ""}`}>
         <CatalogToggleMenu />
       </div>
 

@@ -43,9 +43,9 @@ const FavProductCard: React.FC<props> = ({ favProduct }) => {
                 </div>
 
                 <div className="prices">
-                  <span className="price">{favproduct?.price}</span>
+                  <span className="price">{favproduct?.price} AZN</span>
                   {favproduct.discounted_price ? (
-                    <span className="discountprice">{favproduct?.discounted_price}</span>
+                    <span className="discountprice">{favproduct?.discounted_price} AZN</span>
                   ) : (
                     ""
                   )}

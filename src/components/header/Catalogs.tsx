@@ -11,13 +11,11 @@ const Catalogs: React.FC = () => {
     setCatalogMenu((prevMenu) => !prevMenu);
   };
 
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
-
   const { translations } = useTranslations();
 
   return (
     <div className="catalog-menu">
-      <button className="button-catalog-menu" ref={buttonRef} onClick={handleCatalogMenu}>
+      <button className="button-catalog-menu"  onClick={handleCatalogMenu}>
         <span>{translations["nav_catalog"]}</span>
         <PiList className={`list-icon-catalog ${catalogMenu ? "active" : ""}`} />
       </button>

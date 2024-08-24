@@ -93,8 +93,8 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
               )}
             </div>
             <div className="prices">
-              <span className="price">{data.price}</span>
-              {data.discounted_price ? <span className="discountprice">{data.discounted_price}</span> : ""}
+              <span className="price">{data.price} AZN</span>
+              {data.discounted_price ? <span className="discountprice">{data.discounted_price} AZN</span> : ""}
             </div>
           </article>
         </section>

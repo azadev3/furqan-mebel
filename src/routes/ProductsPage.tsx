@@ -7,7 +7,7 @@ const ProductsPage: React.FC = () => {
   return (
     <div className="product-page-wrapper">
       <div className="products-page">
-        <NavigationShower prevpage="Məhsullar" />
+        <NavigationShower prevpage="Kataloq" />
 
         <div className="container-products">
           <Filter />

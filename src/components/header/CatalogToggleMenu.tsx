@@ -76,7 +76,7 @@ const CatalogToggleMenu: React.FC = () => {
       }
     } catch (error) {
       console.log(error);
-    } 
+    }
   };
 
   return (
@@ -116,7 +116,7 @@ const CatalogToggleMenu: React.FC = () => {
                           onClick={() => {
                             //navigate products and show clicked category names
                             setCatalogMenu(false);
-                            getProductsToCatID(children?.id)
+                            getProductsToCatID(children?.id);
                           }}>
                           {children?.title}
                         </Link>
@@ -132,7 +132,7 @@ const CatalogToggleMenu: React.FC = () => {
                                   onClick={() => {
                                     //navigate products and show clicked category names
                                     setCatalogMenu(false);
-                                    getProductsToCatID(innerchilds?.id)
+                                    getProductsToCatID(innerchilds?.id);
                                   }}
                                   to="/products"
                                   className="inner-child-link"
