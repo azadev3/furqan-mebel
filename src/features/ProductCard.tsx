@@ -110,11 +110,15 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
 
   return (
     <React.Fragment>
-      {!selectedCategoryProducts ? (
+      {selectedCategoryProducts ? (
         <>
-          {priceAscData?.length > 0 && renderProducts(priceAscData)}
-          {priceMinMaxData?.length > 0 && renderProducts(priceMinMaxData)}
-          {otherFilterData?.length > 0 && renderProducts(otherFilterData)}
+          {priceAscData?.length > 0
+            ? renderProducts(priceAscData)
+            : priceMinMaxData?.length > 0
+            ? renderProducts(priceMinMaxData)
+            : otherFilterData?.length > 0
+            ? renderProducts(otherFilterData)
+            : renderProducts(selectedCategoryProducts)}
         </>
       ) : (
         renderProducts(selectedCategoryProducts)

@@ -7,7 +7,11 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { catalogState } from "../../recoil/Atoms";
 import { CgClose } from "react-icons/cg";
-import { CategoriesForFilterIsSelectedCategoryProductState } from "../productpageuitils/filteruitils/CategoriesForFilter";
+import {
+  CategoriesForFilterIsSelectedCategoryProductState,
+  CategoryNameForSelected,
+  CategoryNameForSelectedID,
+} from "../productpageuitils/filteruitils/CategoriesForFilter";
 
 export const clickedCategoryForFilter = atom<number | null>({
   key: "clickedCategoryForFilter",
@@ -79,6 +83,9 @@ const CatalogToggleMenu: React.FC = () => {
     }
   };
 
+  const [___, setCatName] = useRecoilState(CategoryNameForSelected);
+  const [_____, setCatID] = useRecoilState(CategoryNameForSelectedID);
+
   return (
     <div className="toggle-catalog-menu">
       <CgClose
@@ -117,6 +124,8 @@ const CatalogToggleMenu: React.FC = () => {
                             //navigate products and show clicked category names
                             setCatalogMenu(false);
                             getProductsToCatID(children?.id);
+                            setCatName(children?.title);
+                            setCatID(children?.id);
                           }}>
                           {children?.title}
                         </Link>
@@ -133,6 +142,8 @@ const CatalogToggleMenu: React.FC = () => {
                                     //navigate products and show clicked category names
                                     setCatalogMenu(false);
                                     getProductsToCatID(innerchilds?.id);
+                                    setCatName(innerchilds?.title);
+                                    setCatID(innerchilds?.id);
                                   }}
                                   to="/products"
                                   className="inner-child-link"
