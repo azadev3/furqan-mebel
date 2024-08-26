@@ -1,6 +1,6 @@
 import React from "react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
-import { CategoriesForFilterIsSelectedCategoryProductState, CatProductType } from "./filteruitils/CategoriesForFilter";
+import { CategoriesForFilterIsSelectedCategoryProductState, CategoryNameForSelected, CategoryNameForSelectedID, CatProductType } from "./filteruitils/CategoriesForFilter";
 import { LoadingState } from "../../recoil/Atoms";
 import Loader from "../../uitils/Loader";
 import ProductCard from "../../features/ProductCard";
@@ -56,10 +56,13 @@ const ProductsMain: React.FC = () => {
     }
   };
 
+  const catName = useRecoilValue(CategoryNameForSelected);
+  const catID = useRecoilValue(CategoryNameForSelectedID);
+
   return (
     <div className="products-main">
       {isLoading && <Loader />}
-      <span className="title">Məhsullar</span>
+      <span className="title">{catName[catID ? catID : 0] || "Məhsullar"}</span>
       <div className="container-product-main">
         <React.Fragment>
           {hasSelectedCatProd ? (

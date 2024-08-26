@@ -15,6 +15,15 @@ export const CategoriesForFilterIsSelectedCategoryProductState = atom<CatProduct
   default: [],
 });
 
+export const CategoryNameForSelected = atom<{ [key: number]: string }>({
+  key: "CategoryNameForSelected",
+  default: {},
+});
+export const CategoryNameForSelectedID = atom<number | null>({
+  key: "CategoryNameForSelectedID",
+  default: null,
+});
+
 export type Options = {
   id: number;
   title: string;
@@ -44,6 +53,9 @@ export interface CatProductType {
 }
 
 const CategoriesForFilter: React.FC = () => {
+  const [_, setCatName] = useRecoilState(CategoryNameForSelected);
+  const [___, setCatID] = useRecoilState(CategoryNameForSelectedID);
+
   // FETCH CATEGORIES
   const activelanguage = useRecoilValue(SelectedLanguageState);
   const { data: CategoryProductsData } = useQuery<Categories[]>({
@@ -96,15 +108,14 @@ const CategoriesForFilter: React.FC = () => {
       });
       if (response.data) {
         setSelectedProd(response.data?.products);
-        console.log(response.data?.products, 'tikladin ha')
       } else {
         console.log(response.status);
       }
     } catch (error) {
       console.log(error);
-    } 
+    }
   };
-  
+
   const getAllProducts = async () => {
     setLoading(true);
     try {
@@ -115,6 +126,8 @@ const CategoriesForFilter: React.FC = () => {
       });
       if (response.data) {
         setSelectedProd(response.data?.products);
+        setCatName("");
+        setCatID(null)
       } else {
         console.log(response.status);
       }
@@ -127,8 +140,6 @@ const CategoriesForFilter: React.FC = () => {
       }, 200);
     }
   };
-
-
 
   return (
     <section className="categories-for-filter">
@@ -159,6 +170,10 @@ const CategoriesForFilter: React.FC = () => {
                     className="get-all"
                     onClick={() => {
                       getProductsToCatID(categories?.id);
+                      setCatName(() => ({
+                        [categories?.id]: categories?.title,
+                      }));
+                      setCatID(categories?.id);
                     }}>
                     Bu kateqoriyadakı bütün məhsullar
                   </span>
@@ -184,6 +199,10 @@ const CategoriesForFilter: React.FC = () => {
                                 className="get-all"
                                 onClick={() => {
                                   getProductsToCatID(children?.id);
+                                  setCatName(() => ({
+                                    [children?.id]: children?.title,
+                                  }));
+                                  setCatID(children?.id);
                                 }}>
                                 Bu kateqoriyadakı bütün məhsullar
                               </span>
@@ -192,6 +211,10 @@ const CategoriesForFilter: React.FC = () => {
                                     <div
                                       onClick={() => {
                                         getProductsToCatID(innerchild?.id);
+                                        setCatName(() => ({
+                                          [innerchild?.id]: innerchild?.title,
+                                        }));
+                                        setCatID(innerchild?.id);
                                       }}
                                       key={innerchild?.id}
                                       className="inner-child-link">

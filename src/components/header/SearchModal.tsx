@@ -21,7 +21,7 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
   //if user searched, highlight the searched text if equal result text
   const HighlightedText = ({ text, highlight }: { text: any; highlight: any }) => {
     if (!highlight.trim()) {
-      return <>{text}</>;
+      return <>{text}</>
     }
 
     const parts = text.split(new RegExp(`(${highlight})`, "i"));
@@ -122,7 +122,7 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
                         <HighlightedText text={results?.title} highlight={searchedItems} />
                       </span>
                       <p>
-                        <HighlightedText text={results?.content} highlight={searchedItems} />
+                        <HighlightedText text={results?.category_name} highlight={searchedItems} />
                       </p>
                     </div>
                     <div className="right-prices">
