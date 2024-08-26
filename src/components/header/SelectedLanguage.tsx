@@ -10,7 +10,7 @@ const SelectedLanguage: React.FC = () => {
   const [activeLang, setActiveLang] = useRecoilState(SelectedLanguageState);
 
   React.useEffect(() => {
-    const savedLanguage = localStorage.getItem("language");
+    const savedLanguage = localStorage.getItem("language") || "az";
     if (savedLanguage) {
       setActiveLang(savedLanguage);
     }
