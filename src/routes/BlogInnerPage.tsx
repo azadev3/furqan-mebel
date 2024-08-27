@@ -7,6 +7,7 @@ import { useRecoilValue } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Baseurl } from "../api/Baseurl";
+import { Helmet } from "react-helmet";
 
 const BlogInnerPage: React.FC = () => {
   const { slug } = useParams();
@@ -36,6 +37,11 @@ const BlogInnerPage: React.FC = () => {
 
   return (
     <div className="blog-inner-page-wrapper">
+      <Helmet>
+        <title>{blogItem && blogItem?.meta_title}</title>
+        <meta name="keywords" content={blogItem && blogItem?.meta_keywords} />
+        <meta name="description" content={blogItem && blogItem?.meta_description} />
+      </Helmet>
       <div className="inner-page-blog">
         <NavigationShower prevpage={blogItem && blogItem.title.toString() ? blogItem.title : ""} />
 

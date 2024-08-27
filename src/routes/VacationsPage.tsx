@@ -10,6 +10,7 @@ import axios from "axios";
 import Loader from "../uitils/Loader";
 import Error from "../uitils/Error";
 import { useTranslations } from "../TranslateContext";
+import { Helmet } from "react-helmet";
 
 export const selectedVacationState = atom<string>({
   key: "selectedVacationState",
@@ -149,6 +150,13 @@ const VacationsPage: React.FC = () => {
 
   return (
     <div className="vacations-page-wrapper">
+          <Helmet>
+        <title>Furqan Mebel | Vakansiyalar</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="Your Name or Company" />
+        <meta name="theme-color" content="#ffffff" />
+      </Helmet>
       <div className="vacations-page">
         <NavigationShower prevpage={translations['vakansiyalar']} />
         <div className="container-vacations">

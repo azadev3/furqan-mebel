@@ -19,6 +19,8 @@ const Pagination = ({ data, itemsPerPage }: { data: BlogsType[]; itemsPerPage: n
 
   return (
     <div className="blogs">
+  
+
       <div className="grid-blogs">
         {data && currentData && data?.length > 0 ? (
           currentData.map((item: BlogsType) => (

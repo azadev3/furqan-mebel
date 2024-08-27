@@ -20,7 +20,12 @@ const FavProductCard: React.FC<props> = ({ favProduct }) => {
                 <div style={{ pointerEvents: "none" }} className="add-fav-icon">
                   <FaHeart className="iconadded" />
                 </div>
-                <img src={favproduct?.img} alt={`${favproduct?.id}-image`} title={favproduct?.title} />
+                <img
+                style={{cursor: "pointer"}}
+                onClick={() => {
+                  navigate(`/products/${favproduct?.slug}`);
+                }}
+                src={favproduct?.img} alt={`${favproduct?.id}-image`} title={favproduct?.title} />
                 {favproduct?.is_new && (
                   <div className="new-product-flag">
                     <span>yeni</span>

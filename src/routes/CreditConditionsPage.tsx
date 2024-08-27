@@ -9,6 +9,7 @@ import axios from "axios";
 import Loader from "../uitils/Loader";
 import Error from "../uitils/Error";
 import { useTranslations } from "../TranslateContext";
+import { Helmet } from "react-helmet";
 
 interface CreditConditions {
   id: number;
@@ -40,6 +41,13 @@ const CreditConditionsPage: React.FC = () => {
 
   return (
     <div className="credit-conditions-page-wrapper">
+          <Helmet>
+        <title>Furqan Mebel | Kredit</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="Your Name or Company" />
+        <meta name="theme-color" content="#ffffff" />
+      </Helmet>
       <div className="credit-conditions-page">
         <NavigationShower prevpage={translations["kredit_sertleri"]} />
 

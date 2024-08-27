@@ -50,7 +50,7 @@ const ProductSection: React.FC = () => {
   return (
     <section className="product-section">
       <div className="quantity-and-dimensions">
-        <h2 style={{ fontWeight: "500" }}>{productInner?.title}</h2>
+        <h1 style={{ fontWeight: "500" }}>{productInner?.title}</h1>
 
         <div className="sale">
           <strong className="price">{productInner?.price} AZN</strong>

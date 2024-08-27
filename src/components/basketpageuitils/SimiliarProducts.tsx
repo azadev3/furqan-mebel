@@ -11,7 +11,6 @@ import { useTranslations } from "../../TranslateContext";
 import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
 
 const SimiliarProducts: React.FC = () => {
-
   const navigate = useNavigate();
 
   const goInnerProductPage = (slug: string) => {
@@ -38,7 +37,14 @@ const SimiliarProducts: React.FC = () => {
 
   return (
     <div className="similiar-products">
-      <h1>{translations['benzer_mehsullar']}</h1>
+      <h2
+        style={{
+          color: "#000000",
+          fontWeight: "400",
+          fontSize: "60px",
+        }}>
+        {translations["benzer_mehsullar"]}
+      </h2>
 
       <div className="carouselsimiliar-products">
         <Swiper
@@ -67,7 +73,7 @@ const SimiliarProducts: React.FC = () => {
                   </div>
                   <div className="item-details">
                     <span className="category-name">{item?.category_name}</span>
-                    <span className="product-name">{item?.title}</span>
+                    <h1 className="product-name">{item?.title}</h1>
                     <div className="prices">
                       <span>{item?.price} AZN</span>
                       {item.discounted_price ? (

@@ -9,6 +9,7 @@ import getCookie from "../getCookie";
 import { useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../components/header/SelectedLanguage";
 import { UserIsAuthState } from "../recoil/Atoms";
+import { Helmet } from "react-helmet";
 // import Favorites from "../components/favoritespageuitils/Favorites";
 
 const FavouritesPage: React.FC = () => {
@@ -60,6 +61,13 @@ const FavouritesPage: React.FC = () => {
 
   return (
     <div className="favorit-page-wrapper">
+          <Helmet>
+        <title>Furqan Mebel | Favorilər</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="Your Name or Company" />
+        <meta name="theme-color" content="#ffffff" />
+      </Helmet>
       <div className="favorit-page">
         <NavigationShower prevpage="Sevimlilərim" />
         {isAdded ? <Favorites products={favOnDb ? favOnDb : favProducts ? favProducts : []} /> : <EmptyFavorites />}

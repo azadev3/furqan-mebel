@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Baseurl } from "../api/Baseurl";
 import axios from "axios";
 import { CatProductType } from "../components/productpageuitils/filteruitils/CategoriesForFilter";
+import { Helmet } from "react-helmet";
 
 const ProductInner: React.FC = () => {
   const { slugproduct } = useParams();
@@ -37,6 +38,11 @@ const ProductInner: React.FC = () => {
 
   return (
     <main className="product-inner-page-wrapper">
+          <Helmet>
+        <title>{productInner && productInner?.meta_title}</title>
+        <meta name="keywords" content={productInner && productInner?.meta_keywords} />
+        <meta name="description" content={productInner && productInner?.meta_description} />
+      </Helmet>
       <section className="productinnerpage">
         <NavigationShower
           prevpage={productInner && productInner.title.toString() ? productInner.title.toString() : ""}

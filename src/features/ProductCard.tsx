@@ -70,7 +70,12 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
             <div className="add-fav-icon" onClick={() => handleFavouriteClick(data)}>
               {added[data.id] ? <FaHeart className="iconadded" /> : <CiHeart className="icon" />}
             </div>
-            <img src={data.img} alt={`${data.id}-image`} title={data.title} />
+            <img 
+             style={{cursor: "pointer"}}
+             onClick={() => {
+               navigate(`/products/${data?.slug}`);
+             }}
+            src={data.img} alt={`${data.id}-image`} title={data.title} />
             {data.is_new && (
               <div className="new-product-flag">
                 <span>yeni</span>
@@ -110,15 +115,11 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
 
   return (
     <React.Fragment>
-      {selectedCategoryProducts ? (
+      {!selectedCategoryProducts ? (
         <>
-          {priceAscData?.length > 0
-            ? renderProducts(priceAscData)
-            : priceMinMaxData?.length > 0
-            ? renderProducts(priceMinMaxData)
-            : otherFilterData?.length > 0
-            ? renderProducts(otherFilterData)
-            : renderProducts(selectedCategoryProducts)}
+          {priceAscData?.length > 0 && renderProducts(priceAscData)}
+          {priceMinMaxData?.length > 0 && renderProducts(priceMinMaxData)}
+          {otherFilterData?.length > 0 && renderProducts(otherFilterData)}
         </>
       ) : (
         renderProducts(selectedCategoryProducts)

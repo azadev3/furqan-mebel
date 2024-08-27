@@ -7,6 +7,7 @@ import "./styles/responsive.scss";
 import ScrollToTop from "./ScrollToTop.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TranslateContextProvider } from "./TranslateContext.tsx";
+import { HelmetProvider } from "react-helmet-async";
 
 const queryClient = new QueryClient();
 
@@ -16,7 +17,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ScrollToTop>
         <QueryClientProvider client={queryClient}>
           <TranslateContextProvider>
-            <App />
+            <HelmetProvider>
+              <App />
+            </HelmetProvider>
           </TranslateContextProvider>
         </QueryClientProvider>
       </ScrollToTop>

@@ -8,6 +8,7 @@ import { Baseurl } from "../api/Baseurl";
 import Loader from "../uitils/Loader";
 import { useTranslations } from "../TranslateContext";
 import { Services } from "../components/homepageuitils/AboutAndServices";
+import { Helmet } from "react-helmet";
 
 type AboutType = {
   id: number;
@@ -49,6 +50,13 @@ const AboutPage: React.FC = () => {
 
   return (
     <div className="about-page-wrapper">
+      <Helmet>
+        <title>Furqan Mebel | Haqqımızda</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="Your Name or Company" />
+        <meta name="theme-color" content="#ffffff" />
+      </Helmet>
       <div className="about-page">
         <NavigationShower prevpage="Haqqımızda" />
 

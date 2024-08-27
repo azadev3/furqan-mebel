@@ -58,11 +58,10 @@ const ProductsMain: React.FC = () => {
 
   const catName = useRecoilValue(CategoryNameForSelected);
   const catID = useRecoilValue(CategoryNameForSelectedID);
-
   return (
     <div className="products-main">
       {isLoading && <Loader />}
-      <span className="title">{catName[catID ? catID : 0] || "Məhsullar"}</span>
+      <span className="title">{catID && catName[catID] ? catName[catID] : "Məhsullar"}</span>
       <div className="container-product-main">
         <React.Fragment>
           {hasSelectedCatProd ? (

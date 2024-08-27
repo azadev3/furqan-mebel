@@ -8,10 +8,19 @@ import AboutAndServices from "../components/homepageuitils/AboutAndServices";
 import CustomersComment from "../components/homepageuitils/CustomersComment";
 import Blog from "../components/homepageuitils/Blog";
 import Contact from "../components/homepageuitils/Contact";
+import { Helmet } from "react-helmet";
+
 
 const Homepage: React.FC = () => {
   return (
     <div className="homepage-wrapper">
+      <Helmet>
+        <title>Furqan Mebel | Ana səhifə</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="Your Name or Company" />
+        <meta name="theme-color" content="#ffffff" />
+      </Helmet>
       <div className="homepage">
         <Hero />
         <CategoriesSection />

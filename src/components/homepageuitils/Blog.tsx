@@ -19,6 +19,9 @@ export type BlogItemType = {
   category: string;
   blogtitle: string;
   blogdescription: string;
+  meta_title?: string | null,
+  meta_description?: string | null,
+  meta_keywords?: string | null,
   slug?: string;
 };
 
@@ -28,6 +31,9 @@ export interface BlogsType {
   content: string;
   img: string;
   created_at: string;
+  meta_title?: any,
+  meta_description?: any,
+  meta_keywords?: any,
   slug: string;
 }
 

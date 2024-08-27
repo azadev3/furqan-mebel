@@ -122,10 +122,12 @@ const CatalogToggleMenu: React.FC = () => {
                           key={children?.id}
                           onClick={() => {
                             //navigate products and show clicked category names
+                            setCatName(() => ({
+                              [children?.id]: children?.title,
+                            }));
+                            setCatID(children?.id);
                             setCatalogMenu(false);
                             getProductsToCatID(children?.id);
-                            setCatName(children?.title);
-                            setCatID(children?.id);
                           }}>
                           {children?.title}
                         </Link>
@@ -140,10 +142,12 @@ const CatalogToggleMenu: React.FC = () => {
                                 <Link
                                   onClick={() => {
                                     //navigate products and show clicked category names
+                                    setCatName(() => ({
+                                      [innerchilds?.id]: innerchilds?.title,
+                                    }));
+                                    setCatID(innerchilds?.id);
                                     setCatalogMenu(false);
                                     getProductsToCatID(innerchilds?.id);
-                                    setCatName(innerchilds?.title);
-                                    setCatID(innerchilds?.id);
                                   }}
                                   to="/products"
                                   className="inner-child-link"
