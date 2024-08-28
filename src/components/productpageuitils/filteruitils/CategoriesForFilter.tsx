@@ -9,6 +9,7 @@ import { ImagesPopularProducts, ModulesProducts } from "../../homepageuitils/Pop
 import { FaAngleDown } from "react-icons/fa6";
 import { BiCategoryAlt } from "react-icons/bi";
 import { LoadingState } from "../../../recoil/Atoms";
+import { Link } from "react-router-dom";
 
 export const CategoriesForFilterIsSelectedCategoryProductState = atom<CatProductType[]>({
   key: "CategoriesForFilterIsSelectedCategoryProductState",
@@ -99,22 +100,22 @@ const CategoriesForFilter: React.FC = () => {
 
   const [____, setSelectedProd] = useRecoilState(CategoriesForFilterIsSelectedCategoryProductState);
 
-  const getProductsToCatID = async (catid: number) => {
-    try {
-      const response = await axios.get(`https://admin.furqanmebel.az/api/all_products?category_id=${catid}`, {
-        headers: {
-          "Accept-Language": activelanguage,
-        },
-      });
-      if (response.data) {
-        setSelectedProd(response.data?.products);
-      } else {
-        console.log(response.status);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getProductsToCatID = async (catid: number) => {
+  //   try {
+  //     const response = await axios.get(`https://admin.furqanmebel.az/api/all_products?category_id=${catid}`, {
+  //       headers: {
+  //         "Accept-Language": activelanguage,
+  //       },
+  //     });
+  //     if (response.data) {
+  //       setSelectedProd(response.data?.products);
+  //     } else {
+  //       console.log(response.status);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const getAllProducts = async () => {
     setLoading(true);
@@ -127,7 +128,7 @@ const CategoriesForFilter: React.FC = () => {
       if (response.data) {
         setSelectedProd(response.data?.products);
         setCatName("");
-        setCatID(null)
+        setCatID(null);
       } else {
         console.log(response.status);
       }
@@ -166,17 +167,19 @@ const CategoriesForFilter: React.FC = () => {
                   <FaAngleDown className={`dropdownicon ${open[categories?.id] ? "active" : ""}`} />
                 </div>
                 {open[categories?.id] && (
-                  <span
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    to={`/catalog/${categories?.slug}`}
                     className="get-all"
                     onClick={() => {
-                      getProductsToCatID(categories?.id);
-                      setCatName(() => ({
-                        [categories?.id]: categories?.title,
-                      }));
+                      // getProductsToCatID(categories?.id);
+                      // setCatName(() => ({
+                      //   [categories?.id]: categories?.title,
+                      // }));
                       setCatID(categories?.id);
                     }}>
                     Bu kateqoriyadakı bütün məhsullar
-                  </span>
+                  </Link>
                 )}
 
                 {open[categories?.id] && (
@@ -195,31 +198,33 @@ const CategoriesForFilter: React.FC = () => {
                           </div>
                           {openChildren[children?.id] && (
                             <React.Fragment>
-                              <span
+                              <Link
+                                style={{ textDecoration: "none" }}
+                                to={`/catalog/${children?.slug}`}
                                 className="get-all"
                                 onClick={() => {
-                                  getProductsToCatID(children?.id);
-                                  setCatName(() => ({
-                                    [children?.id]: children?.title,
-                                  }));
+                                  // getProductsToCatID(categories?.id);
+                                  // setCatName(() => ({
+                                  //   [categories?.id]: categories?.title,
+                                  // }));
                                   setCatID(children?.id);
                                 }}>
                                 Bu kateqoriyadakı bütün məhsullar
-                              </span>
+                              </Link>
                               {children && children?.children?.length > 0
                                 ? children?.children?.map((innerchild: InnerChilds) => (
-                                    <div
+                                    <Link to={`/catalog/${innerchild?.slug}`}
                                       onClick={() => {
-                                        getProductsToCatID(innerchild?.id);
-                                        setCatName(() => ({
-                                          [innerchild?.id]: innerchild?.title,
-                                        }));
+                                        // getProductsToCatID(innerchild?.id);
+                                        // setCatName(() => ({
+                                        //   [innerchild?.id]: innerchild?.title,
+                                        // }));
                                         setCatID(innerchild?.id);
                                       }}
                                       key={innerchild?.id}
                                       className="inner-child-link">
                                       {innerchild?.title}
-                                    </div>
+                                    </Link>
                                   ))
                                 : ""}
                             </React.Fragment>

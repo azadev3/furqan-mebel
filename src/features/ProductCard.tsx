@@ -108,11 +108,6 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
       <p>No products found.</p>
     );
   };
-
-  React.useEffect(() => {
-    console.log("seclen", selectedCategoryProducts);
-  }, [selectedCategoryProducts]);
-
   return (
     <React.Fragment>
       {!selectedCategoryProducts ? (

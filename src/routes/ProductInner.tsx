@@ -32,13 +32,16 @@ const ProductInner: React.FC = () => {
     staleTime: 1000000,
   });
 
-  const productInner = allProductsData && allProductsData?.length > 0 && allProductsData.find((item: CatProductType) => {
-    return item?.slug.toLowerCase() === slugproduct?.toLowerCase();
-  });
+  const productInner =
+    allProductsData &&
+    allProductsData?.length > 0 &&
+    allProductsData.find((item: CatProductType) => {
+      return item?.slug.toLowerCase() === slugproduct?.toLowerCase();
+    });
 
   return (
     <main className="product-inner-page-wrapper">
-          <Helmet>
+      <Helmet>
         <title>{productInner && productInner?.meta_title}</title>
         <meta name="keywords" content={productInner && productInner?.meta_keywords} />
         <meta name="description" content={productInner && productInner?.meta_description} />

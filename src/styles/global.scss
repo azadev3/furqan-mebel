@@ -1347,3 +1347,7 @@ $border-top-color_1: rgb(57, 190, 57);
 .homepage-wrapper .homepage .special-offers-wrapper .special-offers .gridoffer .left .text-for-left .formore {
   display: flex !important;
 }
+
+.homepage-wrapper .homepage .hero-wrapper .hero .filter {
+  z-index: 0 !important;
+}

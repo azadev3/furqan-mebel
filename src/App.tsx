@@ -49,6 +49,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { CgClose } from "react-icons/cg";
+import CatalogPage from "./components/CatalogPage";
 
 const App: React.FC = () => {
   const [isAuth, setAuth] = useRecoilState(UserIsAuthState);
@@ -269,6 +270,8 @@ const App: React.FC = () => {
       });
     }
   };
+
+ 
   return (
     <div className="app">
   
@@ -409,6 +412,7 @@ const App: React.FC = () => {
         <Route path="/vacations" element={<VacationsPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/:slugproduct" element={<ProductInner />} />
+        <Route path="/catalog/:slugcategory/*" element={<CatalogPage />} />
         <Route path="/mybasket" element={<BasketPage />} />
         <Route path="/delivery" element={<DeliveryPage />} />
         <Route path="/paymentdetails" element={<PaymentDetails />} />

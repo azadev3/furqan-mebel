@@ -7,6 +7,8 @@ import axios from "axios";
 import { Baseurl } from "../api/Baseurl";
 import Loader from "../uitils/Loader";
 import { useTranslations } from "../TranslateContext";
+import { useSeo } from "../useSeo";
+import { Helmet } from "react-helmet";
 
 export type OfficeImages = {
   id: number;
@@ -43,15 +45,23 @@ const StorePage: React.FC = () => {
 
   const { translations } = useTranslations();
 
-
-  // Seçilen konumun resimlerini filtreleme
   const selectedLocationImages = contactItemsData?.find(
     (item) => item.branch_address === selectedLocation
   )?.office_images;
 
+  const seoData = useSeo("stores_page");
 
   return (
     <div className="store-page-wrapper">
+      <Helmet>
+        <title>{seoData?.title || "Furqan Mebel"}</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="Furqan Mebel" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="keywords" content={seoData?.seo_keywords || ""} />
+        <meta name="description" content={seoData?.seo_description || ""} />
+      </Helmet>
       <div className="store-page">
         <NavigationShower prevpage={translations["magazalar"]} />
         <div className="map-and-locations">
@@ -61,8 +71,7 @@ const StorePage: React.FC = () => {
                 <span
                   onClick={() => handleSelectLocation(item.branch_address)}
                   key={i}
-                  className={`link-location ${selectedLocation === item.branch_address ? "activelocation" : ""}`}
-                >
+                  className={`link-location ${selectedLocation === item.branch_address ? "activelocation" : ""}`}>
                   <span>{item.branch_name}</span>
                   <div className="logo-and-location">
                     <img src="../locationicon.svg" alt="location" title={item.branch_address} />

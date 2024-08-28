@@ -9,6 +9,7 @@ import Loader from "../uitils/Loader";
 import { useTranslations } from "../TranslateContext";
 import { Services } from "../components/homepageuitils/AboutAndServices";
 import { Helmet } from "react-helmet";
+import { useSeo } from "../useSeo";
 
 type AboutType = {
   id: number;
@@ -31,9 +32,9 @@ const AboutPage: React.FC = () => {
     },
   });
 
-   //Fetch services data
-   const activeLanguage = useRecoilValue(SelectedLanguageState);
-   const { data: ServicesData } = useQuery<Services[]>({
+  //Fetch services data
+  const activeLanguage = useRecoilValue(SelectedLanguageState);
+  const { data: ServicesData } = useQuery<Services[]>({
     queryKey: ["servicesDataKey", activeLanguage],
     queryFn: async () => {
       const response = await axios.get(`${Baseurl}/services`, {
@@ -48,14 +49,18 @@ const AboutPage: React.FC = () => {
 
   const hasServicesData = ServicesData && ServicesData?.length > 0;
 
+  const seoData = useSeo("about_page");
+
   return (
     <div className="about-page-wrapper">
       <Helmet>
-        <title>Furqan Mebel | Haqqımızda</title>
+        <title>{seoData?.title || "Furqan Mebel | Haqqımızda"}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="author" content="Your Name or Company" />
         <meta name="theme-color" content="#ffffff" />
+        <meta name="keywords" content={seoData?.seo_keywords || ""} />
+        <meta name="description" content={seoData?.seo_description || ""} />
       </Helmet>
       <div className="about-page">
         <NavigationShower prevpage="Haqqımızda" />
@@ -83,24 +88,25 @@ const AboutPage: React.FC = () => {
         <div className="services-us">
           <h2>{translations["xidmetlerimiz"]}</h2>
           <div className="grid-services">
-            {hasServicesData && ServicesData?.map((item: Services, index: number) => (
-              <div className="item-service" key={item.id}>
-                <div className="icon">
-                  <img
-                    style={{ borderRadius: "100px" }}
-                    width="633"
-                    height="633"
-                    src={item.img ? item.img : ""}
-                    alt={`${index}-icon`}
-                  />
-                </div>
+            {hasServicesData &&
+              ServicesData?.map((item: Services, index: number) => (
+                <div className="item-service" key={item.id}>
+                  <div className="icon">
+                    <img
+                      style={{ borderRadius: "100px" }}
+                      width="633"
+                      height="633"
+                      src={item.img ? item.img : ""}
+                      alt={`${index}-icon`}
+                    />
+                  </div>
 
-                <div className="titles-bottom">
-                  <span>{item?.title}</span>
-                  <p>{item?.content}</p>
+                  <div className="titles-bottom">
+                    <span>{item?.title}</span>
+                    <p>{item?.content}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>

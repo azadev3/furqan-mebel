@@ -10,6 +10,7 @@ import Loader from "../uitils/Loader";
 import Error from "../uitils/Error";
 import { useTranslations } from "../TranslateContext";
 import { Helmet } from "react-helmet";
+import { useSeo } from "../useSeo";
 
 interface CreditConditions {
   id: number;
@@ -39,14 +40,18 @@ const CreditConditionsPage: React.FC = () => {
   });
   const { translations } = useTranslations();
 
+  const seoData = useSeo("credit_page");
+
   return (
     <div className="credit-conditions-page-wrapper">
-          <Helmet>
-        <title>Furqan Mebel | Kredit</title>
+      <Helmet>
+        <title>{seoData?.title || "Furqan Mebel | Kredit"}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="author" content="Your Name or Company" />
+        <meta name="author" content="Furqan Mebel" />
         <meta name="theme-color" content="#ffffff" />
+        <meta name="keywords" content={seoData?.seo_keywords || ""} />
+        <meta name="description" content={seoData?.seo_description || ""} />
       </Helmet>
       <div className="credit-conditions-page">
         <NavigationShower prevpage={translations["kredit_sertleri"]} />

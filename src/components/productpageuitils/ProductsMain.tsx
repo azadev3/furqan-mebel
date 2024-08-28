@@ -1,6 +1,11 @@
 import React from "react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
-import { CategoriesForFilterIsSelectedCategoryProductState, CategoryNameForSelected, CategoryNameForSelectedID, CatProductType } from "./filteruitils/CategoriesForFilter";
+import {
+  CategoriesForFilterIsSelectedCategoryProductState,
+  CategoryNameForSelected,
+  CategoryNameForSelectedID,
+  CatProductType,
+} from "./filteruitils/CategoriesForFilter";
 import { LoadingState } from "../../recoil/Atoms";
 import Loader from "../../uitils/Loader";
 import ProductCard from "../../features/ProductCard";
@@ -23,23 +28,25 @@ export const OthersFilterData = atom<CatProductType[]>({
 });
 
 const ProductsMain: React.FC = () => {
-  const isLoading = useRecoilValue(LoadingState);
+
+  const [isLoading, setIsLoading] = useRecoilState(LoadingState);
   const [selectedCategoryProducts, setSelectedProd] = useRecoilState(CategoriesForFilterIsSelectedCategoryProductState);
+  
+  const hasSelectedCatProd = selectedCategoryProducts && selectedCategoryProducts.length > 0;
 
-  const hasSelectedCatProd = selectedCategoryProducts && selectedCategoryProducts?.length > 0;
-
-  //price sort asc
+  // price sort asc
   const priceAscData = useRecoilValue(PriceAscDataState);
 
-  //price min max data
+  // price min max data
   const priceMinMaxData = useRecoilValue(PriceMinMaxState);
-  
-  //others filter data
+
+  // others filter data
   const otherFilterData = useRecoilValue(OthersFilterData);
-  
+
   const activelanguage = useRecoilValue(SelectedLanguageState);
 
   const getAllProducts = async () => {
+    setIsLoading(true); // Start loading
     try {
       const response = await axios.get("https://admin.furqanmebel.az/api/all_products", {
         headers: {
@@ -53,31 +60,37 @@ const ProductsMain: React.FC = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
   const catName = useRecoilValue(CategoryNameForSelected);
   const catID = useRecoilValue(CategoryNameForSelectedID);
+
+  React.useEffect(() => {
+    getAllProducts();
+  }, [activelanguage]); // Depend on activelanguage
+
   return (
     <div className="products-main">
-      {isLoading && <Loader />}
       <span className="title">{catID && catName[catID] ? catName[catID] : "Məhsullar"}</span>
       <div className="container-product-main">
-        <React.Fragment>
-          {hasSelectedCatProd ? (
-            <ProductCard
-              priceMinMaxData={priceMinMaxData}
-              selectedCategoryProducts={selectedCategoryProducts}
-              priceAscData={priceAscData}
-              otherFilterData={otherFilterData}
-            />
-          ) : (
-            <div className="no-content-msg">
-              <p>Məhsul yoxdur.</p>
-              <button onClick={getAllProducts}>Bütün məhsullara bax</button>
-            </div>
-          )}
-        </React.Fragment>
+        {isLoading ? (
+          <Loader />
+        ) : hasSelectedCatProd ? (
+          <ProductCard
+            priceMinMaxData={priceMinMaxData}
+            selectedCategoryProducts={selectedCategoryProducts}
+            priceAscData={priceAscData}
+            otherFilterData={otherFilterData}
+          />
+        ) : (
+          <div className="no-content-msg">
+            <p>Məhsul yoxdur.</p>
+            <button onClick={getAllProducts}>Bütün məhsullara bax</button>
+          </div>
+        )}
       </div>
     </div>
   );

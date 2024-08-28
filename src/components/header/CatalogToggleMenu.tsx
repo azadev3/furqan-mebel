@@ -4,11 +4,10 @@ import { atom, useRecoilState, useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "./SelectedLanguage";
 import { Baseurl } from "../../api/Baseurl";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { catalogState } from "../../recoil/Atoms";
 import { CgClose } from "react-icons/cg";
 import {
-  CategoriesForFilterIsSelectedCategoryProductState,
   CategoryNameForSelected,
   CategoryNameForSelectedID,
 } from "../productpageuitils/filteruitils/CategoriesForFilter";
@@ -22,11 +21,13 @@ export type InnerChilds = {
   id: number;
   title: string;
   img: string | null;
+  slug: string,
 };
 
 export type Children = {
   id: number;
   title: string;
+  slug: string,
   img: string | null;
   children: InnerChilds[];
 };
@@ -35,6 +36,7 @@ export interface Categories {
   id: number;
   title: string;
   img: string | null;
+  slug: string,
   children: Children[];
 }
 
@@ -63,28 +65,10 @@ const CatalogToggleMenu: React.FC = () => {
   const handleHoverCategory = (id: number) => {
     setHoveredCategory(id);
   };
-
-  const [____, setSelectedProd] = useRecoilState(CategoriesForFilterIsSelectedCategoryProductState);
-
-  const getProductsToCatID = async (catid: number) => {
-    try {
-      const response = await axios.get(`https://admin.furqanmebel.az/api/all_products?category_id=${catid}`, {
-        headers: {
-          "Accept-Language": activelanguage,
-        },
-      });
-      if (response.data) {
-        setSelectedProd(response.data?.products);
-      } else {
-        console.log(response.status);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const [___, setCatName] = useRecoilState(CategoryNameForSelected);
   const [_____, setCatID] = useRecoilState(CategoryNameForSelectedID);
+
+  const navigate = useNavigate();
 
   return (
     <div className="toggle-catalog-menu">
@@ -101,6 +85,11 @@ const CatalogToggleMenu: React.FC = () => {
               <span
                 className={`${hoveredCategory === item?.id ? "actived-cat" : ""}`}
                 key={item?.id}
+                onClick={() => {
+                  navigate(`/catalog/${item?.slug}`);
+                  setCatalogMenu(false);
+                  setCatID(item?.id);
+                }}
                 onMouseEnter={() => {
                   handleHoverCategory(item?.id);
                 }}>
@@ -118,7 +107,7 @@ const CatalogToggleMenu: React.FC = () => {
                   ? item.children?.map((children: Children) => (
                       <div className="links-categories" key={children?.id}>
                         <Link
-                          to="/products"
+                          to={`/catalog/${children?.slug}`}
                           key={children?.id}
                           onClick={() => {
                             //navigate products and show clicked category names
@@ -127,7 +116,6 @@ const CatalogToggleMenu: React.FC = () => {
                             }));
                             setCatID(children?.id);
                             setCatalogMenu(false);
-                            getProductsToCatID(children?.id);
                           }}>
                           {children?.title}
                         </Link>
@@ -147,9 +135,8 @@ const CatalogToggleMenu: React.FC = () => {
                                     }));
                                     setCatID(innerchilds?.id);
                                     setCatalogMenu(false);
-                                    getProductsToCatID(innerchilds?.id);
                                   }}
-                                  to="/products"
+                                  to={`/catalog/${innerchilds?.slug}`}
                                   className="inner-child-link"
                                   key={innerchilds?.id}>
                                   {innerchilds?.title}

@@ -1106,6 +1106,11 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 36px;
+            position: relative;
+            .loader-container {
+              position: absolute;
+              top: -260px;
+            }
           }
 
           .no-content-msg {

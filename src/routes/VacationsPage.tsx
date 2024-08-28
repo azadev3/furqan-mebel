@@ -11,6 +11,7 @@ import Loader from "../uitils/Loader";
 import Error from "../uitils/Error";
 import { useTranslations } from "../TranslateContext";
 import { Helmet } from "react-helmet";
+import { useSeo } from "../useSeo";
 
 export const selectedVacationState = atom<string>({
   key: "selectedVacationState",
@@ -107,18 +108,17 @@ export const VacationDescriptionItem: VacationDetailsItemType[] = [
 ];
 
 export interface VacationsTypes {
-  id: number,
-  title: string,
-  branch: string,
-  description: string,
-  requirement: string,
-  email: string,
-  phone: string,
-  slug: string,
+  id: number;
+  title: string;
+  branch: string;
+  description: string;
+  requirement: string;
+  email: string;
+  phone: string;
+  slug: string;
 }
 
 const VacationsPage: React.FC = () => {
-
   // FETCH VACATIONS
   const activelanguage = useRecoilValue(SelectedLanguageState);
   const {
@@ -138,6 +138,10 @@ const VacationsPage: React.FC = () => {
     staleTime: 1000000,
   });
 
+  const { translations } = useTranslations();
+
+  const seoData = useSeo("vacation_page");
+
   if (isLoading) {
     return <Loader />;
   }
@@ -145,23 +149,23 @@ const VacationsPage: React.FC = () => {
   if (isError) {
     return <Error />;
   }
-
-  const { translations } = useTranslations();
-
+  
   return (
     <div className="vacations-page-wrapper">
-          <Helmet>
-        <title>Furqan Mebel | Vakansiyalar</title>
+      <Helmet>
+        <title>{seoData?.title || "Furqan Mebel"}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="author" content="Your Name or Company" />
+        <meta name="author" content="Furqan Mebel" />
         <meta name="theme-color" content="#ffffff" />
+        <meta name="keywords" content={seoData?.seo_keywords || ""} />
+        <meta name="description" content={seoData?.seo_description || ""} />
       </Helmet>
       <div className="vacations-page">
-        <NavigationShower prevpage={translations['vakansiyalar']} />
+        <NavigationShower prevpage={translations["vakansiyalar"]} />
         <div className="container-vacations">
           <div className="left-vacations">
-            <Vacations data={VacationsData}/>
+            <Vacations data={VacationsData} />
           </div>
           <div className="right-vacation-content">
             <VacationContent data={VacationsData} />

@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../components/header/SelectedLanguage";
 import { UserIsAuthState } from "../recoil/Atoms";
 import { Helmet } from "react-helmet";
+import { useSeo } from "../useSeo";
 // import Favorites from "../components/favoritespageuitils/Favorites";
 
 const FavouritesPage: React.FC = () => {
@@ -59,14 +60,18 @@ const FavouritesPage: React.FC = () => {
     }
   }, []);
 
+  const seoData = useSeo("favourites_page");
+
   return (
     <div className="favorit-page-wrapper">
-          <Helmet>
-        <title>Furqan Mebel | Favorilər</title>
+      <Helmet>
+        <title>{seoData?.title || "Furqan Mebel"}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="author" content="Your Name or Company" />
+        <meta name="author" content="Furqan Mebel" />
         <meta name="theme-color" content="#ffffff" />
+        <meta name="keywords" content={seoData?.seo_keywords || ""} />
+        <meta name="description" content={seoData?.seo_description || ""} />
       </Helmet>
       <div className="favorit-page">
         <NavigationShower prevpage="Sevimlilərim" />

@@ -1,31 +1,54 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslations } from "../../TranslateContext";
+import { useQuery } from "@tanstack/react-query";
+import { Baseurl } from "../../api/Baseurl";
+import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { SelectedLanguageState } from "../header/SelectedLanguage";
 
 export type InformationItemType = {
   id: number;
   title: string;
   icon: string;
+  value: string;
 };
 
 const Contact: React.FC = () => {
-  const InformationItems: InformationItemType[] = [
-    {
-      id: 1,
-      title: "Bakı şəhəri, Binəqədi şossesi , küçə 1/22",
-      icon: "../location.svg",
+
+  
+  // fetch socials
+  const activelanguage = useRecoilValue(SelectedLanguageState);
+  const { data: sss } = useQuery<InformationItemType[]>({
+    queryKey: ["sss", activelanguage],
+    queryFn: async () => {
+      const response = await axios.get(`${Baseurl}/contact_items`, {
+        headers: {
+          "Accept-Language": activelanguage,
+        },
+      });
+      return response.data?.contact_items;
     },
-    {
-      id: 2,
-      title: "info@woodstore.az",
-      icon: "../sms.svg",
-    },
-    {
-      id: 3,
-      title: "+994 50 576 80 80",
-      icon: "../mynaui_telephone.svg",
-    },
-  ];
+    staleTime: 1000000,
+  });
+
+  // const InformationItems: InformationItemType[] = [
+  //   {
+  //     id: 1,
+  //     title: "Bakı şəhəri, Binəqədi şossesi , küçə 1/22",
+  //     icon: "../location.svg",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "info@woodstore.az",
+  //     icon: "../sms.svg",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "+994 50 576 80 80",
+  //     icon: "../mynaui_telephone.svg",
+  //   },
+  // ];
 
   const navigate = useNavigate();
 
@@ -58,12 +81,12 @@ const Contact: React.FC = () => {
           <div className="information">
             <h1>{translations['elaqe_melumatlari']}</h1>
             <div className="information-items">
-              {InformationItems.map((item: InformationItemType, i:number) => (
-                <Link to={i === 1 ? `mailto:${item.title}` : i === 2 ? `tel:${item.title}` : ""} key={item.id}>
+              {sss && sss?.length > 0 ? sss?.map((item: InformationItemType) => (
+                <Link to={item?.value} key={item.id}>
                   <img src={item.icon ? item.icon : ""} alt={`${item.id}-icon`} title={item.title} />
                   <span>{item.title}</span>
                 </Link>
-              ))}
+              )) : ""}
             </div>
           </div>
         </div>

@@ -40,7 +40,6 @@ const FilterRelations: React.FC = () => {
           "Accept-Language": activeLang,
         },
       });
-      console.log(response.data?.filters, "filterler");
       return response.data?.filters;
     },
   });
@@ -86,7 +85,6 @@ const FilterRelations: React.FC = () => {
       })
       .then((response) => {
         setOthersFilterData(response.data?.products);
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);

@@ -23,36 +23,39 @@ const NavigationShower: React.FC<props> = (props) => {
   const isBlogInnerPage = useMatch("/blog/:slug");
 
   const isProductInnerPage = useMatch("/products/:slugproduct");
+  const isCatalogPage = useMatch("/catalog/:slugcategory");
 
   const navigate = useNavigate();
 
   const selectedCat = useRecoilValue(CategoriesForFilterIsSelectedCategoryProductState);
 
-    // FETCH CATEGORIES
-    const activelanguage = useRecoilValue(SelectedLanguageState);
-    const { data: CategoryProductsData } = useQuery<Categories[]>({
-      queryKey: ["categoryProductsKey", activelanguage],
-      queryFn: async () => {
-        const response = await axios.get(`${Baseurl}/categories`, {
-          headers: {
-            "Accept-Language": activelanguage,
-          },
-        });
-        return response.data?.categories;
-      },
-      staleTime: 1000000,
-    });
+  // FETCH CATEGORIES
+  const activelanguage = useRecoilValue(SelectedLanguageState);
+  const { data: CategoryProductsData } = useQuery<Categories[]>({
+    queryKey: ["categoryProductsKey", activelanguage],
+    queryFn: async () => {
+      const response = await axios.get(`${Baseurl}/categories`, {
+        headers: {
+          "Accept-Language": activelanguage,
+        },
+      });
+      return response.data?.categories;
+    },
+    staleTime: 1000000,
+  });
 
-    const ids = CategoryProductsData?.find((item: Categories) => {
-      item?.children?.map((child: Children) => {
-        child?.children?.map((innerchild: InnerChilds) => {
-          const selectedCategoryId = selectedCat?.length > 0 && selectedCat?.map((s: CatProductType) => {
-            return innerchild?.id === s?.category_id
+  const ids = CategoryProductsData?.find((item: Categories) => {
+    item?.children?.map((child: Children) => {
+      child?.children?.map((innerchild: InnerChilds) => {
+        const selectedCategoryId =
+          selectedCat?.length > 0 &&
+          selectedCat?.map((s: CatProductType) => {
+            return innerchild?.id === s?.category_id;
           });
-          return selectedCategoryId;
-        })
-      })
+        return selectedCategoryId;
+      });
     });
+  });
 
   return (
     <div className="navigation-shower">
@@ -80,8 +83,17 @@ const NavigationShower: React.FC<props> = (props) => {
             Kataloq
           </Link>
         </>
+      ) : isCatalogPage ? (
+        <>
+          <span className="slash">/</span>
+          <Link to="/products" className="prevpage" style={{ textDecoration: "none" }}>
+            Kataloq
+          </Link>
+        </>
       ) : null}
-      <span className="slash">/</span>
+      <span style={{ display: isCatalogPage ? "none" : "" }} className="slash">
+        /
+      </span>
 
       {props?.prevpage === "Kataloq" ? (
         <>
