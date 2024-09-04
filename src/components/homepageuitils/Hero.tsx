@@ -10,18 +10,19 @@ import { Baseurl } from "../../api/Baseurl";
 import Loader from "../../uitils/Loader";
 import Error from "../../uitils/Error";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { useTranslations } from "../../TranslateContext";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 type HeroDataType = {
   id: string;
   title: string;
   content: string;
   video: string;
-  image: string,
-  is_image: boolean,
+  image: string;
+  is_image: boolean;
 };
 
 const Hero: React.FC = () => {
@@ -45,6 +46,15 @@ const Hero: React.FC = () => {
     staleTime: 10000000,
   });
 
+  const swiperRef = React.useRef<any>();
+
+  const handlePrev = () => {
+    swiperRef?.current && swiperRef.current.slidePrev();
+  };
+
+  const handleNext = () => {
+    swiperRef?.current && swiperRef.current.slideNext();
+  };
 
   return (
     <div className="hero-wrapper">
@@ -55,7 +65,22 @@ const Hero: React.FC = () => {
       ) : (
         <React.Fragment>
           {HeroData && HeroData.length > 0 ? (
-            <Swiper pagination={{ dynamicBullets: true, clickable: true }} modules={[Pagination]} className="mySwiper">
+            <Swiper
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper;
+              }}
+              navigation={{
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              }}
+              loop={true}
+              speed={3000}
+              autoplay={{
+                delay: 4000,
+              }}
+              pagination={{ dynamicBullets: true, clickable: true }}
+              modules={[Pagination, Navigation, Autoplay]}
+              className="mySwiper">
               {HeroData.map((item: HeroDataType) => (
                 <SwiperSlide key={item.id}>
                   <div className="hero">
@@ -85,6 +110,14 @@ const Hero: React.FC = () => {
           ) : (
             ""
           )}
+          <div className="buttons">
+            <button onClick={handlePrev}>
+              <GrFormPrevious className="icon" />
+            </button>
+            <button onClick={handleNext}>
+              <GrFormNext className="icon" />
+            </button>
+          </div>
         </React.Fragment>
       )}
     </div>

@@ -18,6 +18,43 @@
     .hero-wrapper {
       width: 100%;
       background-color: transparent;
+      .buttons {
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: transparent;
+        top: 300px;
+        padding: 0px 36px;
+        button {
+          background-color: rgba(255, 255, 255, 0.902);
+          cursor: pointer;
+          border-radius: 50%;
+          border: none;
+          outline: none;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          transition: 150ms ease-in-out;
+          .icon {
+            transition: 150ms ease-in-out;
+            font-size: 36px;
+            color: green;
+          }
+          &:hover {
+            background-color: rgb(124, 198, 124);
+            .icon {
+              color: white;
+            }
+          }
+        }
+      }
       .hero {
         width: 100%;
         height: 800px;
@@ -136,7 +173,7 @@
           width: 100%;
           height: 100%;
         }
-        
+
         .swiper-slide {
           text-align: center;
           font-size: 18px;
@@ -145,15 +182,13 @@
           justify-content: center;
           align-items: center;
         }
-        
+
         .swiper-slide img {
           display: block;
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
-        
-
       }
     }
 
@@ -366,8 +401,9 @@
               position: absolute;
               top: -8rem;
             }
-            
-            .add-favourites, .add-basket {
+
+            .add-favourites,
+            .add-basket {
               z-index: 10000000;
               position: absolute;
               z-index: 100000;
@@ -389,7 +425,7 @@
                 color: #000000;
               }
               .fav-icon-fill {
-                color: #E41818;
+                color: #e41818;
                 font-size: 21px;
               }
             }
@@ -1195,7 +1231,6 @@
                 text-align: center;
                 margin-top: 11px;
               }
-              
             }
           }
         }

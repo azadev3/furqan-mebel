@@ -49,6 +49,11 @@ const StorePage: React.FC = () => {
     (item) => item.branch_address === selectedLocation
   )?.office_images;
 
+  React.useEffect(() => {
+    if (contactItemsData && contactItemsData.length > 0) {
+      setSelectedLocation(contactItemsData[0].branch_address);
+    }
+  }, [contactItemsData]);
   const seoData = useSeo("stores_page");
 
   return (
