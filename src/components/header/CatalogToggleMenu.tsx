@@ -89,6 +89,10 @@ const CatalogToggleMenu: React.FC = () => {
                   navigate(`/catalog/${item?.slug}`);
                   setCatalogMenu(false);
                   setCatID(item?.id);
+                  setCatName(() => ({
+                    [item?.id]: item?.title,
+                  }));
+                  localStorage.setItem("catname", item?.title);
                 }}
                 onMouseEnter={() => {
                   handleHoverCategory(item?.id);
@@ -116,6 +120,7 @@ const CatalogToggleMenu: React.FC = () => {
                             }));
                             setCatID(children?.id);
                             setCatalogMenu(false);
+                            localStorage.setItem("catname", children?.title);
                           }}>
                           {children?.title}
                         </Link>
@@ -135,6 +140,7 @@ const CatalogToggleMenu: React.FC = () => {
                                     }));
                                     setCatID(innerchilds?.id);
                                     setCatalogMenu(false);
+                                    localStorage.setItem("catname", innerchilds?.title);
                                   }}
                                   to={`/catalog/${innerchilds?.slug}`}
                                   className="inner-child-link"

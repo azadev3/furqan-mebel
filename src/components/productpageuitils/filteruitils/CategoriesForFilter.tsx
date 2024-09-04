@@ -9,7 +9,7 @@ import { ImagesPopularProducts, ModulesProducts } from "../../homepageuitils/Pop
 import { FaAngleDown } from "react-icons/fa6";
 import { BiCategoryAlt } from "react-icons/bi";
 import { LoadingState } from "../../../recoil/Atoms";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const CategoriesForFilterIsSelectedCategoryProductState = atom<CatProductType[]>({
   key: "CategoriesForFilterIsSelectedCategoryProductState",
@@ -142,6 +142,8 @@ const CategoriesForFilter: React.FC = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <section className="categories-for-filter">
       <div className="top-title">
@@ -150,7 +152,12 @@ const CategoriesForFilter: React.FC = () => {
       </div>
 
       <div className="categories-main-items">
-        <section className="all-products" onClick={getAllProducts}>
+        <section
+          className="all-products"
+          onClick={() => {
+            getAllProducts();
+            navigate("/products");
+          }}>
           <span>Bütün məhsullar</span>
         </section>
 
@@ -173,10 +180,11 @@ const CategoriesForFilter: React.FC = () => {
                     className="get-all"
                     onClick={() => {
                       // getProductsToCatID(categories?.id);
-                      // setCatName(() => ({
-                      //   [categories?.id]: categories?.title,
-                      // }));
+                      setCatName(() => ({
+                        [categories?.id]: categories?.title,
+                      }));
                       setCatID(categories?.id);
+                      localStorage.setItem("catname", categories?.title);
                     }}>
                     Bu kateqoriyadakı bütün məhsullar
                   </Link>
@@ -204,22 +212,25 @@ const CategoriesForFilter: React.FC = () => {
                                 className="get-all"
                                 onClick={() => {
                                   // getProductsToCatID(categories?.id);
-                                  // setCatName(() => ({
-                                  //   [categories?.id]: categories?.title,
-                                  // }));
+                                  setCatName(() => ({
+                                    [children?.id]: children?.title,
+                                  }));
                                   setCatID(children?.id);
+                                  localStorage.setItem("catname", children?.title);
                                 }}>
                                 Bu kateqoriyadakı bütün məhsullar
                               </Link>
                               {children && children?.children?.length > 0
                                 ? children?.children?.map((innerchild: InnerChilds) => (
-                                    <Link to={`/catalog/${innerchild?.slug}`}
+                                    <Link
+                                      to={`/catalog/${innerchild?.slug}`}
                                       onClick={() => {
                                         // getProductsToCatID(innerchild?.id);
-                                        // setCatName(() => ({
-                                        //   [innerchild?.id]: innerchild?.title,
-                                        // }));
+                                        setCatName(() => ({
+                                          [innerchild?.id]: innerchild?.title,
+                                        }));
                                         setCatID(innerchild?.id);
+                                        localStorage.setItem("catname", innerchild?.title);
                                       }}
                                       key={innerchild?.id}
                                       className="inner-child-link">

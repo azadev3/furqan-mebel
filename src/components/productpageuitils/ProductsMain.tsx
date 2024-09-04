@@ -2,8 +2,8 @@ import React from "react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
 import {
   CategoriesForFilterIsSelectedCategoryProductState,
-  CategoryNameForSelected,
-  CategoryNameForSelectedID,
+  // CategoryNameForSelected,
+  // CategoryNameForSelectedID,
   CatProductType,
 } from "./filteruitils/CategoriesForFilter";
 import { LoadingState } from "../../recoil/Atoms";
@@ -65,8 +65,8 @@ const ProductsMain: React.FC = () => {
     }
   };
 
-  const catName = useRecoilValue(CategoryNameForSelected);
-  const catID = useRecoilValue(CategoryNameForSelectedID);
+  // const catName = useRecoilValue(CategoryNameForSelected);
+  // const catID = useRecoilValue(CategoryNameForSelectedID);
 
   React.useEffect(() => {
     getAllProducts();
@@ -74,7 +74,7 @@ const ProductsMain: React.FC = () => {
 
   return (
     <div className="products-main">
-      <span className="title">{catID && catName[catID] ? catName[catID] : "Məhsullar"}</span>
+      <span className="title">Məhsullar</span>
       <div className="container-product-main">
         {isLoading ? (
           <Loader />

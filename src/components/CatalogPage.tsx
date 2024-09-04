@@ -33,7 +33,7 @@ const CatalogPage: React.FC = () => {
 
   const activelanguage = useRecoilValue(SelectedLanguageState);
   const seoData = useSeo("products_page");
-  const catName = useRecoilValue(CategoryNameForSelected);
+  const [catName, _] = useRecoilState(CategoryNameForSelected);
   const [catID, setCatID] = useRecoilState(CategoryNameForSelectedID);
   const pageName = useMatch("/catalog/:slugcategory");
 
@@ -106,6 +106,14 @@ const CatalogPage: React.FC = () => {
 
   const hasProducts = categoryProducts && categoryProducts?.length > 0;
 
+  const [catNameLocal, setCatNameLocal] = React.useState<string>("");
+  React.useEffect(() => {
+    const getCatname = localStorage.getItem("catname");
+    if (getCatname) {
+      setCatNameLocal(getCatname);
+    }
+  }, []);
+
   return (
     <div className="catalog-page-wrapper">
       <Helmet>
@@ -125,12 +133,15 @@ const CatalogPage: React.FC = () => {
         <div className="container-catalogpage">
           <Filter />
           <div className="container-catalogpage-main">
-            <ProductCard
-              otherFilterData={otherFilterData}
-              priceAscData={priceAscData}
-              priceMinMaxData={priceMinMaxData}
-              selectedCategoryProducts={hasProducts ? categoryProducts : []}
-            />
+            <h1>{catName[catID ? catID : 0] || catNameLocal || "Salam"}</h1>
+            <div className="product">
+              <ProductCard
+                otherFilterData={otherFilterData}
+                priceAscData={priceAscData}
+                priceMinMaxData={priceMinMaxData}
+                selectedCategoryProducts={hasProducts ? categoryProducts : []}
+              />
+            </div>
           </div>
         </div>
       </div>

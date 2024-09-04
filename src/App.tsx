@@ -271,10 +271,8 @@ const App: React.FC = () => {
     }
   };
 
- 
   return (
     <div className="app">
-  
       {/* call your modal */}
       <div className={`call-your-modal-overlay ${callYourModal ? "active" : ""}`}>
         <ToastContainer transition={Zoom} />
@@ -412,7 +410,8 @@ const App: React.FC = () => {
         <Route path="/vacations" element={<VacationsPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/:slugproduct" element={<ProductInner />} />
-        <Route path="/catalog/:slugcategory/*" element={<CatalogPage />} />
+        <Route path="/catalog/:slugcategory" element={<CatalogPage />} />
+        <Route path="/catalog" element={<CatalogPage />} />
         <Route path="/mybasket" element={<BasketPage />} />
         <Route path="/delivery" element={<DeliveryPage />} />
         <Route path="/paymentdetails" element={<PaymentDetails />} />
