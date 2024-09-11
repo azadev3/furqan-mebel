@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import "./styles/global.scss";
 import "./styles/responsive.scss";
@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <RecoilRoot>
-    <HashRouter>
+    <BrowserRouter>
       <ScrollToTop>
         <QueryClientProvider client={queryClient}>
           <TranslateContextProvider>
@@ -23,6 +23,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           </TranslateContextProvider>
         </QueryClientProvider>
       </ScrollToTop>
-    </HashRouter>
+    </BrowserRouter>
   </RecoilRoot>
 );

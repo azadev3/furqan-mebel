@@ -24,8 +24,8 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
       return <>{text}</>
     }
 
-    const parts = text.split(new RegExp(`(${highlight})`, "i"));
-    return parts.map((part: any, index: any) =>
+    const parts = text?.split(new RegExp(`(${highlight})`, "i"));
+    return parts && parts?.map((part: any, index: any) =>
       part?.toLowerCase() === highlight?.toLowerCase() ? <mark key={index}>{part}</mark> : part
     );
   };

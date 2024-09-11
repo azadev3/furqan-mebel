@@ -99,6 +99,7 @@ const FormAndTotalPrice: React.FC = () => {
               <div className="leftname">
                 <label>Şəhər</label>
                 <select required={ isNullAdress ? false : true } name="city" value={formData.city} onChange={handleChange}>
+                  <option value="">Şəhər seçin</option>
                   <option value="Sumqayıt">Sumqayıt</option>
                   <option value="Lənkəran">Lənkəran</option>
                   <option value="Xaçmaz">Xaçmaz</option>
