@@ -2072,7 +2072,12 @@
 }
 
 @media only screen and (max-width: 568px) {
-
+  .catalog-page-wrapper .catalog-page .container-catalogpage .filter .filter-relations {
+    display: none !important;
+  }
+  .catalog-page-wrapper .catalog-page .container-catalogpage .filter .categories-for-filter {
+    display: none !important;
+  }
   .filter-relations-mobile {
     width: 100%;
     display: flex !important;

@@ -11,6 +11,7 @@ import Loader from "../../uitils/Loader";
 import ProductCard from "../../features/ProductCard";
 import axios from "axios";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export const PriceAscDataState = atom<CatProductType[]>({
   key: "PriceAscDataState",
@@ -28,11 +29,10 @@ export const OthersFilterData = atom<CatProductType[]>({
 });
 
 const ProductsMain: React.FC = () => {
-
   const [isLoading, setIsLoading] = useRecoilState(LoadingState);
   const [selectedCategoryProducts, setSelectedProd] = useRecoilState(CategoriesForFilterIsSelectedCategoryProductState);
-  
-  const hasSelectedCatProd = selectedCategoryProducts && selectedCategoryProducts.length > 0;
+
+  // const hasSelectedCatProd = selectedCategoryProducts && selectedCategoryProducts.length > 0;
 
   // price sort asc
   const priceAscData = useRecoilValue(PriceAscDataState);
@@ -72,25 +72,54 @@ const ProductsMain: React.FC = () => {
     getAllProducts();
   }, [activelanguage]); // Depend on activelanguage
 
+  // Initial states
+  const [displayedProducts, setDisplayedProducts] = React.useState<any[]>([]);
+  const [hasMore, setHasMore] = React.useState(true);
+  const productsPerPage = 10;
+
+  React.useEffect(() => {
+    if (selectedCategoryProducts.length) {
+      setDisplayedProducts(selectedCategoryProducts.slice(0, productsPerPage));
+    }
+  }, [selectedCategoryProducts]);
+
+  const loadMoreProducts = () => {
+    if (displayedProducts.length >= selectedCategoryProducts.length) {
+      setHasMore(false);
+      return;
+    }
+    const nextProducts = selectedCategoryProducts.slice(
+      displayedProducts.length,
+      displayedProducts.length + productsPerPage
+    );
+    setDisplayedProducts((prevProducts) => [...prevProducts, ...nextProducts]);
+  };
+
   return (
     <div className="products-main">
       <span className="title">Məhsullar</span>
       <div className="container-product-main">
-        {isLoading ? (
-          <Loader />
-        ) : hasSelectedCatProd ? (
-          <ProductCard
-            priceMinMaxData={priceMinMaxData}
-            selectedCategoryProducts={selectedCategoryProducts}
-            priceAscData={priceAscData}
-            otherFilterData={otherFilterData}
-          />
-        ) : (
+        {selectedCategoryProducts.length === 0 ? (
           <div className="no-content-msg">
             <p>Məhsul yoxdur.</p>
-            <button onClick={getAllProducts}>Bütün məhsullara bax</button>
           </div>
+        ) : isLoading ? (
+          <Loader />
+        ) : (
+          <InfiniteScroll
+            dataLength={displayedProducts.length}
+            next={loadMoreProducts}
+            hasMore={hasMore}
+            loader={<p>Loading...</p>} endMessage>
+            <ProductCard
+              priceMinMaxData={priceMinMaxData}
+              selectedCategoryProducts={displayedProducts}
+              priceAscData={priceAscData}
+              otherFilterData={otherFilterData}
+            />
+          </InfiniteScroll>
         )}
+        {hasMore && <p style={{ margin: "1rem 0.5rem" }}>Bir neçə saniyə gözləyin...</p>}
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ interface Locations {
   branch_name: string;
   branch_address: string;
   office_images: OfficeImages[];
+  phone: string;
 }
 
 const StorePage: React.FC = () => {
@@ -78,9 +79,15 @@ const StorePage: React.FC = () => {
                   key={i}
                   className={`link-location ${selectedLocation === item.branch_address ? "activelocation" : ""}`}>
                   <span>{item.branch_name}</span>
-                  <div className="logo-and-location">
-                    <img src="../locationicon.svg" alt="location" title={item.branch_address} />
-                    <p>{item.branch_address}</p>
+                  <div className="logo-and-location" style={{ flexDirection: "column", alignItems: "flex-start" }}>
+                    <div style={{ display: "flex", gap: "6px" }}>
+                      <img src="../locationicon.svg" alt="location" title={item.branch_address} />
+                      <p>{item.branch_address}</p>
+                    </div>
+                    <div style={{ display: "flex", gap: "6px" }}>
+                      <img src="../mynaui_telephone.svg" alt="location" title={item.branch_address} />
+                      <p>{item.phone}</p>
+                    </div>
                   </div>
                 </span>
               ))

@@ -22,6 +22,9 @@ export type InnerChilds = {
   title: string;
   img: string | null;
   slug: string,
+  meta_title?: string | null;
+  meta_description?: string | null;
+  meta_keywords?: string | null;
 };
 
 export type Children = {
@@ -30,6 +33,9 @@ export type Children = {
   slug: string,
   img: string | null;
   children: InnerChilds[];
+  meta_title?: string | null;
+  meta_description?: string | null;
+  meta_keywords?: string | null;
 };
 
 export interface Categories {
@@ -38,6 +44,9 @@ export interface Categories {
   img: string | null;
   slug: string,
   children: Children[];
+  meta_title?: string | null;
+  meta_description?: string | null;
+  meta_keywords?: string | null;
 }
 
 const CatalogToggleMenu: React.FC = () => {
