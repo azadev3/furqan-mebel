@@ -100,23 +100,6 @@ const CategoriesForFilter: React.FC = () => {
 
   const [____, setSelectedProd] = useRecoilState(CategoriesForFilterIsSelectedCategoryProductState);
 
-  // const getProductsToCatID = async (catid: number) => {
-  //   try {
-  //     const response = await axios.get(`https://admin.furqanmebel.az/api/all_products?category_id=${catid}`, {
-  //       headers: {
-  //         "Accept-Language": activelanguage,
-  //       },
-  //     });
-  //     if (response.data) {
-  //       setSelectedProd(response.data?.products);
-  //     } else {
-  //       console.log(response.status);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const getAllProducts = async () => {
     setLoading(true);
     try {

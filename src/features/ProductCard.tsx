@@ -10,6 +10,7 @@ import { UserIsAuthState } from "../recoil/Atoms";
 import { addFavouriteFunction } from "./AddFavourite/AddFavouriteFunction";
 import getCookie from "../getCookie";
 import { SelectedLanguageState } from "../components/header/SelectedLanguage";
+import Loader from "../uitils/Loader";
 
 type Props = {
   selectedCategoryProducts: CatProductType[];
@@ -70,12 +71,15 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
             <div className="add-fav-icon" onClick={() => handleFavouriteClick(data)}>
               {added[data.id] ? <FaHeart className="iconadded" /> : <CiHeart className="icon" />}
             </div>
-            <img 
-             style={{cursor: "pointer"}}
-             onClick={() => {
-               navigate(`/products/${data?.slug}`);
-             }}
-            src={data.img} alt={`${data.id}-image`} title={data.title} />
+            <img
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                navigate(`/products/${data?.slug}`);
+              }}
+              src={data.img}
+              alt={`${data.id}-image`}
+              title={data.title}
+            />
             {data.is_new && (
               <div className="new-product-flag">
                 <span>yeni</span>
@@ -83,7 +87,7 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
             )}
             {data.discounted_price && (
               <div className="product-discounted-percentage-flag">
-                <span>{data.discounted_price.split(".00").join("%")}</span>
+                <span>{`${Number(data?.discounted_price).toFixed(2)}%`}</span>
               </div>
             )}
           </div>
@@ -105,7 +109,7 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
         </section>
       ))
     ) : (
-      <p>No products found.</p>
+      <Loader />
     );
   };
   return (

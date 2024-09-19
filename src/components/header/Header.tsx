@@ -6,7 +6,9 @@ import ResponsiveHeader from "./ResponsiveHeader";
 import SearchModal from "./SearchModal";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
+  basketItemState,
   favouriteItemsState,
+  IsAddedState,
   LoginMenuState,
   profileDropdownState,
   selectedCategoryStateProductPage,
@@ -192,10 +194,10 @@ const Header: React.FC = () => {
   };
 
   const token = getCookie("accessToken");
-  const [isBasketData, setIsBasketData] = React.useState<boolean>(false);
-  const [basketDataLS, setBasketDataLS] = React.useState<CatProductType[]>([]);
+  const [isBasketData, ____] = React.useState<boolean>(false);
+  const [basketDataLS, ___] = React.useState<CatProductType[]>([]);
   const [basketProducts, setBasketProducts] = React.useState<BasketDataInterface[]>([]);
-  const [notificationCount, setNotificationCount] = React.useState<number>(0);
+  const basketItems = useRecoilValue(basketItemState);
 
   const getBasketProducts = React.useCallback(async () => {
     try {
@@ -216,26 +218,26 @@ const Header: React.FC = () => {
       console.error("Error fetching basket products:", error);
     }
   }, [token, activeLanguage, basketDataLS]);
+  const [notificationCount, setNotificationCount] = React.useState<number>(0);
+  const isAdded = useRecoilValue(IsAddedState);
+  const lsItem = localStorage.getItem("basket");
+  React.useEffect(() => {
+    if(isAuth && token) {
+      if(basketProducts) {
+        setNotificationCount(basketProducts?.length)
+      }
+    } else {
+      if (lsItem) {
+        setNotificationCount(JSON.parse(lsItem)?.length);
+      }
+    }
+  }, [lsItem, isAdded, basketProducts, basketItems]);
 
   React.useEffect(() => {
-    if (isAuth && token) {
-      getBasketProducts();
-    } else {
-      const basketData = localStorage.getItem("basket");
-      const isBasket = basketData ? JSON.parse(basketData) : [];
-      setBasketDataLS(isBasket);
-      setIsBasketData(isBasket.length > 0);
-    }
-  }, [isAuth, token]);
+    getBasketProducts();
+  }, [notificationCount])
 
-  React.useEffect(() => {
-    if (isAuth && token) {
-      setNotificationCount(basketProducts?.length);
-    } else {
-      setNotificationCount(basketDataLS?.length);
-    }
-  }, [basketProducts, basketDataLS, isAuth, token]);
-
+ 
   return (
     <header
       className={`header-wrapper ${
@@ -319,7 +321,7 @@ const Header: React.FC = () => {
             <div className="userprofile">
               {/* basket icon */}
               <Link to="/mybasket" className="basket">
-                <span className="notification">{notificationCount || "0"}</span>
+                <span className="notification">{notificationCount}</span>
                 <img
                   src={
                     isBasketPage || isBasketData

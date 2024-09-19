@@ -105,3 +105,9 @@ export const LoadingState = atom<boolean>({
   key: "loadingState",
   default: false,
 });
+
+//is added basket state
+export const IsAddedState = atom<number | null>({
+  key: "isAddedStateKey",
+  default: null
+})

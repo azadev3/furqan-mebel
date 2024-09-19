@@ -47,14 +47,6 @@ const BlogInnerPage: React.FC = () => {
 
         <div className="top-description-blog">
           <h1>{blogItem?.title}</h1>
-          <div className="author-and-views">
-            <span>by Joanna Wellick</span>
-            <span className="dot"></span>
-            <div className="view">
-              <img src="../viewicon.svg" alt="view" title="Views" />
-              <span>1.6K views</span>
-            </div>
-          </div>
         </div>
         <div className="image-blog">
           <img src={blogItem?.img} alt={`${blogItem?.id}-image`} title={blogItem?.title} />

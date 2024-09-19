@@ -160,14 +160,7 @@ const FilterRelations: React.FC = () => {
               </React.Fragment>
             ))}
           </div>
-          <div className="range">
-            <strong className="price0">{inputValue[1]}</strong>
-            <img className="range1" src="../rangegreen.svg" alt="" />
-            <input type="range" />
-            <img className="range2" src="../rangegreen.svg" alt="" />
-            <strong className="price10">{inputValue[2]}</strong>
-          </div>
-
+      
           {filterData && filterData.length > 0
             ? filterData.map((item: FilterData) => (
                 <div className="material" key={item.title}>

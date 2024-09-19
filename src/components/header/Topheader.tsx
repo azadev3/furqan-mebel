@@ -42,10 +42,10 @@ const Topheader: React.FC = () => {
             <span>{translations["whatsapp_number"]}</span>
           </a>
 
-          <Link to="" className="call-us" onClick={handleCallYourModal}>
+          <div className="call-us" onClick={handleCallYourModal}>
             <img src="../call.svg" alt="call" title="Zəng sifariş et" />
             <span>Zəng sifariş et</span>
-          </Link>
+          </div>
           <SelectedLanguage />
         </div>
       </header>

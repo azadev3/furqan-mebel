@@ -70,7 +70,7 @@ const ProductsMain: React.FC = () => {
 
   React.useEffect(() => {
     getAllProducts();
-  }, [activelanguage]); // Depend on activelanguage
+  }, []); // Depend on activelanguage
 
   // Initial states
   const [displayedProducts, setDisplayedProducts] = React.useState<any[]>([]);

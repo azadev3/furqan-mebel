@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
 import { useQuery } from "@tanstack/react-query";
 import { Baseurl } from "../../api/Baseurl";
@@ -9,7 +9,7 @@ import { ModulesProducts } from "../homepageuitils/PopularProducts";
 import DOMPurify from "dompurify";
 import SliderSizes, { SliderValue } from "../../SliderSizes";
 import { useTranslations } from "../../TranslateContext";
-import { UserIsAuthState } from "../../recoil/Atoms";
+import { IsAddedState, UserIsAuthState } from "../../recoil/Atoms";
 import getCookie from "../../getCookie";
 import { addBasketFunction, addBasketFunctionStorage } from "../../features/AddBasket/AddBasket";
 import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
@@ -34,6 +34,7 @@ const ProductSection: React.FC = () => {
     staleTime: 1000000,
   });
 
+
   const productInner =
     allProductsData && allProductsData.length > 0
       ? allProductsData.find((item: CatProductType) => {
@@ -42,7 +43,7 @@ const ProductSection: React.FC = () => {
       : "";
 
   const sliderValue = useRecoilValue(SliderValue);
-  const [isAdded, setIsAdded] = React.useState<number | null>(null);
+  const [isAdded, setIsAdded] = useRecoilState(IsAddedState);
 
   const isAuth = useRecoilValue(UserIsAuthState);
   const token = getCookie("accessToken");
@@ -102,7 +103,7 @@ const ProductSection: React.FC = () => {
               </div>
               <div className="monthly-payment">
                 <span>{translations["ayliq_odenis"]}</span>
-                <p style={{ fontSize: "14px" }}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
+                <p style={{ fontSize: "14px" }}>{(productInner?.price * 1.6 / sliderValue).toFixed(2)} azn</p>
               </div>
             </div>
           </div>

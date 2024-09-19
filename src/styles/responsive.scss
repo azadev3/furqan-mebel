@@ -1476,6 +1476,17 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .product-page-wrapper .products-page .container-products .products-main .container-product-main .infinite-scroll-component__outerdiv .infinite-scroll-component {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  .product-page-wrapper .products-page .container-products {
+    flex-direction: column !important;
+  }
+
+
+  .store-page-wrapper .store-page .map-and-locations {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
   .catalog-page-wrapper .catalog-page .container-catalogpage .container-catalogpage-main .product {
     grid-template-columns: repeat(2, 1fr);
   } 
