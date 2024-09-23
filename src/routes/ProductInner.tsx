@@ -12,13 +12,14 @@ import { Baseurl } from "../api/Baseurl";
 import axios from "axios";
 import { CatProductType } from "../components/productpageuitils/filteruitils/CategoriesForFilter";
 import { Helmet } from "react-helmet";
+import Loader from "../uitils/Loader";
 
 const ProductInner: React.FC = () => {
   const { slugproduct } = useParams();
 
   //FETCH ALL PRODUCTS
   const activeLanguage = useRecoilValue(SelectedLanguageState);
-  const { data: allProductsData } = useQuery({
+  const { data: allProductsData, isLoading } = useQuery({
     queryKey: ["allProductKey", activeLanguage],
     queryFn: async () => {
       const response = await axios.get(`${Baseurl}/all_products`, {
@@ -47,7 +48,11 @@ const ProductInner: React.FC = () => {
         <meta name="description" content={productInner && productInner?.meta_description} />
       </Helmet>
       <section className="productinnerpage">
-        <NavigationShower
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+          <NavigationShower
           prevpage={productInner && productInner.title.toString() ? productInner.title.toString() : ""}
         />
 
@@ -59,6 +64,8 @@ const ProductInner: React.FC = () => {
         </div>
         <Sizes />
         <SimiliarProducts />
+          </>
+        )}
       </section>
     </main>
   );

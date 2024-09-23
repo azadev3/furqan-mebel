@@ -68,7 +68,7 @@ export const addBasketFunction = async (itemid: any, items: CatProductType[], la
        });
 
        if(response.data) {
-            console.log(response.data, 'getdi');
+            console.log(response.data, 'going');
        } else { 
             console.log(response.status);
        }

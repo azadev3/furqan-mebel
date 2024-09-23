@@ -75,7 +75,7 @@ const ProductSection: React.FC = () => {
             setIsAdded(productInner?.id);
           }
         }}>
-        {isAdded ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
+        {isAdded === productInner?.id ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
       </button>
       ) : (
         <p style={{color: "red"}}>Stokda yoxdur</p>
@@ -103,7 +103,7 @@ const ProductSection: React.FC = () => {
               </div>
               <div className="monthly-payment">
                 <span>{translations["ayliq_odenis"]}</span>
-                <p style={{ fontSize: "14px" }}>{(productInner?.price * 1.6 / sliderValue).toFixed(2)} azn</p>
+                <p style={{ fontSize: "14px" }}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
               </div>
             </div>
           </div>
