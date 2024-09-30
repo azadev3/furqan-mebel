@@ -8,6 +8,38 @@
 .payment-success-page-wrapper .payment-success-page .card-repition .process {
   display: none !important;
 }
+
+.pagination-controls {
+  width: 100%;
+  height: auto;
+  margin-top: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  span {
+    font-size: 18px;
+    color: #141414;
+    font-weight: 500;
+  }
+  button {
+    padding: 5px 12px;
+    border: 1px solid #cecece;
+    background-color: transparent;
+    color: black;
+    font-size: 17px;
+    cursor: pointer;
+    transition: background-color 100ms ease-in-out;
+    border-radius: 4px;
+    &:hover {
+      background-color: transparent;
+    }
+    &:active {
+      transform: scale(0.99);
+    }
+  }
+}
+
 .delivery-page-wrapper
   .deliverypage
   .container-delivery

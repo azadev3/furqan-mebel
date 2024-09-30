@@ -1,17 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
-import {
-  CategoriesForFilterIsSelectedCategoryProductState,
-  // CategoryNameForSelected,
-  // CategoryNameForSelectedID,
-  CatProductType,
-} from "./filteruitils/CategoriesForFilter";
+import { CategoriesForFilterIsSelectedCategoryProductState, CatProductType } from "./filteruitils/CategoriesForFilter";
 import { LoadingState } from "../../recoil/Atoms";
 import Loader from "../../uitils/Loader";
 import ProductCard from "../../features/ProductCard";
 import axios from "axios";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 export const PriceAscDataState = atom<CatProductType[]>({
   key: "PriceAscDataState",
@@ -31,95 +25,91 @@ export const OthersFilterData = atom<CatProductType[]>({
 const ProductsMain: React.FC = () => {
   const [isLoading, setIsLoading] = useRecoilState(LoadingState);
   const [selectedCategoryProducts, setSelectedProd] = useRecoilState(CategoriesForFilterIsSelectedCategoryProductState);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
 
-  // const hasSelectedCatProd = selectedCategoryProducts && selectedCategoryProducts.length > 0;
-
-  // price sort asc
   const priceAscData = useRecoilValue(PriceAscDataState);
-
-  // price min max data
   const priceMinMaxData = useRecoilValue(PriceMinMaxState);
-
-  // others filter data
   const otherFilterData = useRecoilValue(OthersFilterData);
-
   const activelanguage = useRecoilValue(SelectedLanguageState);
 
-  const getAllProducts = async () => {
-    setIsLoading(true); // Start loading
+  const productsPerPage = 15;
+  const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+  const getAllProducts = async (page: number, filters = {}) => {
+    setIsLoading(true);
     try {
-      const response = await axios.get("https://admin.furqanmebel.az/api/all_products", {
-        headers: {
-          "Accept-Language": activelanguage,
-        },
-      });
+      const response = await axios.get(
+        `https://admin.furqanmebel.az/api/all_products?page=${page}&limit=${productsPerPage}`,
+        {
+          params: filters,
+          headers: {
+            "Accept-Language": activelanguage,
+          },
+        }
+      );
+  
       if (response.data) {
-        setSelectedProd(response.data?.products);
+        setSelectedProd(response.data.products);
+        setTotalProducts(response.data.totalProducts || 0);
       } else {
-        console.log(response.status);
+        console.log("Response status:", response.status);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching products:", error);
     } finally {
-      setIsLoading(false); // End loading
+      setIsLoading(false);
     }
   };
-
-  // const catName = useRecoilValue(CategoryNameForSelected);
-  // const catID = useRecoilValue(CategoryNameForSelectedID);
-
-  React.useEffect(() => {
-    getAllProducts();
-  }, []); // Depend on activelanguage
-
-  // Initial states
-  const [displayedProducts, setDisplayedProducts] = React.useState<any[]>([]);
-  const [hasMore, setHasMore] = React.useState(true);
-  const productsPerPage = 10;
-
-  React.useEffect(() => {
-    if (selectedCategoryProducts.length) {
-      setDisplayedProducts(selectedCategoryProducts.slice(0, productsPerPage));
-    }
-  }, [selectedCategoryProducts]);
-
-  const loadMoreProducts = () => {
-    if (displayedProducts.length >= selectedCategoryProducts.length) {
-      setHasMore(false);
-      return;
-    }
-    const nextProducts = selectedCategoryProducts.slice(
-      displayedProducts.length,
-      displayedProducts.length + productsPerPage
-    );
-    setDisplayedProducts((prevProducts) => [...prevProducts, ...nextProducts]);
-  };
+  
+  useEffect(() => {
+    getAllProducts(currentPage);
+  }, [currentPage, activelanguage]);
+  
+  useEffect(() => {
+    getAllProducts(currentPage, { priceAscData, priceMinMaxData, otherFilterData });
+  }, [priceAscData, priceMinMaxData, otherFilterData]);
 
   return (
     <div className="products-main">
       <span className="title">Məhsullar</span>
       <div className="container-product-main">
-        {selectedCategoryProducts.length === 0 ? (
-          <div className="no-content-msg">
-            <p>Məhsul yoxdur.</p>
-          </div>
-        ) : isLoading ? (
+        {isLoading ? (
           <Loader />
+        ) : selectedCategoryProducts.length === 0 ? (
+          <div className="no-content-msg">
+            <p>No products found</p>
+          </div>
         ) : (
-          <InfiniteScroll
-            dataLength={displayedProducts.length}
-            next={loadMoreProducts}
-            hasMore={hasMore}
-            loader={<p>Loading...</p>} endMessage>
+          <div className="products">
             <ProductCard
               priceMinMaxData={priceMinMaxData}
-              selectedCategoryProducts={displayedProducts}
+              selectedCategoryProducts={selectedCategoryProducts}
               priceAscData={priceAscData}
               otherFilterData={otherFilterData}
             />
-          </InfiniteScroll>
+          </div>
         )}
-        {hasMore && <p style={{ margin: "1rem 0.5rem" }}>Bir neçə saniyə gözləyin...</p>}
+
+        <div className="pagination-controls">
+          {/* Previous Page Button */}
+          <button onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+            Əvvəlki
+          </button>
+
+          {/* Page Numbers */}
+          <span>
+           {currentPage}
+          </span>
+
+          {/* Next Page Button */}
+          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+            Sonrakı
+          </button>
+        </div>
       </div>
     </div>
   );

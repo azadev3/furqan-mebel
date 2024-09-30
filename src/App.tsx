@@ -129,7 +129,6 @@ const App: React.FC = () => {
       });
 
       if (response.data) {
-        console.log(response.data);
         localStorage.removeItem("favourites");
       } else {
         console.error("Response status:", response.status);
@@ -189,7 +188,6 @@ const App: React.FC = () => {
       });
 
       if (response.data) {
-        console.log(response.data);
         localStorage.removeItem("basket");
       } else {
         console.error("Response status:", response.status);

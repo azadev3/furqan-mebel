@@ -21,8 +21,7 @@ const LeftContact: React.FC = () => {
       <div className="toptitle-contact">
         <h1>{translations['bizimle_elaqe']}</h1>
         <p>
-          Lorem ipsum dolor sit amet consectetur. Sed amet pulvinar cursus volutpat dolor. Lorem ipsum dolor sit amet
-          consectetur. Sed amet pulvinar cursus volutpat dolor
+          {translations['bizimle_elaqe_text']}
         </p>
       </div>
 

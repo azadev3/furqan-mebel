@@ -19,7 +19,7 @@ type Props = {
   otherFilterData: CatProductType[];
 };
 
-const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, priceMinMaxData, otherFilterData }) => {
+const ProductCard: React.FC<Props> = ({ selectedCategoryProducts }) => {
   const isAuth = useRecoilValue(UserIsAuthState);
   const token = getCookie("accessToken");
   const selectedLanguage = useRecoilValue(SelectedLanguageState);
@@ -112,19 +112,8 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts, priceAscData, 
       <Loader />
     );
   };
-  return (
-    <React.Fragment>
-      {!selectedCategoryProducts ? (
-        <>
-          {priceAscData?.length > 0 && renderProducts(priceAscData)}
-          {priceMinMaxData?.length > 0 && renderProducts(priceMinMaxData)}
-          {otherFilterData?.length > 0 && renderProducts(otherFilterData)}
-        </>
-      ) : (
-        renderProducts(selectedCategoryProducts)
-      )}
-    </React.Fragment>
-  );
+
+  return <>{renderProducts(selectedCategoryProducts)}</>;
 };
 
 export default ProductCard;

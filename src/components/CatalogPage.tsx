@@ -62,7 +62,6 @@ const CatalogPage: React.FC = () => {
       });
       if (response.data) {
         setCategoryProducts(response.data?.products);
-        console.log("catidin datasi", catid, catID, response?.data?.products, "produktlari");
       } else {
         console.log(response.status);
       }
@@ -133,7 +132,7 @@ const CatalogPage: React.FC = () => {
         <div className="container-catalogpage">
           <Filter />
           <div className="container-catalogpage-main">
-            <h1>{catName[catID ? catID : 0] || catNameLocal || "Salam"}</h1>
+            <h1>{catName[catID ? catID : 0] || catNameLocal || ""}</h1>
             <div className="product">
               <ProductCard
                 otherFilterData={otherFilterData}

@@ -28,7 +28,6 @@ export const useAddBasket = () => {
         });
   
         if (response.data) {
-          console.log(response.data, "elave edldi");
           setBasketItems((prevItems: any) => {
             const updatedItems = { ...prevItems, [id]: basketItems };
             localStorage.setItem("baskets", JSON.stringify(updatedItems));
@@ -73,7 +72,6 @@ const removeBasket = async (basketItem: ProductsInterface, id: number) => {
       });
 
       if (response.data) {
-        console.log(response.data, "çıkarıldı");
         setBasketItems((prevItems: any) => {
           const updatedItems = { ...prevItems };
           delete updatedItems[id];

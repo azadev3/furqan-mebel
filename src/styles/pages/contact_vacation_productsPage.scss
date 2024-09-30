@@ -1109,9 +1109,7 @@
             justify-content: flex-start;
             gap: 36px;
             position: relative;
-            .infinite-scroll-component__outerdiv {
-              width: 100%;
-              .infinite-scroll-component  {
+              .products  {
                 width: 100%;
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
@@ -1120,8 +1118,6 @@
                   display: none;
                 }
               }
-            
-            }
             .loader-container {
               position: absolute;
               top: -260px;

@@ -153,7 +153,7 @@ const Basket: React.FC = () => {
       });
 
       if (response.data) {
-        console.log(response.data, "silindi");
+        console.log(response.data);
       } else {
         console.log(response.status);
       }
