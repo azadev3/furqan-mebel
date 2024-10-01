@@ -23,7 +23,7 @@ const FavProductCard: React.FC<props> = ({ favProduct }) => {
                 <img
                 style={{cursor: "pointer"}}
                 onClick={() => {
-                  navigate(`/products/${favproduct?.slug}`);
+                  navigate(`/product_single/${favproduct?.slug}`);
                 }}
                 src={favproduct?.img} alt={`${favproduct?.id}-image`} title={favproduct?.title} />
                 {favproduct?.is_new && (
@@ -40,7 +40,7 @@ const FavProductCard: React.FC<props> = ({ favProduct }) => {
               <article
                 className="product-description"
                 onClick={() => {
-                  navigate(`/products/${favproduct?.slug}`);
+                  navigate(`/product_single/${favproduct?.slug}`);
                 }}>
                 <div className="top">
                   <span className="category-name">{favproduct?.category_name}</span>

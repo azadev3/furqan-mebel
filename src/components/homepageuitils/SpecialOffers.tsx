@@ -58,7 +58,7 @@ const SpecialOffers: React.FC = () => {
                           <span className="discount-count">{product.discounted_price || product.price} AZN</span>
                         </div>
                         <h1>{product.title}</h1>
-                        <Link to={`/products/${product?.slug}`} className="formore">
+                        <Link to={`/product_single/${product?.slug}`} className="formore">
                           <span>Daha çox</span>
                           <img src="../rightorange.svg" alt="right" title="Daha çox" />
                         </Link>

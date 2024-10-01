@@ -145,7 +145,7 @@ const ProductsInterface: React.FC = () => {
                     {popularProducts && popularProducts?.length > 0
                       ? popularProducts.map((item: CatProductType) => (
                           <SwiperSlide key={item.id}>
-                            <Link to={`/products/${item?.slug.toLowerCase()}`} className="subitem">
+                            <Link to={`/product_single/${item?.slug.toLowerCase()}`} className="subitem">
                               <img className="shop-bag" src="../shopbag.svg" alt="show" title="Səbət" />
 
                               <div className="punts">
@@ -195,7 +195,7 @@ const ProductsInterface: React.FC = () => {
                 <React.Fragment>
                   {popularProducts && popularProducts?.length > 0
                     ? popularProducts.slice(0, 4).map((item: CatProductType) => (
-                        <Link to={`/products/${item?.slug.toLowerCase()}`} key={item.id} className="subitem">
+                        <Link to={`/product_single/${item?.slug.toLowerCase()}`} key={item.id} className="subitem">
                           <div className="add-basket">
                             <HiOutlineShoppingBag className="shopping-bag" />
                           </div>

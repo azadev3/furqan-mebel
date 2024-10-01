@@ -109,7 +109,7 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
             filterItems.length > 0 ? (
               filterItems.map((results: ProductsInterface) => (
                 <Link
-                  to={`/products/${results?.slug?.toLowerCase()}`}
+                  to={`/product_single/${results?.slug?.toLowerCase()}`}
                   className="search-result-item"
                   key={results.id}
                   onClick={() => setSearchModal(false)}>

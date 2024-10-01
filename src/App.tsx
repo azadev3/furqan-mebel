@@ -407,7 +407,7 @@ const App: React.FC = () => {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/vacations" element={<VacationsPage />} />
         <Route path="/products" element={<ProductsPage />} />
-        <Route path="/products/:slugproduct" element={<ProductInner />} />
+        <Route path="/product_single/:slugproduct" element={<ProductInner />} />
         <Route path="/catalog/:slugcategory" element={<CatalogPage />} />
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="/mybasket" element={<BasketPage />} />

@@ -39,19 +39,19 @@ const ProductsMain: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const getAllProducts = async (page: number, filters = {}) => {
+
+  const getAllProducts = async (page: number) => {
     setIsLoading(true);
     try {
       const response = await axios.get(
         `https://admin.furqanmebel.az/api/all_products?page=${page}&limit=${productsPerPage}`,
         {
-          params: filters,
           headers: {
             "Accept-Language": activelanguage,
           },
         }
       );
-  
+
       if (response.data) {
         setSelectedProd(response.data.products);
         setTotalProducts(response.data.totalProducts || 0);
@@ -64,13 +64,13 @@ const ProductsMain: React.FC = () => {
       setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
     getAllProducts(currentPage);
   }, [currentPage, activelanguage]);
-  
+
   useEffect(() => {
-    getAllProducts(currentPage, { priceAscData, priceMinMaxData, otherFilterData });
+    getAllProducts(currentPage);
   }, [priceAscData, priceMinMaxData, otherFilterData]);
 
   return (
@@ -101,9 +101,7 @@ const ProductsMain: React.FC = () => {
           </button>
 
           {/* Page Numbers */}
-          <span>
-           {currentPage}
-          </span>
+          <span>{currentPage}</span>
 
           {/* Next Page Button */}
           <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>

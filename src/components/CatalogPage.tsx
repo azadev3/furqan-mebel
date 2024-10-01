@@ -36,6 +36,15 @@ const CatalogPage: React.FC = () => {
   const [catName, _] = useRecoilState(CategoryNameForSelected);
   const [catID, setCatID] = useRecoilState(CategoryNameForSelectedID);
   const pageName = useMatch("/catalog/:slugcategory");
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [totalProducts, setTotalProducts] = React.useState(0);
+
+  const productsPerPage = 15;
+  const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const { data: CategoryProductsData } = useQuery<Categories[]>({
     queryKey: ["categoryProductsKey", activelanguage, slugcategory],
@@ -53,15 +62,24 @@ const CatalogPage: React.FC = () => {
 
   const [categoryProducts, setCategoryProducts] = React.useState<CatProductType[]>([]);
 
-  const getProductsToCatID = async (catid: number) => {
+  React.useEffect(() => {
+    console.log(catID)
+  }, [])
+
+  const getProductsToCatID = async (catid: number, page: number) => {
     try {
-      const response = await axios.get(`https://admin.furqanmebel.az/api/all_products?category_id=${catid}`, {
-        headers: {
-          "Accept-Language": activelanguage,
-        },
-      });
+      const response = await axios.get(
+        `https://admin.furqanmebel.az/api/all_products?category_id=${catid}&page=${page}&limit=${productsPerPage}`,
+        {
+          headers: {
+            "Accept-Language": activelanguage,
+          },
+        }
+      );
       if (response.data) {
+        console.log(response.data.products)
         setCategoryProducts(response.data?.products);
+        setTotalProducts(response.data.totalProducts || 0);
       } else {
         console.log(response.status);
       }
@@ -96,12 +114,12 @@ const CatalogPage: React.FC = () => {
 
       if (matchingCategory) {
         setCatID(matchingCategory.id);
-        getProductsToCatID(matchingCategory.id);
+        getProductsToCatID(matchingCategory.id, currentPage);
       }
     } else if (catID) {
-      getProductsToCatID(catID);
+      getProductsToCatID(catID, currentPage);
     }
-  }, [catID, CategoryProductsData, slugcategory]);
+  }, [catID, CategoryProductsData, slugcategory, currentPage]);
 
   const hasProducts = categoryProducts && categoryProducts?.length > 0;
 
@@ -140,6 +158,21 @@ const CatalogPage: React.FC = () => {
                 priceMinMaxData={priceMinMaxData}
                 selectedCategoryProducts={hasProducts ? categoryProducts : []}
               />
+            </div>
+
+            <div className="pagination-controls">
+              {/* Previous Page Button */}
+              <button onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                Əvvəlki
+              </button>
+
+              {/* Page Numbers */}
+              <span>{currentPage}</span>
+
+              {/* Next Page Button */}
+              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                Sonrakı
+              </button>
             </div>
           </div>
         </div>

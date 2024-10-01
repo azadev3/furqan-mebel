@@ -74,7 +74,7 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts }) => {
             <img
               style={{ cursor: "pointer" }}
               onClick={() => {
-                navigate(`/products/${data?.slug}`);
+                navigate(`/product_single/${data?.slug}`);
               }}
               src={data.img}
               alt={`${data.id}-image`}
@@ -91,7 +91,7 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts }) => {
               </div>
             )}
           </div>
-          <article className="product-description" onClick={() => navigate(`/products/${data.slug}`)}>
+          <article className="product-description" onClick={() => navigate(`/product_single/${data.slug}`)}>
             <div className="top">
               <span className="category-name">{data.category_name}</span>
               <h3 className="product-name">{data.title}</h3>

@@ -14,7 +14,7 @@ const SimiliarProducts: React.FC = () => {
   const navigate = useNavigate();
 
   const goInnerProductPage = (slug: string) => {
-    navigate(`/products/${slug.toLowerCase()}`);
+    navigate(`/product_single/${slug.toLowerCase()}`);
   };
 
   //FETCH ALL PRODUCTS

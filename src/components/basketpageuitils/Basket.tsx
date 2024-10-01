@@ -208,7 +208,7 @@ const Basket: React.FC = () => {
                     <div className="basket-item-card" key={item.id}>
                       <CgClose className="remove-item" onClick={() => removeProduct(item.product.id)} />
 
-                      <article className="left-information" onClick={() => navigate(`/products/${item.product.slug}`)}>
+                      <article className="left-information" onClick={() => navigate(`/product_single/${item.product.slug}`)}>
                         <div className="image-info">
                           <img src={item.product.img} alt={`${item.product.id}-img`} />
                         </div>
@@ -234,7 +234,7 @@ const Basket: React.FC = () => {
                         <div className="basket-item-card" key={item.id}>
                           <CgClose className="remove-item" onClick={() => removeProduct(item?.id)} />
     
-                          <article className="left-information" onClick={() => navigate(`/products/${item?.slug}`)}>
+                          <article className="left-information" onClick={() => navigate(`/product_single/${item?.slug}`)}>
                             <div className="image-info">
                               <img src={item?.img} alt={`${item?.id}-img`} />
                             </div>
