@@ -18,6 +18,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Categories } from "./header/CatalogToggleMenu";
 import { Baseurl } from "../api/Baseurl";
 import { useMatch, useParams } from "react-router-dom";
+import { Pagination, Stack } from "@mui/material";
 
 const CatalogPage: React.FC = () => {
   const { slugcategory } = useParams<{ slugcategory: string }>();
@@ -62,10 +63,6 @@ const CatalogPage: React.FC = () => {
 
   const [categoryProducts, setCategoryProducts] = React.useState<CatProductType[]>([]);
 
-  React.useEffect(() => {
-    console.log(catID)
-  }, [])
-
   const getProductsToCatID = async (catid: number, page: number) => {
     try {
       const response = await axios.get(
@@ -77,9 +74,9 @@ const CatalogPage: React.FC = () => {
         }
       );
       if (response.data) {
-        console.log(response.data.products)
+        console.log(response.data.products);
         setCategoryProducts(response.data?.products);
-        setTotalProducts(response.data.totalProducts || 0);
+        setTotalProducts(response.data?.pagination?.total || 0);
       } else {
         console.log(response.status);
       }
@@ -160,20 +157,21 @@ const CatalogPage: React.FC = () => {
               />
             </div>
 
-            <div className="pagination-controls">
-              {/* Previous Page Button */}
+            <Stack spacing={2}>
+              <Pagination page={currentPage} onChange={() => handlePageChange(currentPage + 1)} count={totalPages} color="secondary" />
+            </Stack>
+            {/* <div className="pagination-controls">
               <button onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
                 Əvvəlki
               </button>
 
-              {/* Page Numbers */}
               <span>{currentPage}</span>
+              <span>{totalPages - currentPage}</span>
 
-              {/* Next Page Button */}
               <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
                 Sonrakı
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

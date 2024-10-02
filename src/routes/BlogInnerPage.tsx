@@ -32,7 +32,7 @@ const BlogInnerPage: React.FC = () => {
     BlogData &&
     BlogData.length > 0 &&
     BlogData.find((item: BlogsType) => {
-      return item?.slug.toLowerCase() === slug?.toLowerCase();
+      return item?.slug === slug?.toLowerCase();
     });
 
   return (

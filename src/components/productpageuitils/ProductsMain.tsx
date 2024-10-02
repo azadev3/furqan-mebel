@@ -6,6 +6,7 @@ import Loader from "../../uitils/Loader";
 import ProductCard from "../../features/ProductCard";
 import axios from "axios";
 import { SelectedLanguageState } from "../header/SelectedLanguage";
+import { Pagination, Stack } from "@mui/material";
 
 export const PriceAscDataState = atom<CatProductType[]>({
   key: "PriceAscDataState",
@@ -54,7 +55,7 @@ const ProductsMain: React.FC = () => {
 
       if (response.data) {
         setSelectedProd(response.data.products);
-        setTotalProducts(response.data.totalProducts || 0);
+        setTotalProducts(response.data?.pagination?.total || 0);
       } else {
         console.log("Response status:", response.status);
       }
@@ -94,20 +95,26 @@ const ProductsMain: React.FC = () => {
           </div>
         )}
 
-        <div className="pagination-controls">
-          {/* Previous Page Button */}
+        <Stack spacing={2}>
+          <Pagination
+            page={currentPage}
+            onChange={() => handlePageChange(currentPage + 1)}
+            count={totalPages}
+            color="secondary"
+          />
+        </Stack>
+
+        {/* <div className="pagination-controls">
           <button onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
             Əvvəlki
           </button>
 
-          {/* Page Numbers */}
           <span>{currentPage}</span>
 
-          {/* Next Page Button */}
           <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
             Sonrakı
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

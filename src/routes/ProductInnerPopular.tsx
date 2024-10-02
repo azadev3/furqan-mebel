@@ -2,8 +2,6 @@ import React from "react";
 import NavigationShower from "../uitils/NavigationShower";
 import { useParams } from "react-router-dom";
 import SimiliarProducts from "../components/basketpageuitils/SimiliarProducts";
-import ImageSection from "../components/productinneruitils/ImageSection";
-import ProductSection from "../components/productinneruitils/ProductSection";
 import Sizes from "../components/productinneruitils/Sizes";
 import { useRecoilValue } from "recoil";
 import { SelectedLanguageState } from "../components/header/SelectedLanguage";
@@ -13,31 +11,33 @@ import axios from "axios";
 import { CatProductType } from "../components/productpageuitils/filteruitils/CategoriesForFilter";
 import { Helmet } from "react-helmet";
 import Loader from "../uitils/Loader";
+import ImageSectionPopular from "../components/productinneruitils/ImageSectionPopular";
+import ProductSectionPopular from "../components/productinneruitils/ProductSectionPopular";
 
-const ProductInner: React.FC = () => {
-  const { slugproduct } = useParams();
+const ProductInnerPopular: React.FC = () => {
+  const { slugproductpopular } = useParams();
 
   //FETCH ALL PRODUCTS
   const activeLanguage = useRecoilValue(SelectedLanguageState);
-  const { data: allProductsData, isLoading } = useQuery({
-    queryKey: ["allProductKey", activeLanguage],
+  const { data: popularProducts, isLoading } = useQuery({
+    queryKey: ["popularProductsKey", activeLanguage],
     queryFn: async () => {
-      const response = await axios.get(`${Baseurl}/all_products`, {
+      const response = await axios.get(`${Baseurl}/popular_products`, {
         headers: {
           "Content-Type": "application/json",
           "Accept-Language": activeLanguage,
         },
       });
-      return response.data?.products;
+      return response.data?.popular_products;
     },
     staleTime: 1000000,
   });
 
   const productInner =
-    allProductsData &&
-    allProductsData?.length > 0 &&
-    allProductsData.find((item: CatProductType) => {
-      return item?.slug === slugproduct?.toLowerCase();
+    popularProducts &&
+    popularProducts?.length > 0 &&
+    popularProducts.find((item: CatProductType) => {
+      return item?.slug === slugproductpopular?.toLowerCase();
     });
 
   return (
@@ -52,18 +52,18 @@ const ProductInner: React.FC = () => {
           <Loader />
         ) : (
           <>
-          <NavigationShower
-          prevpage={productInner && productInner.title.toString() ? productInner.title.toString() : ""}
-        />
+            <NavigationShower
+              prevpage={productInner && productInner.title.toString() ? productInner.title.toString() : ""}
+            />
 
-        <div className="product-showing-area">
-          <div className="product-showing">
-            <ImageSection />
-            <ProductSection />
-          </div>
-        </div>
-        <Sizes />
-        <SimiliarProducts />
+            <div className="product-showing-area">
+              <div className="product-showing">
+                <ImageSectionPopular />
+                <ProductSectionPopular />
+              </div>
+            </div>
+            <Sizes />
+            <SimiliarProducts />
           </>
         )}
       </section>
@@ -71,4 +71,4 @@ const ProductInner: React.FC = () => {
   );
 };
 
-export default ProductInner;
+export default ProductInnerPopular;

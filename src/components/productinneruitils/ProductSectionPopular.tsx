@@ -14,31 +14,30 @@ import getCookie from "../../getCookie";
 import { addBasketFunction, addBasketFunctionStorage } from "../../features/AddBasket/AddBasket";
 import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
 
-const ProductSection: React.FC = () => {
+const ProductSectionPopular: React.FC = () => {
   const { translations } = useTranslations();
-  const { slugproduct } = useParams();
-
+  const { slugproductpopular } = useParams();
+  
   //FETCH ALL PRODUCTS
   const activeLanguage = useRecoilValue(SelectedLanguageState);
-  const { data: allProductsData } = useQuery({
-    queryKey: ["allProductKey", activeLanguage],
+  const { data: popularProducts } = useQuery({
+    queryKey: ["popularProductsKey", activeLanguage],
     queryFn: async () => {
-      const response = await axios.get(`${Baseurl}/all_products`, {
+      const response = await axios.get(`${Baseurl}/popular_products`, {
         headers: {
           "Content-Type": "application/json",
           "Accept-Language": activeLanguage,
         },
       });
-      return response.data?.products;
+      return response.data?.popular_products;
     },
     staleTime: 1000000,
   });
 
-
   const productInner =
-    allProductsData && allProductsData.length > 0
-      ? allProductsData.find((item: CatProductType) => {
-          return item?.slug === slugproduct?.toLowerCase();
+    popularProducts && popularProducts.length > 0
+      ? popularProducts.find((item: CatProductType) => {
+          return item?.slug === slugproductpopular?.toLowerCase();
         })
       : "";
 
@@ -65,20 +64,20 @@ const ProductSection: React.FC = () => {
 
       {productInner && productInner?.is_stock ? (
         <button
-        className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
-        onClick={() => {
-          if (isAuth && token) {
-            addBasketFunction(productInner?.id, productInner, activeLanguage, token);
-            setIsAdded(productInner?.id);
-          } else {
-            addBasketFunctionStorage(productInner);
-            setIsAdded(productInner?.id);
-          }
-        }}>
-        {isAdded === productInner?.id ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
-      </button>
+          className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
+          onClick={() => {
+            if (isAuth && token) {
+              addBasketFunction(productInner?.id, productInner, activeLanguage, token);
+              setIsAdded(productInner?.id);
+            } else {
+              addBasketFunctionStorage(productInner);
+              setIsAdded(productInner?.id);
+            }
+          }}>
+          {isAdded === productInner?.id ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
+        </button>
       ) : (
-        <p style={{color: "red"}}>Stokda yoxdur</p>
+        <p style={{ color: "red" }}>Stokda yoxdur</p>
       )}
 
       <div className="details-section">
@@ -116,13 +115,14 @@ const ProductSection: React.FC = () => {
       </div>
 
       <article className="set-modules">
-        {productInner && Array(productInner)?.map((item: CatProductType) => {
-          if(item && item?.modules && item?.modules?.length > 0) {
-            return <h3 key={item?.id}>{translations["deste_daxil_modullar"]}</h3>
-          } else {
-            return ""
-          }
-        })}
+        {productInner &&
+          Array(productInner)?.map((item: CatProductType) => {
+            if (item && item?.modules && item?.modules?.length > 0) {
+              return <h3 key={item?.id}>{translations["deste_daxil_modullar"]}</h3>;
+            } else {
+              return "";
+            }
+          })}
         <div className="grid-modules">
           {productInner &&
             Array(productInner)?.map((item: CatProductType) =>
@@ -143,4 +143,4 @@ const ProductSection: React.FC = () => {
   );
 };
 
-export default ProductSection;
+export default ProductSectionPopular;

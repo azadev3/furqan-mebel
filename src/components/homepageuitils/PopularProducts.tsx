@@ -86,6 +86,7 @@ const ProductsInterface: React.FC = () => {
       });
 
       if (response.data) {
+        console.log(response.data?.popular_products, 'ssssss')
         setPopularProducts(response.data?.popular_products);
       } else {
         console.log(response.status);
@@ -145,7 +146,7 @@ const ProductsInterface: React.FC = () => {
                     {popularProducts && popularProducts?.length > 0
                       ? popularProducts.map((item: CatProductType) => (
                           <SwiperSlide key={item.id}>
-                            <Link to={`/product_single/${item?.slug.toLowerCase()}`} className="subitem">
+                            <Link to={`/popular_product_single/${item?.slug}`} className="subitem">
                               <img className="shop-bag" src="../shopbag.svg" alt="show" title="Səbət" />
 
                               <div className="punts">
@@ -171,12 +172,10 @@ const ProductsInterface: React.FC = () => {
                                 <span className="category-name">{item?.category_name}</span>
                                 <span className="product-name">{item?.title}</span>
                                 <div className="prices">
-                                  <span>{item.price} AZN</span>
-                                  {item.discounted_price ? (
-                                    <article className="discountprice">{item.discounted_price} AZN</article>
-                                  ) : (
-                                    ""
-                                  )}
+                                  <span className="price">
+                                    {item.discounted_price ? `${item.discounted_price} AZN` : `${item.price} AZN`}
+                                  </span>
+                                  {item.discounted_price && <span className="discountprice">{item.price} AZN</span>}
                                 </div>
                               </div>
                             </Link>
@@ -195,7 +194,7 @@ const ProductsInterface: React.FC = () => {
                 <React.Fragment>
                   {popularProducts && popularProducts?.length > 0
                     ? popularProducts.slice(0, 4).map((item: CatProductType) => (
-                        <Link to={`/product_single/${item?.slug.toLowerCase()}`} key={item.id} className="subitem">
+                        <Link to={`/popular_product_single/${item?.slug}`} key={item.id} className="subitem">
                           <div className="add-basket">
                             <HiOutlineShoppingBag className="shopping-bag" />
                           </div>
@@ -223,12 +222,10 @@ const ProductsInterface: React.FC = () => {
                             <span className="category-name">{item.category_name}</span>
                             <span className="product-name">{item.title}</span>
                             <div className="prices">
-                              <span>{item.price} AZN</span>
-                              {item.discounted_price ? (
-                                <article className="discountprice">{item.discounted_price} AZN</article>
-                              ) : (
-                                ""
-                              )}
+                              <span className="price">
+                                {item.discounted_price ? `${item.discounted_price} AZN` : `${item.price} AZN`}
+                              </span>
+                              {item.discounted_price && <span className="discountprice">{item.price} AZN</span>}
                             </div>
                           </div>
                         </Link>

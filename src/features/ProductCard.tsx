@@ -87,7 +87,7 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts }) => {
             )}
             {data.discounted_price && (
               <div className="product-discounted-percentage-flag">
-                <span>{`${Number(data?.discounted_price).toFixed(2)}%`}</span>
+                <span>{data?.discount_percent}%</span>
               </div>
             )}
           </div>
@@ -102,8 +102,10 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts }) => {
               )}
             </div>
             <div className="prices">
-              <span className="price">{data.price} AZN</span>
-              {data.discounted_price ? <span className="discountprice">{data.discounted_price} AZN</span> : ""}
+              <span className="price">
+                {data.discounted_price ? `${data.discounted_price} AZN` : `${data.price} AZN`}
+              </span>
+              {data.discounted_price && <span className="discountprice">{data.price} AZN</span>}
             </div>
           </article>
         </section>

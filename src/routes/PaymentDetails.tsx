@@ -95,11 +95,6 @@ const PaymentDetails: React.FC = () => {
     }
   };
 
-  React.useEffect(() => {
-    console.log(radioRefs);
-    console.log(activeMonth, "f");
-  }, [activeMonth, radioRefs]);
-
   const { translations } = useTranslations();
 
   return (

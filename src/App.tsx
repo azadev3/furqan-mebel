@@ -50,6 +50,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { CgClose } from "react-icons/cg";
 import CatalogPage from "./components/CatalogPage";
+import ProductInnerPopular from "./routes/ProductInnerPopular";
 
 const App: React.FC = () => {
   const [isAuth, setAuth] = useRecoilState(UserIsAuthState);
@@ -408,6 +409,7 @@ const App: React.FC = () => {
         <Route path="/vacations" element={<VacationsPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/product_single/:slugproduct" element={<ProductInner />} />
+        <Route path="/popular_product_single/:slugproductpopular" element={<ProductInnerPopular />} />
         <Route path="/catalog/:slugcategory" element={<CatalogPage />} />
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="/mybasket" element={<BasketPage />} />

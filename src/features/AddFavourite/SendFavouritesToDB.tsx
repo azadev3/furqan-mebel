@@ -12,7 +12,7 @@ export const sendFavouritesToDB = async (favitems: CatProductType[], token: stri
     });
 
     if (response.data) {
-      console.log(response.data, "going");
+      console.log(response.data);
     } else {
       console.log(response.status);
     }

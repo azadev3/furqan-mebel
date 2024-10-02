@@ -75,12 +75,10 @@ const SimiliarProducts: React.FC = () => {
                     <span className="category-name">{item?.category_name}</span>
                     <h1 className="product-name">{item?.title}</h1>
                     <div className="prices">
-                      <span>{item?.price} AZN</span>
-                      {item.discounted_price ? (
-                        <article className="discountprice">{item?.discounted_price} AZN</article>
-                      ) : (
-                        ""
-                      )}
+                      <span className="price">
+                        {item.discounted_price ? `${item.discounted_price} AZN` : `${item.price} AZN`}
+                      </span>
+                      {item.discounted_price && <span className="discountprice">{item.price} AZN</span>}
                     </div>
                   </div>
                 </SwiperSlide>

@@ -36,7 +36,6 @@ export interface CatProductType {
   category_id: number;
   category_name: string;
   content: string;
-  discounted_price: string;
   id: number;
   images: ImagesPopularProducts;
   img: string;
@@ -44,6 +43,8 @@ export interface CatProductType {
   is_in_cart: boolean;
   is_new: boolean;
   is_popular: boolean;
+  discount_percent: any;
+  discounted_price: any;
   is_stock: boolean;
   modules: ModulesProducts[];
   options: Options[];

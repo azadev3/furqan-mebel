@@ -46,7 +46,7 @@ const PaginationProductsPage = ({ data, itemsPerPage }: { data: any; itemsPerPag
     <div className="products-page-products-pag">
       <div className="products-page-content">
         {currentData && currentData.length > 0 ? currentData.map((item: ProductsInterface) => (
-          <Link to={`/product_single/${item?.slug.toLowerCase()}`} className="items" key={item.id}>
+          <Link to={`/product_single/${item?.slug}`} className="items" key={item.id}>
             <img className="shop-bag" src="../shopbag.svg" alt="show" title="Səbət" />
             <div
               className="add-favourites"
