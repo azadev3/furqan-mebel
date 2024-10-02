@@ -19,7 +19,7 @@ type Props = {
   otherFilterData: CatProductType[];
 };
 
-const ProductCard: React.FC<Props> = ({ selectedCategoryProducts }) => {
+const ProductCardForCatalog: React.FC<Props> = ({ selectedCategoryProducts }) => {
   const isAuth = useRecoilValue(UserIsAuthState);
   const token = getCookie("accessToken");
   const selectedLanguage = useRecoilValue(SelectedLanguageState);
@@ -120,4 +120,4 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts }) => {
   return <>{renderProducts(selectedCategoryProducts)}</>;
 };
 
-export default ProductCard;
+export default ProductCardForCatalog;

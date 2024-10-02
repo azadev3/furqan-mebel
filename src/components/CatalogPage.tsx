@@ -12,13 +12,13 @@ import {
 } from "./productpageuitils/filteruitils/CategoriesForFilter";
 import axios from "axios";
 import { SelectedLanguageState } from "./header/SelectedLanguage";
-import ProductCard from "../features/ProductCard";
 import { OthersFilterData, PriceAscDataState, PriceMinMaxState } from "./productpageuitils/ProductsMain";
 import { useQuery } from "@tanstack/react-query";
 import { Categories } from "./header/CatalogToggleMenu";
 import { Baseurl } from "../api/Baseurl";
 import { useMatch, useParams } from "react-router-dom";
 import { Pagination, Stack } from "@mui/material";
+import ProductCardForCatalog from "../features/ProductCardForCatalog";
 
 const CatalogPage: React.FC = () => {
   const { slugcategory } = useParams<{ slugcategory: string }>();
@@ -149,7 +149,7 @@ const CatalogPage: React.FC = () => {
           <div className="container-catalogpage-main">
             <h1>{catName[catID ? catID : 0] || catNameLocal || ""}</h1>
             <div className="product">
-              <ProductCard
+              <ProductCardForCatalog
                 otherFilterData={otherFilterData}
                 priceAscData={priceAscData}
                 priceMinMaxData={priceMinMaxData}
