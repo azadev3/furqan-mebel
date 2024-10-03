@@ -53,12 +53,10 @@ const ProductSectionPopular: React.FC = () => {
         <h1 style={{ fontWeight: "500" }}>{productInner?.title}</h1>
 
         <div className="sale">
-          <strong className="price">{productInner?.price} AZN</strong>
-          {productInner && productInner?.discounted_price ? (
-            <span className="discountprice">{productInner?.discounted_price}</span>
-          ) : (
-            ""
-          )}
+          <span className="price">
+            {productInner?.discounted_price ? `${productInner?.discounted_price} AZN` : `${productInner?.price} AZN`}
+          </span>
+          {productInner?.discounted_price && <span className="discountprice">{productInner?.price} AZN</span>}
         </div>
       </div>
 

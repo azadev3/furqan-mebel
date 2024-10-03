@@ -45,10 +45,10 @@ export interface CatProductType {
   is_popular: boolean;
   discount_percent: any;
   discounted_price: any;
+  price: string;
   is_stock: boolean;
   modules: ModulesProducts[];
   options: Options[];
-  price: string;
   slug: string;
   title: string;
   quantity: number;

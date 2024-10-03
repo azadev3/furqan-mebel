@@ -34,7 +34,6 @@ const ProductSection: React.FC = () => {
     staleTime: 1000000,
   });
 
-
   const productInner =
     allProductsData && allProductsData.length > 0
       ? allProductsData.find((item: CatProductType) => {
@@ -54,31 +53,29 @@ const ProductSection: React.FC = () => {
         <h1 style={{ fontWeight: "500" }}>{productInner?.title}</h1>
 
         <div className="sale">
-          <strong className="price">{productInner?.price} AZN</strong>
-          {productInner && productInner?.discounted_price ? (
-            <span className="discountprice">{productInner?.discounted_price}</span>
-          ) : (
-            ""
-          )}
+          <span className="price">
+            {productInner?.discounted_price ? `${productInner?.discounted_price} AZN` : `${productInner?.price} AZN`}
+          </span>
+          {productInner?.discounted_price && <span className="discountprice">{productInner?.price} AZN</span>}
         </div>
       </div>
 
       {productInner && productInner?.is_stock ? (
         <button
-        className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
-        onClick={() => {
-          if (isAuth && token) {
-            addBasketFunction(productInner?.id, productInner, activeLanguage, token);
-            setIsAdded(productInner?.id);
-          } else {
-            addBasketFunctionStorage(productInner);
-            setIsAdded(productInner?.id);
-          }
-        }}>
-        {isAdded === productInner?.id ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
-      </button>
+          className={isAdded === productInner?.id ? "remove-basket" : "add-basket"}
+          onClick={() => {
+            if (isAuth && token) {
+              addBasketFunction(productInner?.id, productInner, activeLanguage, token);
+              setIsAdded(productInner?.id);
+            } else {
+              addBasketFunctionStorage(productInner);
+              setIsAdded(productInner?.id);
+            }
+          }}>
+          {isAdded === productInner?.id ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
+        </button>
       ) : (
-        <p style={{color: "red"}}>Stokda yoxdur</p>
+        <p style={{ color: "red" }}>Stokda yoxdur</p>
       )}
 
       <div className="details-section">
@@ -116,13 +113,14 @@ const ProductSection: React.FC = () => {
       </div>
 
       <article className="set-modules">
-        {productInner && Array(productInner)?.map((item: CatProductType) => {
-          if(item && item?.modules && item?.modules?.length > 0) {
-            return <h3 key={item?.id}>{translations["deste_daxil_modullar"]}</h3>
-          } else {
-            return ""
-          }
-        })}
+        {productInner &&
+          Array(productInner)?.map((item: CatProductType) => {
+            if (item && item?.modules && item?.modules?.length > 0) {
+              return <h3 key={item?.id}>{translations["deste_daxil_modullar"]}</h3>;
+            } else {
+              return "";
+            }
+          })}
         <div className="grid-modules">
           {productInner &&
             Array(productInner)?.map((item: CatProductType) =>
