@@ -222,11 +222,19 @@ const Basket: React.FC = () => {
 
                   <article className="right">
                     <h4 className="price">
-                      {(Number(item?.product?.discounted_price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN
+                      {item?.product?.discounted_price ? (
+                        <>
+                          {`${(Number(item?.product?.discounted_price) * (Number(item?.quantity) || 1)).toFixed(
+                            2
+                          )} AZN`}
+                          <span style={{ color: "#cecece", textDecoration: "line-through", fontSize: "18px", marginLeft: "16px" }}>
+                            {`${(Number(item?.product?.price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN`}
+                          </span>
+                        </>
+                      ) : (
+                        `${(Number(item?.product?.price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN`
+                      )}
                     </h4>
-                    <span style={{ color: "#cecece", textDecoration: "line-through", fontSize: "18px" }}>
-                      {(Number(item?.product?.price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN
-                    </span>
                     <div className="counters">
                       <button onClick={() => decrementProduct(item.product.id)}>-</button>
                       <span>{item.quantity || 1}</span>
@@ -253,11 +261,17 @@ const Basket: React.FC = () => {
 
                     <article className="right">
                       <h4 className="price">
-                        {(Number(item?.discounted_price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN
+                        {item?.discounted_price ? (
+                          <>
+                            {`${(Number(item?.discounted_price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN`}
+                            <span style={{ color: "#cecece", textDecoration: "line-through", fontSize: "18px" }}>
+                              {`${(Number(item?.price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN`}
+                            </span>
+                          </>
+                        ) : (
+                          `${(Number(item?.price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN`
+                        )}
                       </h4>
-                      <span style={{ color: "#cecece", textDecoration: "line-through", fontSize: "18px" }}>
-                        {(Number(item?.price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN
-                      </span>
 
                       <div className="counters">
                         <button onClick={() => decrementProduct(item?.id)}>-</button>
