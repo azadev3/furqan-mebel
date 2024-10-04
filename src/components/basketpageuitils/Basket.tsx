@@ -118,8 +118,8 @@ const Basket: React.FC = () => {
             })
             .filter((item) => item !== null);
 
-            setBasketProducts(updatedBasketProducts as BasketDataInterface[]);
-            location.reload();
+          setBasketProducts(updatedBasketProducts as BasketDataInterface[]);
+          location.reload();
         } else {
           console.error("Error while decrementing product:", response);
         }
@@ -168,7 +168,7 @@ const Basket: React.FC = () => {
       const timeout = setTimeout(() => {
         window.location.reload();
       }, 1500);
-      
+
       return () => clearTimeout(timeout);
     } else {
       const updatedBasket = basketItems.filter((item) => item.id !== id);
@@ -202,61 +202,74 @@ const Basket: React.FC = () => {
       {loading ? (
         <Loader />
       ) : (
-            <>
-              {basketProducts.length > 0
-                ? basketProducts.map((item: BasketDataInterface) => (
-                    <div className="basket-item-card" key={item.id}>
-                      <CgClose className="remove-item" onClick={() => removeProduct(item.product.id)} />
+        <>
+          {basketProducts.length > 0
+            ? basketProducts.map((item: BasketDataInterface) => (
+                <div className="basket-item-card" key={item.id}>
+                  <CgClose className="remove-item" onClick={() => removeProduct(item.product.id)} />
 
-                      <article className="left-information" onClick={() => navigate(`/product_single/${item.product.slug}`)}>
-                        <div className="image-info">
-                          <img src={item.product.img} alt={`${item.product.id}-img`} />
-                        </div>
-                        <div className="descriptions">
-                          <h3>{item.product.title}</h3>
-                          <p>{item?.product?.category_name}</p>
-                        </div>
-                      </article>
-
-                      <article className="right">
-                        <h4 className="price">{parseFloat(item.product.price) * (item.quantity || 1)} AZN</h4>
-                        <div className="counters">
-                          <button onClick={() => decrementProduct(item.product.id)}>-</button>
-                          <span>{item.quantity || 1}</span>
-                          <button onClick={() => incrementProduct(item.product.id)}>+</button>
-                        </div>
-                      </article>
+                  <article
+                    className="left-information"
+                    onClick={() => navigate(`/product_single/${item.product.slug}`)}>
+                    <div className="image-info">
+                      <img src={item.product.img} alt={`${item.product.id}-img`} />
                     </div>
-                  ))
-                : basketItems ? (
-                  basketItems.length > 0
-                    ? basketItems.map((item: CatProductType) => (
-                        <div className="basket-item-card" key={item.id}>
-                          <CgClose className="remove-item" onClick={() => removeProduct(item?.id)} />
-    
-                          <article className="left-information" onClick={() => navigate(`/product_single/${item?.slug}`)}>
-                            <div className="image-info">
-                              <img src={item?.img} alt={`${item?.id}-img`} />
-                            </div>
-                            <div className="descriptions">
-                              <h3>{item?.title}</h3>
-                              <p>{item?.category_name}</p>
-                            </div>
-                          </article>
-    
-                          <article className="right">
-                            <h4 className="price">{parseFloat(item?.price) * (item.quantity || 1)} AZN</h4>
-                            <div className="counters">
-                              <button onClick={() => decrementProduct(item?.id)}>-</button>
-                              <span>{item.quantity || 1}</span>
-                              <button onClick={() => incrementProduct(item?.id)}>+</button>
-                            </div>
-                          </article>
-                        </div>
-                      ))
-                    : "Səbət boşdur."
-                ) : ""}
-            </>
+                    <div className="descriptions">
+                      <h3>{item.product.title}</h3>
+                      <p>{item?.product?.category_name}</p>
+                    </div>
+                  </article>
+
+                  <article className="right">
+                    <h4 className="price">
+                      {(Number(item?.product?.discounted_price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN
+                    </h4>
+                    <span style={{ color: "#cecece", textDecoration: "line-through", fontSize: "18px" }}>
+                      {(Number(item?.product?.price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN
+                    </span>
+                    <div className="counters">
+                      <button onClick={() => decrementProduct(item.product.id)}>-</button>
+                      <span>{item.quantity || 1}</span>
+                      <button onClick={() => incrementProduct(item.product.id)}>+</button>
+                    </div>
+                  </article>
+                </div>
+              ))
+            : basketItems
+            ? basketItems.length > 0
+              ? basketItems.map((item: CatProductType) => (
+                  <div className="basket-item-card" key={item.id}>
+                    <CgClose className="remove-item" onClick={() => removeProduct(item?.id)} />
+
+                    <article className="left-information" onClick={() => navigate(`/product_single/${item?.slug}`)}>
+                      <div className="image-info">
+                        <img src={item?.img} alt={`${item?.id}-img`} />
+                      </div>
+                      <div className="descriptions">
+                        <h3>{item?.title}</h3>
+                        <p>{item?.category_name}</p>
+                      </div>
+                    </article>
+
+                    <article className="right">
+                      <h4 className="price">
+                        {(Number(item?.discounted_price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN
+                      </h4>
+                      <span style={{ color: "#cecece", textDecoration: "line-through", fontSize: "18px" }}>
+                        {(Number(item?.price) * (Number(item?.quantity) || 1)).toFixed(2)} AZN
+                      </span>
+
+                      <div className="counters">
+                        <button onClick={() => decrementProduct(item?.id)}>-</button>
+                        <span>{item.quantity || 1}</span>
+                        <button onClick={() => incrementProduct(item?.id)}>+</button>
+                      </div>
+                    </article>
+                  </div>
+                ))
+              : "Səbət boşdur."
+            : ""}
+        </>
       )}
 
       {hasItems && (
