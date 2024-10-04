@@ -70,6 +70,11 @@ const SimiliarProducts: React.FC = () => {
                   <img className="shop-bag" src="../shopbag.svg" alt="show" title="Səbət" />
                   <div className="product-image">
                     <img src={item?.img} alt={`${item.id}-image`} title={item?.title} />
+                    {item.discounted_price && (
+                      <div className="product-discounted-percentage-flag">
+                        <span>{item?.discount_percent}%</span>
+                      </div>
+                    )}
                   </div>
                   <div className="item-details">
                     <span className="category-name">{item?.category_name}</span>

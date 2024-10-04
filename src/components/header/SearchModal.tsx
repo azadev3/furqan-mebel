@@ -21,12 +21,15 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
   //if user searched, highlight the searched text if equal result text
   const HighlightedText = ({ text, highlight }: { text: any; highlight: any }) => {
     if (!highlight.trim()) {
-      return <>{text}</>
+      return <>{text}</>;
     }
 
     const parts = text?.split(new RegExp(`(${highlight})`, "i"));
-    return parts && parts?.map((part: any, index: any) =>
-      part?.toLowerCase() === highlight?.toLowerCase() ? <mark key={index}>{part}</mark> : part
+    return (
+      parts &&
+      parts?.map((part: any, index: any) =>
+        part?.toLowerCase() === highlight?.toLowerCase() ? <mark key={index}>{part}</mark> : part
+      )
     );
   };
 
@@ -126,10 +129,17 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
                       </p>
                     </div>
                     <div className="right-prices">
-                      <span className="price">{results?.price} ₼</span>
-                      {results.discounted_price ? <span className="discount">{results?.discounted_price} ₼</span> : ""}
+                      <span className="price">
+                        {results.discounted_price ? `${results.discounted_price} ₼` : `${results.price} ₼`}
+                      </span>
+                      {results.discounted_price && (
+                        <span className="price" style={{ textDecoration: "line-through", color: "#cecece", fontSize: "21px" }}>
+                          {results.price} ₼
+                        </span>
+                      )}
                     </div>
                   </div>
+
                 </Link>
               ))
             ) : (

@@ -21,6 +21,34 @@
   width: 100%;
 }
 
+.product-inner-page-wrapper
+  .productinnerpage
+  .similiar-products
+  .carouselsimiliar-products
+  .swiper-slide
+  .product-image
+  .product-discounted-percentage-flag {
+  background: #fafafa;
+  border: 1px solid #f2f2f5;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  padding: 3px;
+  min-width: 34px;
+  width: 34px;
+  height: 34px;
+  span {
+    color: #43b749;
+    font-weight: 500;
+    font-size: 12px;
+  }
+}
+
 .payment-success-page-wrapper .payment-success-page .card-repition .process {
   display: none !important;
 }
@@ -1343,33 +1371,117 @@ $border-top-color_1: rgb(57, 190, 57);
   }
 }
 
-.homepage-wrapper .homepage .popular-products-wrapper .popular-products .container-with-popular-products .categories-filtering-items .subitem .item-details .product-name {
+.homepage-wrapper
+  .homepage
+  .popular-products-wrapper
+  .popular-products
+  .container-with-popular-products
+  .categories-filtering-items
+  .subitem
+  .item-details
+  .product-name {
   @include noneOverflow();
   -webkit-line-clamp: 1;
   line-clamp: 1;
 }
-.product-inner-page-wrapper .productinnerpage .similiar-products .carouselsimiliar-products .swiper-slide .item-details .product-name {
+.product-inner-page-wrapper
+  .productinnerpage
+  .similiar-products
+  .carouselsimiliar-products
+  .swiper-slide
+  .item-details
+  .product-name {
   @include noneOverflow();
   -webkit-line-clamp: 1;
   line-clamp: 1;
 }
-.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .details-section .title-and-description h2 {
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .details-section
+  .title-and-description
+  h2 {
   line-height: 36px;
 }
 .basket-page-wrapper .basketpage .similiar-products .carouselsimiliar-products {
   height: 300px !important;
 }
-.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .left-ranger {
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .credit-terms
+  .terms-wrapper
+  .top-container
+  .left-ranger {
   height: auto !important;
   margin: 0 !important;
 }
-.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .comission, .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .monthly-payment {
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .credit-terms
+  .terms-wrapper
+  .top-container
+  .comission,
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .credit-terms
+  .terms-wrapper
+  .top-container
+  .monthly-payment {
   min-width: 80px !important;
 }
-.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .comission span, .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .monthly-payment span {
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .credit-terms
+  .terms-wrapper
+  .top-container
+  .comission
+  span,
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .credit-terms
+  .terms-wrapper
+  .top-container
+  .monthly-payment
+  span {
   font-size: 10px !important;
 }
-.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .comission p, .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .monthly-payment p {
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .credit-terms
+  .terms-wrapper
+  .top-container
+  .comission
+  p,
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .credit-terms
+  .terms-wrapper
+  .top-container
+  .monthly-payment
+  p {
   font-size: 13px;
   font-weight: 600;
 }
@@ -1379,14 +1491,44 @@ $border-top-color_1: rgb(57, 190, 57);
   width: 100%;
   row-gap: 4px;
 }
-.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .comission, .product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container .monthly-payment {
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .credit-terms
+  .terms-wrapper
+  .top-container
+  .comission,
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .credit-terms
+  .terms-wrapper
+  .top-container
+  .monthly-payment {
   height: 50px !important;
   gap: 0;
 }
-.product-inner-page-wrapper .productinnerpage .product-showing-area .product-showing .product-section .credit-terms .terms-wrapper .top-container {
+.product-inner-page-wrapper
+  .productinnerpage
+  .product-showing-area
+  .product-showing
+  .product-section
+  .credit-terms
+  .terms-wrapper
+  .top-container {
   width: 100% !important;
 }
-.homepage-wrapper .homepage .popular-products-wrapper .popular-products .container-with-popular-products .categories-filtering-items .add-basket {
+.homepage-wrapper
+  .homepage
+  .popular-products-wrapper
+  .popular-products
+  .container-with-popular-products
+  .categories-filtering-items
+  .add-basket {
   display: none !important;
 }
 .about-page-wrapper .about-page .services-us .grid-services .item-service {
@@ -1401,10 +1543,20 @@ $border-top-color_1: rgb(57, 190, 57);
 }
 
 .blog-inner-page-wrapper .inner-page-blog .descriptions {
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-size: 36px;
   }
-  p, span, strong, li, ul, ol {
+  p,
+  span,
+  strong,
+  li,
+  ul,
+  ol {
     color: #191c1f;
     font-size: 20px;
     line-height: 32px;

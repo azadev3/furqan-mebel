@@ -21,11 +21,14 @@ const FavProductCard: React.FC<props> = ({ favProduct }) => {
                   <FaHeart className="iconadded" />
                 </div>
                 <img
-                style={{cursor: "pointer"}}
-                onClick={() => {
-                  navigate(`/product_single/${favproduct?.slug}`);
-                }}
-                src={favproduct?.img} alt={`${favproduct?.id}-image`} title={favproduct?.title} />
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    navigate(`/product_single/${favproduct?.slug}`);
+                  }}
+                  src={favproduct?.img}
+                  alt={`${favproduct?.id}-image`}
+                  title={favproduct?.title}
+                />
                 {favproduct?.is_new && (
                   <div className="new-product-flag">
                     <span>yeni</span>
@@ -48,12 +51,10 @@ const FavProductCard: React.FC<props> = ({ favProduct }) => {
                 </div>
 
                 <div className="prices">
-                  <span className="price">{favproduct?.price} AZN</span>
-                  {favproduct.discounted_price ? (
-                    <span className="discountprice">{favproduct?.discounted_price} AZN</span>
-                  ) : (
-                    ""
-                  )}
+                  <span className="price">
+                    {favproduct.discounted_price ? `${favproduct.discounted_price} AZN` : `${favproduct.price} AZN`}
+                  </span>
+                  {favproduct.discounted_price && <span className="discountprice">{favproduct.price} AZN</span>}
                 </div>
               </article>
             </section>
