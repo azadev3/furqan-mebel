@@ -1562,3 +1562,26 @@ $border-top-color_1: rgb(57, 190, 57);
     line-height: 32px;
   }
 }
+
+.refresh-filter-btn{
+  width: 100%;
+  padding: 7px 12px;
+  margin-top: 24px;
+  border: none;
+  outline: none;
+  background-color: #43b749;
+  border: 1px solid transparent;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 100ms ease-in-out;
+  &:hover {
+    background-color: white;
+    border: 1px solid #43b749;
+    color: black;
+  }
+  &:active {
+    transform: scale(0.99);
+  }
+}

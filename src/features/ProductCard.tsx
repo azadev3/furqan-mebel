@@ -13,13 +13,10 @@ import { SelectedLanguageState } from "../components/header/SelectedLanguage";
 import Loader from "../uitils/Loader";
 
 type Props = {
-  selectedCategoryProducts: CatProductType[];
-  priceAscData: CatProductType[];
-  priceMinMaxData: CatProductType[];
-  otherFilterData: CatProductType[];
+  product: CatProductType[],
 };
 
-const ProductCard: React.FC<Props> = ({ selectedCategoryProducts }) => {
+const ProductCard: React.FC<Props> = ({ product }) => {
   const isAuth = useRecoilValue(UserIsAuthState);
   const token = getCookie("accessToken");
   const selectedLanguage = useRecoilValue(SelectedLanguageState);
@@ -57,7 +54,7 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts }) => {
     }));
 
     if (isAuth && token) {
-      addFavouriteFunction(data.id, selectedCategoryProducts, selectedLanguage, token);
+      addFavouriteFunction(data.id, product, selectedLanguage, token);
     } else {
       addFavouriteFunctionStorage(data);
     }
@@ -117,7 +114,7 @@ const ProductCard: React.FC<Props> = ({ selectedCategoryProducts }) => {
     );
   };
 
-  return <>{renderProducts(selectedCategoryProducts)}</>;
+  return <>{renderProducts(product)}</>;
 };
 
 export default ProductCard;
