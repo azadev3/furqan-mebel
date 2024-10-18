@@ -43,10 +43,35 @@ const ProductInnerCategoryProduct: React.FC = () => {
       return item?.slug?.toLowerCase() === slugproductcategories?.toLowerCase();
     });
 
+
+    
+  //FETCH ALL PRODUCTS
+  const { data: categoryProducts } = useQuery({
+    queryKey: ["catProductKey", activeLanguage],
+    queryFn: async () => {
+      const response = await axios.get(`${Baseurl}/product_single/${slugproductcategories}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept-Language": activeLanguage,
+        },
+      });
+      return response.data?.product;
+    },
+    staleTime: 1000000,
+  });
+
+
+    const productInnerForMetaTitle =
+    categoryProducts && categoryProducts.length > 0
+      ? categoryProducts.find((item: CatProductType) => {
+          return item?.slug === slugproductcategories;
+        })
+      : "";
+
   return (
     <main className="product-inner-page-wrapper">
       <Helmet>
-        <title>{productInner && productInner?.meta_title}</title>
+        <title>{productInnerForMetaTitle && productInnerForMetaTitle?.meta_title || productInner?.title}</title>
         <meta name="keywords" content={productInner && productInner?.meta_keywords} />
         <meta name="description" content={productInner && productInner?.meta_description} />
       </Helmet>

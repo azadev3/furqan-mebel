@@ -357,11 +357,15 @@ const CatalogPage: React.FC = () => {
     window.scrollTo(0, 0);
   };
 
+  const [pageTitle, setPageTitle] = React.useState<string>("");
+
   React.useEffect(() => {
     if (!catID && CategoryProductsData) {
       let matchingCategory: Categories | any;
 
       matchingCategory = CategoryProductsData.find((c) => c?.slug === slugcategory);
+
+      setPageTitle(matchingCategory?.meta_title);
 
       if (!matchingCategory) {
         for (const category of CategoryProductsData) {
@@ -428,12 +432,50 @@ const CatalogPage: React.FC = () => {
     }
   }, []);
 
+  React.useEffect(() => {
+    let matchingCategory: Categories | any;
+
+    CategoryProductsData &&
+      CategoryProductsData.forEach((category) => {
+        if (category.slug === slugcategory) {
+          matchingCategory = category;
+        } else if (category.children) {
+          category.children.forEach((child) => {
+            if (child.slug === slugcategory) {
+              matchingCategory = child;
+            } else if (child.children) {
+              child.children.forEach((subChild) => {
+                if (subChild.slug === slugcategory) {
+                  matchingCategory = subChild;
+                }
+              });
+            }
+          });
+        }
+      });
+
+    if (matchingCategory) {
+      setPageTitle(matchingCategory.meta_title);
+    }
+  }, [CategoryProductsData, slugcategory, currentPage, checkboxChecked, minPrice, maxPrice]);
+
+  const [dropdownMinMax, setDropdownMinMax] = React.useState<boolean>(false);
+  const openMinMaxDropdown = () => {
+    setDropdownMinMax((prev) => !prev);
+  };
+
+  const [dropdownMaterial, setDropdownMaterial] = React.useState<{[key: number]: boolean}>({});
+  const openDropdownMaterial = (id: number) => {
+    setDropdownMaterial((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   return (
     <div className="catalog-page-wrapper">
       <Helmet>
-        <title>
-          {`${seoData?.title} | ${catName[catID ? catID : 0] || "Bütün məhsullar"}` || "Furqan Mebel | Məhsullar"}
-        </title>
+        <title>{pageTitle}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="author" content="Furqan Mebel" />
@@ -466,26 +508,36 @@ const CatalogPage: React.FC = () => {
 
             <div className="filter-relations">
               <div className="price-placement">
-                <span>{translations["qiymet_araligi_filter"]}</span>
-
-                <div className="min-max">
-                  {RangeInputs.map((inputs: RangeInputType) => (
-                    <React.Fragment key={inputs?.id}>
-                      <input
-                        value={inputValue[inputs?.id]}
-                        type={inputs?.type}
-                        placeholder={inputs?.placeholder}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e, inputs?.id)}
-                      />
-                    </React.Fragment>
-                  ))}
+                {/* dropdown min max inputs */}
+                <div className="dropdown-min-max-input">
+                  <div className="dropdown-linked" onClick={openMinMaxDropdown}>
+                    <span>{translations["qiymet_araligi_filter"]}</span>
+                    <img src="../down.svg" alt="" style={{ transform: dropdownMinMax ? "rotate(180deg)" : "" }} />
+                  </div>
+                  <div className={`dropdown-minmax ${dropdownMinMax ? "actived" : ""}`}>
+                    <div className="min-max">
+                      {RangeInputs.map((inputs: RangeInputType) => (
+                        <React.Fragment key={inputs?.id}>
+                          <input
+                            value={inputValue[inputs?.id]}
+                            type={inputs?.type}
+                            placeholder={inputs?.placeholder}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e, inputs?.id)}
+                          />
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 {filterData && filterData.length > 0
-                  ? filterData.map((item: FilterData) => (
+                  ? filterData.map((item: FilterData, i: number) => (
                       <div className="material" key={item.title}>
-                        <span>{item.title}</span>
-                        <div className="materials">
+                        <div className="dropdown-linked" onClick={() => openDropdownMaterial(i)}>
+                          <span>{item.title}</span>
+                          <img src="../down.svg" alt="" style={{ transform: dropdownMaterial[i] ? "rotate(180deg)" : "" }} />
+                        </div>
+                        <div className={`materials ${dropdownMaterial[i] ? "actived" : ""}`}>
                           {item.options.map((option: Optionsfilter) => (
                             <span
                               onClick={() => handleSelectMaterials(option.id)}
