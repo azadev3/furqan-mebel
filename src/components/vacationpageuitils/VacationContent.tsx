@@ -2,12 +2,16 @@ import React from "react";
 import { selectedVacationState, VacationsTypes } from "../../routes/VacationsPage";
 import { useRecoilValue } from "recoil";
 import { Link } from "react-router-dom";
+import { useTranslations } from "../../TranslateContext";
 
 type props = {
   data: VacationsTypes[];
 };
 
 const VacationContent: React.FC<props> = (data) => {
+
+  const { translations } = useTranslations();
+
   const selectedVacation = useRecoilValue(selectedVacationState);
 
   return (
@@ -21,12 +25,12 @@ const VacationContent: React.FC<props> = (data) => {
                 <div className="desc" dangerouslySetInnerHTML={{ __html: item?.description }} />
                 <div className="requirements" dangerouslySetInnerHTML={{ __html: item?.requirement }} />
                 <div className="for-contact">
-                  <span>Müraciət üçün</span>
+                  <span>{translations['muraciet_ucun']}</span>
                   <div className="contacts">
                     <Link to="" className="item">
                       <img src="../em.svg" alt="email" />
                       <div className="righttitles">
-                        <span>Email</span>
+                        <span>{translations['email_input']}</span>
                         <p>{item?.email}</p>
                       </div>
                     </Link>

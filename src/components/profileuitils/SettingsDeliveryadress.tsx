@@ -1,6 +1,10 @@
 import React from "react";
+import { useTranslations } from "../../TranslateContext";
 
 const SettingsDeliveryadress: React.FC = () => {
+
+  const { translations } = useTranslations();
+
   return (
     <div className="delivery-adress">
       <div className="head-title">
@@ -10,11 +14,11 @@ const SettingsDeliveryadress: React.FC = () => {
       <form className="form-area">
         <div className="name-surname">
           <div className="name">
-            <label>Ad</label>
+            <label>{translations['ad_input']}</label>
             <input type="text" placeholder="Jhon" />
           </div>
           <div className="surname">
-            <label>Soyad</label>
+            <label>{translations['soyad_input']}</label>
             <input type="text" placeholder="Doe" />
           </div>
         </div>
@@ -38,7 +42,7 @@ const SettingsDeliveryadress: React.FC = () => {
         </div>
         <div className="city-postalcode">
           <div className="city">
-            <label>Şəhər</label>
+            <label>{translations['seher_input']}</label>
             <select name="" id="">
               <option value="Bakı">Bakı</option>
               <option value="Bakı">Bakı</option>
@@ -54,7 +58,7 @@ const SettingsDeliveryadress: React.FC = () => {
         </div>
 
         <div className="email">
-          <label>Email</label>
+          <label>{translations['email_input']}</label>
           <input type="email" placeholder="nümunə@gmail.com" />
         </div>
         <div className="telnumber">

@@ -1,10 +1,14 @@
 import React from "react";
+import { useTranslations } from "../../TranslateContext";
 
 const SettingsTopCard: React.FC = () => {
+
+  const { translations } = useTranslations();
+
   return (
     <div className="settings-top-card">
       <div className="head-title">
-        <span>tənzimləmələr</span>
+        <span>{translations['tenzimlemeler_title']}</span>
       </div>
       <div className="content">
         <div className="left-profile">
@@ -13,11 +17,11 @@ const SettingsTopCard: React.FC = () => {
         <form className="form-for-user">
           <div className="email-name-telephone">
             <div className="name">
-              <label>Ad / Soyad</label>
+              <label>{translations['ad_input']} / {translations['soyad_input']}</label>
               <input type="text" placeholder="Jhon Doe" />
             </div>
             <div className="email">
-              <label>Email</label>
+              <label>{translations['email_input']}</label>
               <input type="email" placeholder="nümunə@gmail.com" />
             </div>
             <div className="telnumber">
