@@ -32,7 +32,7 @@ const OrderDetails: React.FC = () => {
   const showDetails =
     ordersData &&
     ordersData?.length > 0 &&
-    ordersData.find((item: Orders) => item?.id.toString().split("#").join("") === id);
+    ordersData.find((item: Orders) => item?.id?.toString().split("#").join("") === id);
 
   return (
     <div className="order-details">

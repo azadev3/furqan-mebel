@@ -10,12 +10,15 @@ import { useQuery } from "@tanstack/react-query";
 import { SelectedLanguageState } from "../components/header/SelectedLanguage";
 import { Baseurl } from "../api/Baseurl";
 import axios from "axios";
+import { useTranslations } from "../TranslateContext";
 
 type props = {
   prevpage: string;
 };
 
 const NavigationShower: React.FC<props> = (props) => {
+
+  const { translations } = useTranslations();
   const location = useLocation();
 
   const isDeliveryPage = location.pathname === "/delivery" || location.pathname === "/paymentdetails";
@@ -60,34 +63,34 @@ const NavigationShower: React.FC<props> = (props) => {
   return (
     <div className="navigation-shower">
       <span className="prevpage" style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
-        Ana Səhifə
+        {translations['nav_anasehife']}
       </span>
       {isDeliveryPage ? (
         <>
           <span className="slash">/</span>
           <Link to="/mybasket" className="prevpage" style={{ textDecoration: "none" }}>
-            Səbət
+            {translations['sebet_title']}
           </Link>
         </>
       ) : isBlogInnerPage ? (
         <>
           <span className="slash">/</span>
           <Link to="/blog" className="prevpage" style={{ textDecoration: "none" }}>
-            Blog
+            {translations["nav_blog"]}
           </Link>
         </>
       ) : isProductInnerPage ? (
         <>
           <span className="slash">/</span>
           <Link to="/products" className="prevpage" style={{ textDecoration: "none" }}>
-            Kataloq
+            {translations['catalog']}
           </Link>
         </>
       ) : isCatalogPage ? (
         <>
           <span className="slash">/</span>
           <Link to="/products" className="prevpage" style={{ textDecoration: "none" }}>
-            Kataloq
+            {translations['catalog']}
           </Link>
         </>
       ) : null}
@@ -95,7 +98,7 @@ const NavigationShower: React.FC<props> = (props) => {
         /
       </span>
 
-      {props?.prevpage === "Kataloq" ? (
+      {props?.prevpage === translations['catalog'] ? (
         <>
           <span className="nowpage">
             {props.prevpage} / {ids?.title}

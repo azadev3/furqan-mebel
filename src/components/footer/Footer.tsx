@@ -197,8 +197,8 @@ const Footer: React.FC = () => {
           <div className="right-footer">
             <nav className="categories-top">
               <div className="left-links">
-                {CategoryProductsData && CategoryProductsData.length > 0
-                  ? CategoryProductsData.slice(0, 4).map((item: CategoriesInterface) => (
+                {CategoryProductsData && CategoryProductsData?.length > 0
+                  ? CategoryProductsData?.slice(0, 4).map((item: CategoriesInterface) => (
                       <span
                         onClick={() => handleSelectedCategory(item?.id)}
                         key={item.id}
@@ -217,7 +217,7 @@ const Footer: React.FC = () => {
                   navigate("/products");
                 }}
                 className="show-all-products">
-                <span>Bütün məhsullara bax</span>
+                <span>{translations['butun_mehsullara_bax']}</span>
                 <img src="../rightarrow.svg" alt="rightarrow" />
               </div>
             </nav>
@@ -241,12 +241,12 @@ const Footer: React.FC = () => {
                   {translations['abone_ol']}
                 </button>
               </div>
-              <p>Kampaniyalar haqqında məlumat əldə etmək üçün.</p>
+              <p>{translations['kampaniya_melumat_title']}</p>
             </div>
           </div>
         </div>
 
-        <p className="footer-title">© Bütün hüquqlar qorunur </p>
+        <p className="footer-title">{translations['butun_huquqlar_qorunur']}</p>
       </footer>
     </footer>
   );

@@ -1,7 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslations } from './TranslateContext'
 
 const Thanks:React.FC = () => {
+
+     const { translations } = useTranslations();
+
   return (
     <div className='thanks-page'>
      <div className="success">
@@ -13,7 +17,7 @@ const Thanks:React.FC = () => {
      </div>
      <Link to='/' className="home-btn">
           <img src="../House.svg" alt="houseimg" />
-          <span>Ana səhifəyə qayıt </span>
+          <span>{translations['nav_anasehife']}</span>
      </Link>
     </div>
   )

@@ -193,7 +193,7 @@ const ProductsInterface: React.FC = () => {
               ) : (
                 <React.Fragment>
                   {popularProducts && popularProducts?.length > 0
-                    ? popularProducts.slice(0, 4).map((item: CatProductType) => (
+                    ? popularProducts?.slice(0, 4).map((item: CatProductType) => (
                         <Link to={`/popular_product_single/${item?.slug}`} key={item.id} className="subitem">
                           <div className="add-basket">
                             <HiOutlineShoppingBag className="shopping-bag" />
@@ -238,7 +238,7 @@ const ProductsInterface: React.FC = () => {
 
           <div className="all-products">
             <Link to="/products">
-              <span>Bütün məhsullara bax</span>
+              <span>{translations['butun_mehsullara_bax']}</span>
               <img src="../linearrowgreen.svg" alt="right" title="Bütün məhsullar" />
             </Link>
           </div>

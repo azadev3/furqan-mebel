@@ -107,7 +107,7 @@ const StorePage: React.FC = () => {
                 />
               ))
             ) : (
-              <p>Hələ ki, şəkil yoxdur.</p>
+              <p>{translations['heleki_hecne_elave_olunmayib_paragraph']}</p>
             )}
           </div>
         </div>

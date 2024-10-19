@@ -43,7 +43,7 @@ const BlogInnerPage: React.FC = () => {
         <meta name="description" content={blogItem && blogItem?.meta_description} />
       </Helmet>
       <div className="inner-page-blog">
-        <NavigationShower prevpage={blogItem && blogItem.title.toString() ? blogItem.title : ""} />
+        <NavigationShower prevpage={blogItem && blogItem.title?.toString() ? blogItem.title : ""} />
 
         <div className="top-description-blog">
           <h1>{blogItem?.title}</h1>

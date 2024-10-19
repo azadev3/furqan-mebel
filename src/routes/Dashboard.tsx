@@ -12,6 +12,7 @@ import axios from "axios";
 import { Baseurl } from "../api/Baseurl";
 import getCookie from "../getCookie";
 import { toast } from "react-toastify";
+import { useTranslations } from "../TranslateContext";
 
 export type DashboardLinksType = {
   id: number;
@@ -22,45 +23,49 @@ export type DashboardLinksType = {
 };
 
 //dashboard links
-export const DashboardLinkItems: DashboardLinksType[] = [
-  {
-    id: 1,
-    title: "Dashboard",
-    activeIcon: "../whitedashboardicon.svg",
-    deactiveIcon: "../dashboardicon.svg",
-    to: "/profile/dashboard",
-  },
-  {
-    id: 2,
-    title: "Sifariş tarixçəsi",
-    activeIcon: "../Storefront.svg",
-    deactiveIcon: "../Storefrontb.svg",
-    to: "/profile/orderhistory",
-  },
-  {
-    id: 3,
-    title: "Sevimlilərim",
-    activeIcon: "../whitedashboardicon.svg",
-    deactiveIcon: "../Heart.svg",
-    to: "/profile/favourites",
-  },
-  // {
-  //   id: 4,
-  //   title: "Tənzimləmələr",
-  //   activeIcon: "../Gearw.svg",
-  //   deactiveIcon: "../Gear.svg",
-  //   to: "/profile/settings",
-  // },
-  {
-    id: 5,
-    title: "Çıxış",
-    activeIcon: "../SignOut.svg",
-    deactiveIcon: "../SignOut.svg",
-    to: "",
-  },
-];
 
 const Dashboard: React.FC = () => {
+
+  const { translations } = useTranslations();
+
+  const DashboardLinkItems: DashboardLinksType[] = [
+    {
+      id: 1,
+      title: `${translations["dashboard"]}`,
+      activeIcon: "../whitedashboardicon.svg",
+      deactiveIcon: "../dashboardicon.svg",
+      to: "/profile/dashboard",
+    },
+    {
+      id: 2,
+      title: `${translations["sifaris_tarixcesi"]}`,
+      activeIcon: "../Storefront.svg",
+      deactiveIcon: "../Storefrontb.svg",
+      to: "/profile/orderhistory",
+    },
+    {
+      id: 3,
+      title: `${translations["sevimlilerim"]}`,
+      activeIcon: "../whitedashboardicon.svg",
+      deactiveIcon: "../Heart.svg",
+      to: "/profile/favourites",
+    },
+    // {
+    //   id: 4,
+    //   title: "Tənzimləmələr",
+    //   activeIcon: "../Gearw.svg",
+    //   deactiveIcon: "../Gear.svg",
+    //   to: "/profile/settings",
+    // },
+    {
+      id: 5,
+      title: `${translations["cixis"]}`,
+      activeIcon: "../SignOut.svg",
+      deactiveIcon: "../SignOut.svg",
+      to: "",
+    },
+  ];
+
   const [_, setAuth] = useRecoilState(UserIsAuthState);
 
   //open dashboard mobile toggle menu
@@ -138,13 +143,13 @@ const Dashboard: React.FC = () => {
         });
         document.cookie = "userInfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None";
         document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=None";
-       
+
         Object.keys(localStorage).forEach((key) => {
-          if(key !== "favourites" && key !== "basket") {
+          if (key !== "favourites" && key !== "basket") {
             localStorage.removeItem(key);
           }
         });
-        
+
         const timeout = setTimeout(() => {
           navigate("/");
           setAuth(false);
@@ -174,7 +179,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-page-wrapper">
       <div className="dashboard-page">
-        <NavigationShower prevpage="Profil" />
+        <NavigationShower prevpage={translations['profile_title']} />
 
         <div className="container-dashboard">
           {mobile ? (

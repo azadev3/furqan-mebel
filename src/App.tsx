@@ -281,7 +281,7 @@ const App: React.FC = () => {
           <h1>{translations["zeng_sifaris_et"]}</h1>
           <form action="" className="form">
             <div className="field-input">
-              <label htmlFor="name">Ad</label>
+              <label htmlFor="name">{translations['ad_input']}</label>
               <input
                 type="text"
                 name="name"
@@ -294,7 +294,7 @@ const App: React.FC = () => {
               />
             </div>
             <div className="field-input">
-              <label htmlFor="tel">Əlaqə nömrəsi</label>
+              <label htmlFor="tel">{translations['elaqe_nomresi']}</label>
               <input
                 type="text"
                 name="tel"

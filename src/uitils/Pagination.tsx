@@ -13,7 +13,7 @@ const Pagination = ({ data, itemsPerPage }: { data: BlogsType[]; itemsPerPage: n
     setCurrentPage(pageNumber);
   };
 
-  const currentData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const currentData = data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const { translations } = useTranslations();
 
@@ -34,9 +34,9 @@ const Pagination = ({ data, itemsPerPage }: { data: BlogsType[]; itemsPerPage: n
               </div>
               <div className="bottom-title">
                 <h1>{item?.title}</h1>
-                <div dangerouslySetInnerHTML={{ __html: item?.content.slice(0, 300) }} />
+                <div dangerouslySetInnerHTML={{ __html: item?.content?.slice(0, 300) }} />
                 <Link to={`/blog/${item?.slug}`} className="formore-button">
-                  <span>Daha çox</span>
+                  <span>{translations['daha_cox_title']}</span>
                   <img src="../linearrowgreen.svg" alt="arrowright" title="Go to blogs" />
                 </Link>
               </div>

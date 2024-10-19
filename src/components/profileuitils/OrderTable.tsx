@@ -77,7 +77,7 @@ const OrderTable: React.FC = () => {
               <td className={ControlStatus(item)}>{item.status === "1" ? "Yeni Sifariş" : item.status === "2" ? "Hazırlanır" : item.status === "3" ? "Göndərildi" : item.status === "4" ? "delivered" : item.status === "5" ? "rejected" : ""}</td>
               <td>{item?.order_date}</td>
               <td>
-                <Link to={`/profile/orderhistory/${item?.id.toString().split("#").join("")}`}>
+                <Link to={`/profile/orderhistory/${item?.id?.toString().split("#").join("")}`}>
                   <span>Detallar</span>
                   <img src="../rig.svg" alt="" />
                 </Link>

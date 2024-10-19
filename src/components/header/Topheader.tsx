@@ -43,8 +43,8 @@ const Topheader: React.FC = () => {
           </a>
 
           <div className="call-us" onClick={handleCallYourModal}>
-            <img src="../call.svg" alt="call" title="Zəng sifariş et" />
-            <span>Zəng sifariş et</span>
+            <img src="../call.svg" alt="call" title={translations['zeng_sifaris_et']} />
+            <span>{translations['zeng_sifaris_et']}</span>
           </div>
           <SelectedLanguage />
         </div>

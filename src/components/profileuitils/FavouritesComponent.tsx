@@ -7,8 +7,11 @@ import { SelectedLanguageState } from "../header/SelectedLanguage";
 import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForFilter";
 import { Baseurl } from "../../api/Baseurl";
 import axios from "axios";
+import { useTranslations } from "../../TranslateContext";
 
 const FavouritesComponent: React.FC = () => {
+
+  const { translations } = useTranslations();
 
   const [favOnDb, setFavOnDb] = React.useState<CatProductType[]>([]);
 
@@ -60,7 +63,7 @@ const FavouritesComponent: React.FC = () => {
   return (
     <div className="fav-component-dashboard">
       {!isAdded ? (
-        "Hələ ki Favori məhsulunuz yoxdur."
+        `${translations['heleki_favori_mehsulunuz_yoxdur']}`
       ) : (
         <PaginationLikedProducts data={favOnDb ? favOnDb : favProducts ? favProducts : []} itemsPerPage={12} />
       )}

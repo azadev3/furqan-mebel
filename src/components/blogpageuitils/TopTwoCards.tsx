@@ -45,7 +45,7 @@ const TopTwoCards: React.FC = () => {
                       <span>{item?.created_at}</span>
                     </div>
                     <h1>{item?.title}</h1>
-                    <div dangerouslySetInnerHTML={{ __html: item?.content.slice(0, 300) }} />
+                    <div dangerouslySetInnerHTML={{ __html: item?.content?.slice(0, 300) }} />
                   </div>
                 </Link>
               );
@@ -69,7 +69,7 @@ const TopTwoCards: React.FC = () => {
                       <span>{item?.created_at}</span>
                     </div>
                     <h1>{item?.title}</h1>
-                    <div dangerouslySetInnerHTML={{ __html: item?.content.slice(0, 300) }} />
+                    <div dangerouslySetInnerHTML={{ __html: item?.content?.slice(0, 300) }} />
                   </div>
                 </Link>
               );

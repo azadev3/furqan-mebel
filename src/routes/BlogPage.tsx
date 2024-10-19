@@ -4,9 +4,12 @@ import TopTwoCards from "../components/blogpageuitils/TopTwoCards";
 import Blogs from "../components/blogpageuitils/Blogs";
 import { Helmet } from "react-helmet";
 import { useSeo } from "../useSeo";
+import { useTranslations } from "../TranslateContext";
 
 const BlogPage: React.FC = () => {
   const seoData = useSeo("blog_page");
+
+  const { translations } = useTranslations();
 
   return (
     <div className="blog-page-wrapper">
@@ -20,7 +23,7 @@ const BlogPage: React.FC = () => {
         <meta name="description" content={seoData?.seo_description || ""} />
       </Helmet>
       <div className="blog-page">
-        <NavigationShower prevpage="Blog" />
+        <NavigationShower prevpage={translations['nav_blog']} />
         <TopTwoCards />
         <Blogs />
       </div>

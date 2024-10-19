@@ -33,7 +33,7 @@ const VacationContent: React.FC<props> = (data) => {
                     <Link to="" className="item">
                       <img src="../em.svg" alt="email" />
                       <div className="righttitles">
-                        <span>Əlaqə nömrəsi</span>
+                        <span>{translations['elaqe_nomresi']}</span>
                         <p>{item?.phone}</p>
                       </div>
                     </Link>

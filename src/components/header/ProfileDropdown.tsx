@@ -1,5 +1,5 @@
 import React from "react";
-import { DashboardLinkItems, DashboardLinksType } from "../../routes/Dashboard";
+import { DashboardLinksType } from "../../routes/Dashboard";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { dashboarLinksActiveState, profileDropdownState, UserIsAuthState } from "../../recoil/Atoms";
 import { atom, useRecoilState } from "recoil";
@@ -8,6 +8,7 @@ import { UserInfo } from "../profileuitils/DashboardContent";
 import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import { toast } from "react-toastify";
+import { useTranslations } from "../../TranslateContext";
 
 export const userInfoState = atom<UserInfo | null>({
   key: 'userinfostate',
@@ -20,6 +21,47 @@ type prop = {
 };
 
 const ProfileDropdown: React.FC<prop> = (prop) => {
+
+  const { translations } = useTranslations();
+
+  const DashboardLinkItems: DashboardLinksType[] = [
+    {
+      id: 1,
+      title: `${translations['dashboard']}`,
+      activeIcon: "../whitedashboardicon.svg",
+      deactiveIcon: "../dashboardicon.svg",
+      to: "/profile/dashboard",
+    },
+    {
+      id: 2,
+      title: `${translations['sifaris_tarixcesi']}`,
+      activeIcon: "../Storefront.svg",
+      deactiveIcon: "../Storefrontb.svg",
+      to: "/profile/orderhistory",
+    },
+    {
+      id: 3,
+      title: `${translations['sevimlilerim']}`,
+      activeIcon: "../whitedashboardicon.svg",
+      deactiveIcon: "../Heart.svg",
+      to: "/profile/favourites",
+    },
+    // {
+    //   id: 4,
+    //   title: "Tənzimləmələr",
+    //   activeIcon: "../Gearw.svg",
+    //   deactiveIcon: "../Gear.svg",
+    //   to: "/profile/settings",
+    // },
+    {
+      id: 5,
+      title: `${translations['cixis']}`,
+      activeIcon: "../SignOut.svg",
+      deactiveIcon: "../SignOut.svg",
+      to: "",
+    },
+  ];
+
   //active - deactive dashboard links on profile dropdown menu
   const [active, setActive] = useRecoilState(dashboarLinksActiveState);
 
@@ -138,7 +180,7 @@ const ProfileDropdown: React.FC<prop> = (prop) => {
               return (
                 <li onClick={LogOutUser} key={item?.id} className="link-item-profilemenu">
                   <img src={item?.deactiveIcon} alt={`${item?.id}-icon`} title={item?.title} />
-                  <span>{loading ? "Hesabdan çıxılır..." : item?.title}</span>
+                  <span>{loading ? `${translations['logout_title']}` : item?.title}</span>
                 </li>
               );
             } else {

@@ -53,7 +53,7 @@ const ProductInnerPopular: React.FC = () => {
         ) : (
           <>
             <NavigationShower
-              prevpage={productInner && productInner.title.toString() ? productInner.title.toString() : ""}
+              prevpage={productInner && productInner?.title?.toString() ? productInner?.title?.toString() : ""}
             />
 
             <div className="product-showing-area">

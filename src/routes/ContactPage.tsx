@@ -4,10 +4,13 @@ import LeftContact from '../components/contactpageuitils/LeftContact'
 import RightContact from '../components/contactpageuitils/RightContact'
 import { Helmet } from 'react-helmet'
 import { useSeo } from '../useSeo'
+import { useTranslations } from '../TranslateContext'
 
 const ContactPage:React.FC = () => {
 
   const seoData = useSeo("contact_page");
+
+  const { translations } = useTranslations();
 
   return (
     <div className='contact-page-wrapper'>
@@ -21,7 +24,7 @@ const ContactPage:React.FC = () => {
         <meta name="description" content={seoData?.seo_description || ""} />
       </Helmet>
      <div className="contact-page">
-          <NavigationShower prevpage='Əlaqə'/>
+          <NavigationShower prevpage={translations['bizimle_elaqe']}/>
           <div className="container-contact">
                <LeftContact />
                <RightContact />

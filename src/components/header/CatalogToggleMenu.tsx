@@ -11,6 +11,7 @@ import {
   CategoryNameForSelected,
   CategoryNameForSelectedID,
 } from "../productpageuitils/filteruitils/CategoriesForFilter";
+import { useTranslations } from "../../TranslateContext";
 
 export const clickedCategoryForFilter = atom<number | null>({
   key: "clickedCategoryForFilter",
@@ -50,6 +51,9 @@ export interface Categories {
 }
 
 const CatalogToggleMenu: React.FC = () => {
+
+  const { translations } = useTranslations();
+  
   const [__, setCatalogMenu] = useRecoilState(catalogState);
 
   // FETCH CATEGORIES
@@ -161,7 +165,7 @@ const CatalogToggleMenu: React.FC = () => {
                         </div>
                       </div>
                     ))
-                  : "Hələ ki heç nə əlavə olunmayıb";
+                  : `${translations['heleki_hecne_elave_olunmayib_paragraph']}`;
               }
             })
           : ""}

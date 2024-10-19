@@ -12,7 +12,7 @@ const PaginationLikedProducts = ({ data, itemsPerPage }: { data: CatProductType[
     setCurrentPage(pageNumber);
   };
 
-  const currentData = data && data?.length > 0 ? data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : '';
+  const currentData = data && data?.length > 0 ? data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : '';
 
   return (
     <div className="favorites">

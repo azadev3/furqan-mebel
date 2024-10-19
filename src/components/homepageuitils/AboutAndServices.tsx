@@ -92,7 +92,7 @@ const AboutAndServices: React.FC = () => {
                   </div>
                   <div className="btn-area">
                     <Link to="">
-                      <span>Daha çox</span>
+                      <span>{translations['daha_cox_title']}</span>
                       <img src="../linearrowgreen.svg" alt="" />
                     </Link>
                   </div>

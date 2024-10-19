@@ -38,7 +38,7 @@ const LeftContact: React.FC = () => {
             try {
               const response = await axios.post(`${Baseurl}/contact_post`, values);
               if (response.data) {
-                toast.success("Təşəkkür edirik! Sizinlə ən qısa zamanda əlaqə saxlanılacaq", {
+                toast.success(`${translations['tesekkur_mesaji']}`, {
                   position: "top-center",
                 });
                 resetForm();
@@ -51,7 +51,7 @@ const LeftContact: React.FC = () => {
             <Form>
               <div className="field-name-surname">
                 <div className="name">
-                  <label>Ad</label>
+                  <label>{translations['ad_input']}</label>
                   <Field
                     style={{ border: props.errors?.name ? "4px solid rgb(234, 78, 78)" : "" }}
                     type="text"
@@ -61,7 +61,7 @@ const LeftContact: React.FC = () => {
                   {props && props.errors?.name && <ErrorMessage name="name" component="span" className="error-msg" />}
                 </div>
                 <div className="surname">
-                  <label>Soyad</label>
+                  <label>{translations['soyad_input']}</label>
                   <Field
                     style={{ border: props.errors?.surname ? "4px solid rgb(234, 78, 78)" : "" }}
                     type="text"
@@ -74,7 +74,7 @@ const LeftContact: React.FC = () => {
                 </div>
               </div>
               <div className="email">
-                <label>Email</label>
+                <label>{translations['email_input']}</label>
                 <Field
                   style={{ border: props.errors?.email ? "4px solid rgb(234, 78, 78)" : "" }}
                   type="email"
@@ -84,7 +84,7 @@ const LeftContact: React.FC = () => {
                 {props && props.errors?.email && <ErrorMessage name="email" component="span" className="error-msg" />}
               </div>
               <div className="message">
-                <label>Mesaj</label>
+                <label>{translations['mesaj_input']}</label>
                 <Field
                   style={{ border: props.errors?.message ? "4px solid rgb(234, 78, 78)" : "" }}
                   as="textarea"

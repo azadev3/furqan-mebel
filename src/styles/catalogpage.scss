@@ -411,7 +411,7 @@
               }
 
               .dropdown-minmax {
-                margin-top: 12px;
+                margin-top: 0;
                 background-color: white;
                 padding: 0;
                 border-radius: 4px;
@@ -526,6 +526,7 @@
                   pointer-events: all;
                   height: auto;
                 padding: 12px;
+                margin-top: 12px;
 
                 }
               }
@@ -570,7 +571,7 @@
 
             .material {
               width: 100%;
-              margin-top: 47px;
+              margin-top: 12px;
               display: flex;
               align-items: flex-start;
               justify-content: flex-start;

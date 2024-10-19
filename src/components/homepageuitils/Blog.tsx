@@ -122,7 +122,7 @@ const Blog: React.FC = () => {
                     <h1>{item?.title}</h1>
                     <div className="content" dangerouslySetInnerHTML={{ __html: item?.content?.slice(0, 300) }} />
                     <Link to={`/blog/${item?.slug?.toLowerCase()}`} className="formore-button">
-                      <span>Daha çox</span>
+                      <span>{translations['daha_cox_title']}</span>
                       <img src="../linearrowgreen.svg" alt="arrowright" title="Go to blogs" />
                     </Link>
                   </div>

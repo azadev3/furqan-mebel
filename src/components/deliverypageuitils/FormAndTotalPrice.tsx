@@ -73,7 +73,7 @@ const FormAndTotalPrice: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <div className="name-surname">
               <div className="leftname">
-                <label>Ad</label>
+                <label>{translations['ad_input']}</label>
                 <input
                   required={ isNullAdress ? false : true }
                   type="text"
@@ -84,7 +84,7 @@ const FormAndTotalPrice: React.FC = () => {
                 />
               </div>
               <div className="rightsurname">
-                <label>Soyad</label>
+                <label>{translations['soyad_input']}</label>
                 <input
                   required={ isNullAdress ? false : true }
                   type="text"
@@ -97,7 +97,7 @@ const FormAndTotalPrice: React.FC = () => {
             </div>
             <div className="zipcode-city">
               <div className="leftname">
-                <label>Şəhər</label>
+                <label>{translations['seher_input']}</label>
                 <select required={ isNullAdress ? false : true } name="city" value={formData.city} onChange={handleChange}>
                   <option value="">Şəhər seçin</option>
                   <option value="Sumqayıt">Sumqayıt</option>
@@ -110,7 +110,7 @@ const FormAndTotalPrice: React.FC = () => {
                 </select>
               </div>
               <div className="tel">
-                <label>Əlaqə nömrəsi</label>
+                <label>{translations['elaqe_nomresi']}</label>
                 <input
                   required={ isNullAdress ? false : true }
                   type="text"

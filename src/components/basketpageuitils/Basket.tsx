@@ -9,6 +9,7 @@ import { SelectedLanguageState } from "../header/SelectedLanguage";
 import getCookie from "../../getCookie";
 import { UserIsAuthState } from "../../recoil/Atoms";
 import Loader from "../../uitils/Loader";
+import { useTranslations } from "../../TranslateContext";
 
 export interface BasketDataInterface {
   id: number;
@@ -17,6 +18,9 @@ export interface BasketDataInterface {
 }
 
 const Basket: React.FC = () => {
+
+  const { translations } = useTranslations();
+
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const [basketItems, setBasketItems] = useState<CatProductType[]>([]);
@@ -281,7 +285,7 @@ const Basket: React.FC = () => {
                     </article>
                   </div>
                 ))
-              : "Səbət boşdur."
+              : `${translations['sebet_bosdur']}`
             : ""}
         </>
       )}

@@ -59,8 +59,8 @@ const SpecialOffers: React.FC = () => {
                         </div>
                         <h1>{product.title}</h1>
                         <Link to={`/product_single/${product?.slug}`} className="formore">
-                          <span>Daha çox</span>
-                          <img src="../rightorange.svg" alt="right" title="Daha çox" />
+                          <span>{translations['daha_cox_title']}</span>
+                          <img src="../rightorange.svg" alt="right" title="{translations['daha_cox_title']}" />
                         </Link>
                       </div>
                     </React.Fragment>

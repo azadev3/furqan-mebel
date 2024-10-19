@@ -9,6 +9,7 @@ import {
 } from "../../../homepageuitils/PopularProducts";
 import { CiHeart } from "react-icons/ci";
 import { useAddFavourite } from "../../../../useAddFavourite";
+import { useTranslations } from "../../../../TranslateContext";
 
 export type FavouriteItemType = {
   id: number;
@@ -31,6 +32,8 @@ export type FavouriteItemType = {
 
 const PaginationProductsPage = ({ data, itemsPerPage }: { data: any; itemsPerPage: number }) => {
 
+  const { translations } = useTranslations();
+
   const { addFavourite, favouriteItems } = useAddFavourite();
 
   const [currentPage, setCurrentPage] = React.useState<number>(1);
@@ -40,7 +43,7 @@ const PaginationProductsPage = ({ data, itemsPerPage }: { data: any; itemsPerPag
     setCurrentPage(pageNumber);
   };
 
-  const currentData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const currentData = data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="products-page-products-pag">
@@ -96,7 +99,7 @@ const PaginationProductsPage = ({ data, itemsPerPage }: { data: any; itemsPerPag
               </div>
             </div>
           </Link>
-        )) : <p className="no-product-title">Hələ ki bu kateqoriyada məhsul yoxdur.</p>}
+        )) : <p className="no-product-title">{translations['heleki_mehsul_yoxdur_paragraph']}</p>}
       </div>
 
       {currentData && currentData.length > 0 ? (

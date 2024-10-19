@@ -1,11 +1,11 @@
 import React, { ChangeEvent } from "react";
-import { Link } from "react-router-dom";
 import OrderTable from "./OrderTable";
 import getCookie from "../../getCookie";
 import { IoClose } from "react-icons/io5";
 import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import { toast } from "react-toastify";
+import { useTranslations } from "../../TranslateContext";
 
 type StatisticsType = {
   id: number;
@@ -49,6 +49,8 @@ interface ProfileUser {
 
 const DashboardContent: React.FC = () => {
 
+  const { translations } = useTranslations();
+
   const token = getCookie("accessToken");
 
   //get profile 
@@ -75,19 +77,19 @@ const DashboardContent: React.FC = () => {
   const Statistics: StatisticsType[] = [
     {
       id: 1,
-      title: "Bütün sifarişlər",
+      title: `${translations['butun_sifarisler']}`,
       count: `${profileData && profileData?.all_orders ? profileData?.all_orders : "0"}`,
       icon: "../Rocket.svg",
     },
     {
       id: 2,
-      title: "Hazırlanan sifarişlər",
+      title: `${translations['hazirlanan_sifarisler']}`,
       count: `${profileData && profileData?.completed_orders ? profileData?.completed_orders : "0"}`,
       icon: "../Receipt.svg",
     },
     {
       id: 3,
-      title: "Tamamlanmış sifarişlər",
+      title: `${translations['tamamlanmis_sifarisler']}`,
       count: `${profileData && profileData?.prepared_orders ? profileData?.prepared_orders : "0"}`,
       icon: "../Package.svg",
     },
@@ -100,7 +102,7 @@ const DashboardContent: React.FC = () => {
       const parsedInfo = JSON.parse(decodeURIComponent(getUserInfo));
       setUserInfo(parsedInfo);
     }
-  }, []);
+  }, [getUserInfo]);
 
   //edit profile informations
   const [editIsClick, setEditIsClick] = React.useState<boolean>(false);
@@ -182,22 +184,17 @@ const DashboardContent: React.FC = () => {
 
   React.useEffect(() => {
     getProfile();
-  }, []);
+  }, [getProfile]);
 
   return (
     <div className="dashboard-route-content">
       <div className="top-username-and-text">
-        <h3>Salam, {userInfo?.name}</h3>
-        <p>
-          Hesabınızın idarə panelindən, siz asanlıqla <Link to="">Son Sifarişlərinizi</Link> yoxlaya və baxa,{" "}
-          <Link to="">Göndərmə</Link> və <Link to="">Faktura Ünvanlarınızı</Link> idarə edə və{" "}
-          <Link to="">Parolunuzu və Hesab məlumatlarınızı</Link> redaktə edə bilərsiniz.
-        </p>
+        <h3>{translations['hello_msg']}, {userInfo?.name}</h3>
       </div>
 
       <div className="account-informations">
         <div className="information-box">
-          <h4 className="information-title">Hesab məlumatları</h4>
+          <h4 className="information-title">{translations['hesab_melumatlari']}</h4>
 
           <div className="profile-content">
             <div className="top-profile-info">
@@ -213,14 +210,14 @@ const DashboardContent: React.FC = () => {
                 <div className="text">
                   {editIsClick ? (
                     <>
-                      <strong>Ad:</strong>
+                      <strong>{translations['ad_input']}:</strong>
                       <input
                         type="text"
                         name="username"
                         placeholder={`${userInfo?.name}`}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                       />
-                      <strong>Soyad:</strong>
+                      <strong>{translations['soyad_input']}:</strong>
                       <input
                         type="text"
                         name="username"
@@ -239,7 +236,7 @@ const DashboardContent: React.FC = () => {
                 {editIsClick ? (
                   <React.Fragment>
                     <div className={`email ${editIsClick ? "converted-inputs" : ""}`}>
-                      <strong>Email:</strong>
+                      <strong>{translations['email_input']}:</strong>
                       <input
                         type="email"
                         placeholder={userInfo?.email}
@@ -248,7 +245,7 @@ const DashboardContent: React.FC = () => {
                       />
                     </div>
                     <div className={`tel ${editIsClick ? "converted-inputs" : ""}`}>
-                      <strong>Əlaqə nömrəsi:</strong>
+                      <strong>{translations['elaqe_nomresi']}:</strong>
                       <input
                         type="text"
                         placeholder={userInfo?.phone}
@@ -260,11 +257,11 @@ const DashboardContent: React.FC = () => {
                 ) : (
                   <React.Fragment>
                     <div className="email">
-                      <strong>Email:</strong>
+                      <strong>{translations['email_input']}:</strong>
                       <p>{userInfo?.email}</p>
                     </div>
                     <div className="tel">
-                      <strong>Əlaqə nömrəsi:</strong>
+                      <strong>{translations['elaqe_nomresi']}:</strong>
                       <p>{userInfo?.phone}</p>
                     </div>
                   </React.Fragment>
@@ -275,7 +272,7 @@ const DashboardContent: React.FC = () => {
             {editIsClick ? (
               <div className="after-buttons">
                 <button className={`edit-profile-informations-button-isactive ${loading ? "deactived" : ""}`} onClick={() => setEditIsClick(false)}>
-                  <span>Ləğv et</span>
+                  <span>{translations['legv_et']}</span>
                   <IoClose className="close-icon" />
                 </button>
                 <button
@@ -287,7 +284,7 @@ const DashboardContent: React.FC = () => {
               </div>
             ) : (
               <button className="edit-profile-informations-button" onClick={handleEditProfileInformations}>
-                Düzəliş et
+                {translations['duzelis_et']}
               </button>
             )}
           </div>

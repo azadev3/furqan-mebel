@@ -9,8 +9,10 @@ import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import { toast } from "react-toastify";
 import Loader from "../../uitils/Loader";
+import { useTranslations } from "../../TranslateContext";
 
 const Register: React.FC = () => {
+  const { translations } = useTranslations();
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -99,7 +101,7 @@ const Register: React.FC = () => {
               <ErrorMessage name="email" component="div" className="error" />
             </div>
             <div className="field-input">
-              <label htmlFor="phone">Əlaqə nömrəsi</label>
+              <label htmlFor="phone">{translations['elaqe_nomresi']}</label>
               <Field type="text" id="phone" name="phone" placeholder="+994 000 00 00" />
               <ErrorMessage name="phone" component="div" className="error" />
             </div>

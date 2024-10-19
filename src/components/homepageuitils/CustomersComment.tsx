@@ -99,7 +99,7 @@ const CustomersComment: React.FC = () => {
                       </div>
                       <strong>{item?.title}</strong>
                       <span>{item?.position}</span>
-                      <p>{item?.content.slice(0, 100)}</p>
+                      <p>{item?.content?.slice(0, 100)}</p>
                     </div>
                   </SwiperSlide>
                 ))

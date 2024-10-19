@@ -21,7 +21,7 @@ const SettingsTopCard: React.FC = () => {
               <input type="email" placeholder="nümunə@gmail.com" />
             </div>
             <div className="telnumber">
-              <label>Əlaqə nömrəsi</label>
+              <label>{translations['elaqe_nomresi']}</label>
               <input type="number" placeholder="+9994 70 000 00 00" />
             </div>
           </div>

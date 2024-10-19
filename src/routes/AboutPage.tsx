@@ -63,7 +63,7 @@ const AboutPage: React.FC = () => {
         <meta name="description" content={seoData?.seo_description || ""} />
       </Helmet>
       <div className="about-page">
-        <NavigationShower prevpage="Haqqımızda" />
+        <NavigationShower prevpage={translations['nav_haqqimizda']} />
 
         {isLoading ? (
           <Loader />
