@@ -81,7 +81,7 @@ const PaginationProductsPage = ({ data, itemsPerPage }: { data: any; itemsPerPag
             </div>
             <div className="punts">
               <div className="new-punt">
-                <span>Yeni</span>
+                <span>{translations['yeni_title']}</span>
               </div>
               <div className="discount-punt">
                 <span>30%</span>

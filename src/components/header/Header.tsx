@@ -362,9 +362,9 @@ const Header: React.FC = () => {
                   onClick={() => setLoginMenu(true)}
                   style={{ cursor: "pointer" }}
                   className="login"
-                  title="Daxil ol">
+                  title={translations['daxil_ol']}>
                   <img src={isHomePage && !isScrolled ? "../profilewhite.png" : "../Person.svg"} alt="person" />
-                  <span>Daxil ol</span>
+                  <span>{translations['daxil_ol']}</span>
                 </div>
               )}
             </div>

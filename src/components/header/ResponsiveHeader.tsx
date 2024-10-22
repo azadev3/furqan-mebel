@@ -314,9 +314,9 @@ const ResponsiveHeader: React.FC<Props> = ({ setSearchModal }) => {
             />
           </Link>
         ) : (
-          <div onClick={() => setLoginMenu(true)} style={{ cursor: "pointer" }} className="login" title="Daxil ol">
+          <div onClick={() => setLoginMenu(true)} style={{ cursor: "pointer" }} className="login" title={translations['daxil_ol']}>
             <img src={isHomePage && !isScrolled ? "../profilewhite.png" : "../Person.svg"} alt="person" />
-            <span>Daxil ol</span>
+            <span>{translations['daxil_ol']}</span>
           </div>
         )}
 

@@ -151,7 +151,7 @@ const Register: React.FC = () => {
                   setActiveRegister(false);
                   setActiveLogin(true);
                 }}>
-                Daxil ol
+                {translations['daxil_ol']}
               </span>
             </div>
           </Form>

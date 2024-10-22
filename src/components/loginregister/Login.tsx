@@ -8,6 +8,7 @@ import axios from "axios";
 import { Baseurl } from "../../api/Baseurl";
 import { toast } from "react-toastify";
 import Loader from "../../uitils/Loader";
+import { useTranslations } from "../../TranslateContext";
 
 interface LoginData {
   id: number,
@@ -19,6 +20,8 @@ interface LoginData {
 }
 
 const Login: React.FC = () => {
+
+  const { translations } = useTranslations();
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => setShowPassword(!showPassword);
@@ -109,7 +112,7 @@ const Login: React.FC = () => {
               <ErrorMessage name="password" component="div" className="error" />
             </div>
 
-            <button type="submit">{loading ? <Loader /> : "Daxil ol"}</button>
+            <button type="submit">{loading ? <Loader /> : translations['daxil_ol']}</button>
             <div className="already-account-question">
               <span>Hesabın yoxdur?</span>
               <span
@@ -118,7 +121,7 @@ const Login: React.FC = () => {
                 onClick={() => {
                   setActiveRegister(true), setActiveLogin(false);
                 }}>
-                Qeydiyyatdan keç
+                {translations['qeydiyyat']}
               </span>
             </div>
           </Form>

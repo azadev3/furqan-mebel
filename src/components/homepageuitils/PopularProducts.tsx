@@ -152,7 +152,7 @@ const ProductsInterface: React.FC = () => {
                               <div className="punts">
                                 {item?.is_new ? (
                                   <div className="new-punt">
-                                    <span>Yeni</span>
+                                    <span>{translations['yeni_title']}</span>
                                   </div>
                                 ) : (
                                   ""
@@ -202,7 +202,7 @@ const ProductsInterface: React.FC = () => {
                           <div className="punts">
                             {item?.is_new ? (
                               <div className="new-punt">
-                                <span>Yeni</span>
+                                <span>{translations['yeni_title']}</span>
                               </div>
                             ) : (
                               ""

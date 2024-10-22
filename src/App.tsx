@@ -344,7 +344,7 @@ const App: React.FC = () => {
               </section>
               <div className="login-and-register-buttons">
                 <button className="login" onClick={() => setActiveLogin(true)}>
-                  Daxil ol
+                  {translations['daxil_ol']}
                 </button>
                 <button className="register" onClick={() => setActiveRegister(true)}>
                   Qeydiyyat
@@ -377,7 +377,7 @@ const App: React.FC = () => {
               style={{ display: activeRegister ? "none" : "" }}>
               <section className="head-area-modal">
                 <FaArrowLeft className="back-icon" onClick={() => setActiveLogin(false)} />
-                <h3>Daxil ol</h3>
+                <h3>{translations['daxil_ol']}</h3>
                 <IoCloseOutline
                   className="close-icon"
                   onClick={() => {
