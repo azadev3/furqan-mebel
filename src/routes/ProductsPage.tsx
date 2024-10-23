@@ -343,7 +343,7 @@ const ProductsPage: React.FC = () => {
         <meta name="description" content={seoData?.seo_description || ""} />
       </Helmet>
       <div className="products-page">
-        <NavigationShower prevpage="Kataloq" />
+        <NavigationShower prevpage={translations['kataloq_key']} />
 
         <div className="container-products">
           <div className="filter">

@@ -484,7 +484,7 @@ const CatalogPage: React.FC = () => {
         <meta name="description" content={seoData?.seo_description || ""} />
       </Helmet>
       <div className="catalog-page">
-        <NavigationShower prevpage={pageName ? pageName?.pathname.split("/catalog").join("") : "Kataloq"} />
+        <NavigationShower prevpage={pageName ? pageName?.pathname.split("/catalog").join("") : translations['kataloq_key']} />
 
         <div className="container-catalogpage">
           <div className="filter">

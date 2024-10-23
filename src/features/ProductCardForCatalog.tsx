@@ -11,12 +11,16 @@ import { addFavouriteFunction } from "./AddFavourite/AddFavouriteFunction";
 import getCookie from "../getCookie";
 import { SelectedLanguageState } from "../components/header/SelectedLanguage";
 import Loader from "../uitils/Loader";
+import { useTranslations } from "../TranslateContext";
 
 type Props = {
   product: CatProductType[],
 };
 
 const ProductCardForCatalog: React.FC<Props> = ({ product }) => {
+
+  const { translations } = useTranslations();
+
   const isAuth = useRecoilValue(UserIsAuthState);
   const token = getCookie("accessToken");
   const selectedLanguage = useRecoilValue(SelectedLanguageState);
@@ -95,9 +99,9 @@ const ProductCardForCatalog: React.FC<Props> = ({ product }) => {
               <span className="category-name">{data.category_name}</span>
               <h3 className="product-name">{data.title}</h3>
               {data.is_stock ? (
-                <strong className="isStock">Stokda var</strong>
+                <strong className="isStock">{translations['stokda_var_key']}</strong>
               ) : (
-                <strong className="noStock">Stokda yoxdur</strong>
+                <strong className="noStock">{translations['stokda_yoxdur_key']}</strong>
               )}
             </div>
             <div className="prices">

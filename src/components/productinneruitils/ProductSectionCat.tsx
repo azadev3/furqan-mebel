@@ -78,7 +78,7 @@ const ProductSectionCat: React.FC = () => {
           {isAdded === productInner?.id ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
         </button>
       ) : (
-        <p style={{ color: "red" }}>Stokda yoxdur</p>
+        <p style={{ color: "red" }}>{translations['stokda_yoxdur_key']}</p>
       )}
 
       <div className="details-section">
