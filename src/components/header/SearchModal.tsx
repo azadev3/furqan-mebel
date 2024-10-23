@@ -12,12 +12,14 @@ import { Baseurl } from "../../api/Baseurl";
 import { ProductsInterface } from "../homepageuitils/PopularProducts";
 import Loader from "../../uitils/Loader";
 import Error from "../../uitils/Error";
+import { useTranslations } from "../../TranslateContext";
 
 type Props = {
   setSearchModal: React.Dispatch<SetStateAction<boolean>>;
 };
 
 const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
+  const { translations } = useTranslations();
   //if user searched, highlight the searched text if equal result text
   const HighlightedText = ({ text, highlight }: { text: any; highlight: any }) => {
     if (!highlight.trim()) {
@@ -86,7 +88,7 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
       <div className="modal" ref={searchModalRef}>
         <div className="topfx">
           <div className="topmodal">
-            <h1>Axtarış et</h1>
+            <h1>{translations["axtaris_et"]}</h1>
             <CgClose className="close" onClick={() => setSearchModal(false)} />
           </div>
           <div className="input-area">
@@ -133,20 +135,21 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
                         {results.discounted_price ? `${results.discounted_price} ₼` : `${results.price} ₼`}
                       </span>
                       {results.discounted_price && (
-                        <span className="price" style={{ textDecoration: "line-through", color: "#cecece", fontSize: "21px" }}>
+                        <span
+                          className="price"
+                          style={{ textDecoration: "line-through", color: "#cecece", fontSize: "21px" }}>
                           {results.price} ₼
                         </span>
                       )}
                     </div>
                   </div>
-
                 </Link>
               ))
             ) : (
               <div className="resultno">
                 <span>
                   <MdGpsNotFixed className="gps" />
-                  <span>axtardığınız tapılmadı</span>
+                  <span>{translations["no_search_title"]}</span>
                 </span>
               </div>
             )
@@ -154,7 +157,7 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
             <div className="resultno">
               <span>
                 <CiSearch className="gps" />
-                Bir şey axtar
+                {translations["birsey_axtar"]}
               </span>
             </div>
           )}
