@@ -75,7 +75,7 @@ const ProductSectionCat: React.FC = () => {
               setIsAdded(productInner?.id);
             }
           }}>
-          {isAdded === productInner?.id ? "Məhsul səbəttədir" : "Səbətə əlavə et"}
+          {isAdded === productInner?.id ? translations['mehsul_sebette'] : translations['sebete_elave_et']}
         </button>
       ) : (
         <p style={{ color: "red" }}>{translations['stokda_yoxdur_key']}</p>
