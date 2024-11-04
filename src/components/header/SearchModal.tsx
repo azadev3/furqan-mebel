@@ -1,4 +1,4 @@
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
 import { MdGpsNotFixed } from "react-icons/md";
@@ -20,7 +20,8 @@ type Props = {
 
 const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
   const { translations } = useTranslations();
-  //if user searched, highlight the searched text if equal result text
+  const activeLanguage = useRecoilValue(SelectedLanguageState);
+
   const HighlightedText = ({ text, highlight }: { text: any; highlight: any }) => {
     if (!highlight.trim()) {
       return <>{text}</>;
@@ -29,56 +30,57 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
     const parts = text?.split(new RegExp(`(${highlight})`, "i"));
     return (
       parts &&
-      parts?.map((part: any, index: any) =>
+      parts.map((part: any, index: any) =>
         part?.toLowerCase() === highlight?.toLowerCase() ? <mark key={index}>{part}</mark> : part
       )
     );
   };
 
-  //FETCH ALL PRODUCTS
-  const activeLanguage = useRecoilValue(SelectedLanguageState);
+  const ITEMS_PER_PAGE = 10;
+  const [searchedItems, setSearchedItems] = useState<string>("");
+  const [page, setPage] = useState(1);
+
   const {
     data: allProductsData,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["allProductKey", activeLanguage],
+    queryKey: ["searchDataKey", activeLanguage],
     queryFn: async () => {
-      const response = await axios.get(`${Baseurl}/all_products`, {
+      const response = await axios.get(`${Baseurl}/search_all_products`, {
         headers: {
           "Content-Type": "application/json",
           "Accept-Language": activeLanguage,
         },
       });
-      return response.data?.products;
+      return response.data;
     },
-    staleTime: 1000000,
+    staleTime: 1000 * 60 * 60,
   });
 
-  //searched items
-  const [searchedItems, setSearchedItems] = React.useState<string>("");
-
   const filterItems =
-    allProductsData && allProductsData.length > 0
-      ? allProductsData.filter((item: ProductsInterface) => {
-          const itemNameLower = item?.title.toLowerCase();
+    allProductsData && allProductsData?.length > 0
+      ? allProductsData?.filter((item: ProductsInterface) => {
+          const itemNameLower = item?.title?.toLowerCase();
           const searchedItemsLower = searchedItems?.toLowerCase();
           return itemNameLower?.includes(searchedItemsLower);
         })
       : [];
 
-  //outside clicked
-  const searchModalRef = React.useRef<HTMLDivElement | null>(null);
+  const paginatedItems = filterItems.slice(0, page * ITEMS_PER_PAGE);
 
+  const loadMore = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+  const searchModalRef = React.useRef<HTMLDivElement | null>(null);
   React.useEffect(() => {
     const outsideClickSearchModal = (e: MouseEvent) => {
       const isOutside = searchModalRef && searchModalRef.current && !searchModalRef.current.contains(e.target as Node);
-
       if (isOutside) {
         setSearchModal(false);
       }
     };
-
     document.addEventListener("mousedown", outsideClickSearchModal);
     return () => document.removeEventListener("mousedown", outsideClickSearchModal);
   }, []);
@@ -96,7 +98,10 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
               value={searchedItems}
               type="text"
               placeholder="Məhsul axtar..."
-              onChange={(e) => setSearchedItems(e.target.value)}
+              onChange={(e) => {
+                setSearchedItems(e.target.value);
+                setPage(1);
+              }}
             />
             <BiSearch className="searchicon" />
           </div>
@@ -105,46 +110,53 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
         <div className="content-searched">
           {isLoading && <Loader />}
           {isError && <Error />}
-          {searchedItems && filterItems.length > 0 && (
+          {searchedItems && paginatedItems.length > 0 && (
             <span className="result-chain">
               <strong>{filterItems.length}</strong> Məhsul tapıldı
             </span>
           )}
           {searchedItems ? (
-            filterItems.length > 0 ? (
-              filterItems.map((results: ProductsInterface) => (
-                <Link
-                  to={`/product_single/${results?.slug?.toLowerCase()}`}
-                  className="search-result-item"
-                  key={results.id}
-                  onClick={() => setSearchModal(false)}>
-                  <div className="left-image">
-                    <img src={results.img} alt={`${results?.id}-img`} title={results?.title} />
-                  </div>
-                  <div className="right">
-                    <div className="left-informationitem">
-                      <span>
-                        <HighlightedText text={results?.title} highlight={searchedItems} />
-                      </span>
-                      <p>
-                        <HighlightedText text={results?.category_name} highlight={searchedItems} />
-                      </p>
+            paginatedItems.length > 0 ? (
+              <>
+                {paginatedItems.map((results: ProductsInterface) => (
+                  <Link
+                    to={`/product_single/${results && results?.slug && results?.slug?.toLowerCase()}`}
+                    className="search-result-item"
+                    key={results?.id}
+                    onClick={() => setSearchModal(false)}>
+                    <div className="left-image">
+                      <img src={results?.img} alt={`${results?.id}-img`} title={results?.title} />
                     </div>
-                    <div className="right-prices">
-                      <span className="price">
-                        {results.discounted_price ? `${results.discounted_price} ₼` : `${results.price} ₼`}
-                      </span>
-                      {results.discounted_price && (
-                        <span
-                          className="price"
-                          style={{ textDecoration: "line-through", color: "#cecece", fontSize: "21px" }}>
-                          {results.price} ₼
+                    <div className="right">
+                      <div className="left-informationitem">
+                        <span>
+                          <HighlightedText text={results?.title} highlight={searchedItems} />
                         </span>
-                      )}
+                        <p>
+                          <HighlightedText text={results?.category_name} highlight={searchedItems} />
+                        </p>
+                      </div>
+                      <div className="right-prices">
+                        <span className="price">
+                          {results?.discounted_price ? `${results?.discounted_price} ₼` : `${results?.price} ₼`}
+                        </span>
+                        {results?.discounted_price && (
+                          <span
+                            className="price"
+                            style={{ textDecoration: "line-through", color: "#cecece", fontSize: "21px" }}>
+                            {results?.price} ₼
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))
+                  </Link>
+                ))}
+                {paginatedItems.length < filterItems.length && (
+                  <button onClick={loadMore} className="load-more-btn">
+                    {translations['load_more']}
+                  </button>
+                )}
+              </>
             ) : (
               <div className="resultno">
                 <span>

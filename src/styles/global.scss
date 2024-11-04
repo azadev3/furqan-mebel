@@ -1593,3 +1593,41 @@ $border-top-color_1: rgb(57, 190, 57);
   text-wrap: nowrap;
   font-size: 16px;
 }
+.homepage-wrapper .homepage .popular-products-wrapper .popular-products .container-with-popular-products .categories-filtering-items .subitem .punts .new-punt span, .homepage-wrapper .homepage .popular-products-wrapper .popular-products .container-with-popular-products .categories-filtering-items .subitem .punts .discount-punt span {
+  font-size: 12px !important;
+  letter-spacing: -0.3px;
+}
+.product-card .product-image-wrapper .new-product-flag, .product-card .product-image-wrapper .product-discounted-percentage-flag, .fav-product-card .product-image-wrapper .new-product-flag, .fav-product-card .product-image-wrapper .product-discounted-percentage-flag {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+.product-card .product-image-wrapper .new-product-flag span, .product-card .product-image-wrapper .product-discounted-percentage-flag span, .fav-product-card .product-image-wrapper .new-product-flag span, .fav-product-card .product-image-wrapper .product-discounted-percentage-flag span {
+  font-size: 10px !important;
+  letter-spacing: -0.5px;
+}
+
+.load-more-btn {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 30%;
+  border: none;
+  outline: none;
+  padding: 8px 0;
+  margin: 0 auto;
+  background-color: #5ccf5386;
+  border-radius: 4px;
+  transition: 100ms ease;
+  cursor: pointer;
+  &:hover {
+    background-color: #205a23;
+    color: white;
+  }
+  &:active {
+    transform: scale(0.96);
+  }
+}

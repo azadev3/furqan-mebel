@@ -3,12 +3,15 @@ import { CatProductType } from "../components/productpageuitils/filteruitils/Cat
 import "../styles/productcard.scss";
 import { FaHeart } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { useTranslations } from "../TranslateContext";
 
 type props = {
   favProduct: CatProductType[];
 };
 
 const FavProductCard: React.FC<props> = ({ favProduct }) => {
+
+  const { translations } = useTranslations();
   const navigate = useNavigate();
 
   return (
@@ -31,7 +34,7 @@ const FavProductCard: React.FC<props> = ({ favProduct }) => {
                 />
                 {favproduct?.is_new && (
                   <div className="new-product-flag">
-                    <span>yeni</span>
+                    <span>{translations['yeni_title']}</span>
                   </div>
                 )}
                 {favproduct?.discounted_price && (

@@ -81,7 +81,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
             />
             {data.is_new && (
               <div className="new-product-flag">
-                <span>yeni</span>
+                <span>{translations['yeni_title']}</span>
               </div>
             )}
             {data.discounted_price && (

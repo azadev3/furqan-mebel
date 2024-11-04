@@ -17,7 +17,7 @@ import { CatProductType } from "../productpageuitils/filteruitils/CategoriesForF
 const ProductSectionPopular: React.FC = () => {
   const { translations } = useTranslations();
   const { slugproductpopular } = useParams();
-  
+
   //FETCH ALL PRODUCTS
   const activeLanguage = useRecoilValue(SelectedLanguageState);
   const { data: popularProducts } = useQuery({
@@ -72,10 +72,10 @@ const ProductSectionPopular: React.FC = () => {
               setIsAdded(productInner?.id);
             }
           }}>
-          {isAdded === productInner?.id ? translations['mehsul_sebette'] : translations['sebete_elave_et']}
+          {isAdded === productInner?.id ? translations["mehsul_sebette"] : translations["sebete_elave_et"]}
         </button>
       ) : (
-        <p style={{ color: "red" }}>{translations['stokda_yoxdur_key']}</p>
+        <p style={{ color: "red" }}>{translations["stokda_yoxdur_key"]}</p>
       )}
 
       <div className="details-section">
@@ -100,7 +100,25 @@ const ProductSectionPopular: React.FC = () => {
               </div>
               <div className="monthly-payment">
                 <span>{translations["ayliq_odenis"]}</span>
-                <p style={{ fontSize: "14px" }}>{(productInner?.price / sliderValue).toFixed(2)} azn</p>
+                <p style={{ fontSize: "14px" }}>
+                  {(() => {
+                    let price = productInner?.price / sliderValue;
+                    if (sliderValue === 3) {
+                      price *= 1.085; // %8.5 added
+                    } else if (sliderValue === 6) {
+                      price *= 1.14; // %14 added
+                    } else if (sliderValue === 9) {
+                      price *= 1.195; // %19.5 added
+                    } else if (sliderValue === 12) {
+                      price *= 1.25; // %25 added
+                    } else if (sliderValue === 15) {
+                      price *= 1.3; // %30 added
+                    } else if (sliderValue === 18) {
+                      price *= 1.35; // %35 added
+                    }
+                    return `${price.toFixed(2)} azn`;
+                  })()}
+                </p>
               </div>
             </div>
           </div>
