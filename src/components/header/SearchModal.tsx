@@ -153,7 +153,7 @@ const SearchModal: React.FC<Props> = ({ setSearchModal }) => {
                 ))}
                 {paginatedItems.length < filterItems.length && (
                   <button onClick={loadMore} className="load-more-btn">
-                    {translations['load_more']}
+                    {translations["load_more"]}
                   </button>
                 )}
               </>
