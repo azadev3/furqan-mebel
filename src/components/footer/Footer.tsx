@@ -233,7 +233,7 @@ const Footer: React.FC = () => {
               <div className="buttonsub">
                 <input
                   type="email"
-                  placeholder="Your Email"
+                  placeholder={translations['email_input']}
                   value={email}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 />

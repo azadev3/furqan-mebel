@@ -124,7 +124,7 @@ const ProductSection: React.FC = () => {
           </div>
           <article className="title-bottom">
             <p>
-              <span>*</span>Kampaniya şərtləri ilə bağlı aylıq ödəniş məbləği dəyişə bilər
+              <span>*</span>{translations['kampaniya_text_translate']}
             </p>
           </article>
         </div>
